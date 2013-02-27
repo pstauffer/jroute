@@ -30,9 +30,8 @@
 		</plugins>
   </build>
 
-  <name>mdp_jtodo</name>
+  <name>jroute</name>
   <url>http://maven.apache.org</url>
-
 
   <dependencies>
     <dependency>
