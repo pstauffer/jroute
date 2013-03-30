@@ -1,38 +1,81 @@
 package ch.zhaw.jroute.model;
 
-public class Node {
-	private int nodeID;
-	private int Lat;
-	private int Lon;
+import gov.nasa.worldwind.geom.Position;
+import gov.nasa.worldwind.render.SurfaceCircle;
 
-	public Node(int nodeID, int Lat, int Lon) {
-		this.nodeID = nodeID;
-		this.Lat = Lat;
-		this.Lon = Lon;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Node extends SurfaceCircle {
+	String name;
+	List<Node> next = new ArrayList<Node>();
+	List<Connector> edges = new ArrayList<Connector>();
+	Node before;
+	double distanceToStart;
+	boolean status;
+
+	public Node(Position curPos, int i) {
+		super(curPos,i);
+	}
+	
+	public boolean getStatus() {
+		return status;
 	}
 
-	public int getNodeID() {
-		return nodeID;
+	public void setGreenStatus() {
+		status = true;
 	}
 
-	public void setNodeID(int nodeID) {
-		this.nodeID = nodeID;
+	public void setRedStatus() {
+		status = false;
 	}
 
-	public int getLat() {
-		return Lat;
+	public void setEdge(Connector edge) {
+		this.edges.add(edge);
 	}
 
-	public void setLat(int lat) {
-		Lat = lat;
+	public List<Connector> getEdge() {
+		return edges;
 	}
 
-	public int getLon() {
-		return Lon;
+	public Node(String name) {
+		this.name = name;
 	}
 
-	public void setLon(int lon) {
-		Lon = lon;
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setNext(Node next) {
+		this.next.add(next);
+	}
+
+	List<Node> getNext() {
+		return next;
+	}
+
+	void setBefore(Node before) {
+		this.before = before;
+	}
+
+	Node getBefore() {
+		return before;
+	}
+
+	void setDistance(double distance) {
+		this.distanceToStart = distance;
+	}
+
+	public double getDistance() {
+		return distanceToStart;
+	}
+	
+	public String toString(){
+		return this.name;
 	}
 
 }

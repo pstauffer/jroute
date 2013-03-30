@@ -14,6 +14,9 @@ import javax.swing.JPanel;
  */
 public class SideNavigationPanel extends JPanel{
 	
+	private NodeOverviewPanel nodePanel;
+	private ConnectorOverviewPanel connectorPanel;
+	
 	/**
 	 * 
 	 * @param worldWindWindow
@@ -22,10 +25,23 @@ public class SideNavigationPanel extends JPanel{
 		
 		//Add a new borderlayout to the the Frame
 		super(new BorderLayout());
-		
 		this.setPreferredSize(new Dimension(200,400));
 		
-		this.add(new ConnectorOverviewPanel());
+		this.nodePanel = new NodeOverviewPanel();
+		this.connectorPanel = new ConnectorOverviewPanel();
+		
+		this.add(nodePanel,BorderLayout.NORTH);
+		this.add(connectorPanel,BorderLayout.SOUTH);
 	}
+	
+	public NodeOverviewPanel getNodePanel() {
+		return nodePanel;
+	}
+
+	public ConnectorOverviewPanel getConnectorPanel() {
+		return connectorPanel;
+	}
+	
+	
 
 }

@@ -4,4 +4,6 @@ import gov.nasa.worldwind.layers.RenderableLayer;
 
 public class NodeLayer extends RenderableLayer {
 
+	
+	
 }
