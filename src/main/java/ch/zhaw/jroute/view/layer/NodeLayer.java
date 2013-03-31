@@ -1,8 +1,18 @@
 package ch.zhaw.jroute.view.layer;
 
-import gov.nasa.worldwind.layers.RenderableLayer;
+import java.util.Observable;
+import java.util.Observer;
 
-public class NodeLayer extends RenderableLayer {
+import gov.nasa.worldwind.layers.RenderableLayer;
+import gov.nasa.worldwind.render.Renderable;
+
+public class NodeLayer extends RenderableLayer implements Observer{
+
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+		this.addRenderable((Renderable) arg);
+	}
 
 	
 	
