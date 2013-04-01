@@ -11,7 +11,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import ch.zhaw.jroute.model.NodePascal;
+
 public class NodeHandler {
+
+	static NodePascal node1 = new NodePascal();
 
 	public static void main(String argv[]) {
 
@@ -39,15 +43,21 @@ public class NodeHandler {
 
 					Element eElement = (Element) nNode;
 
-					System.out.println("node id : "
-							+ eElement.getAttribute("id"));
+					int nodeID = Integer.parseInt(eElement.getAttribute("id"));
+					String lat = eElement.getAttribute("lat");
+					String lon = eElement.getAttribute("lon");
 
-					System.out.println("lat : " + eElement.getAttribute("lat"));
-					System.out.println("lat : " + eElement.getAttribute("lon"));
+					node1.setNodeID(nodeID);
+					node1.setLat(lat);
+					node1.setLon(lon);
 
 				}
 
 			}
+
+			System.out.println(node1.getNodeID());
+			System.out.println(node1.getLat());
+			System.out.println(node1.getLon());
 
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -44,14 +44,11 @@ public class WayHandler {
 
 				}
 
-				NodeList blaa = doc.getElementsByTagName("nd");
+				NodeList nList2 = doc.getElementsByTagName("nd");
 
-				for (int kl = 0; kl < blaa.getLength(); kl++) {
+				for (int temp2 = 0; temp2 < nList2.getLength(); temp2++) {
 
-					Node haaa = blaa.item(kl);
-
-					System.out.println("\nCurrent Element :"
-							+ haaa.getNodeName());
+					Node haaa = nList2.item(temp2);
 
 					if (haaa.getNodeType() == Node.ELEMENT_NODE) {
 
