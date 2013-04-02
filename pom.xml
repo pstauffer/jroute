@@ -33,7 +33,6 @@
   <name>jroute</name>
   <url>http://maven.apache.org</url>
 
-
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -41,12 +40,6 @@
       <version>4.10</version>
       <scope>test</scope>
     </dependency>
-
-<dependency>
-    <groupId>local.repo</groupId>
-    <artifactId>0.6</artifactId>
-    <version>0.6</version>
-</dependency>
 
   </dependencies>
 </project>
