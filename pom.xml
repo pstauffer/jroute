@@ -34,14 +34,6 @@
   <url>http://maven.apache.org</url>
 
 
-<repositories>
-		<repository>
-			<id>lib-repository</id>
-			<name>Local Repository</name>
-			<url>file:///lib/</url>
-		</repository>
-	</repositories>
-
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
