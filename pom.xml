@@ -33,6 +33,19 @@
   <name>jroute</name>
   <url>http://maven.apache.org</url>
 
+<repositories>
+<repository>
+    <id>maven-repo</id>
+    <url>https://github.com/barneyyy844/maven-repo/raw/master/repository</url>
+    <releases>
+        <enabled>true</enabled>
+    </releases>
+    <snapshots>
+        <enabled>false</enabled>
+    </snapshots>
+</repository>
+</repositories>
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -40,6 +53,13 @@
       <version>4.10</version>
       <scope>test</scope>
     </dependency>
+
+    <dependency>
+      <groupId>gov.nasa</groupId>
+      <artifactId>worldwind</artifactId>
+      <version>0.6</version>
+    </dependency>
+
 
   </dependencies>
 </project>
