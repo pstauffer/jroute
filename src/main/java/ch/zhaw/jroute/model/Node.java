@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Node extends SurfaceCircle {
+	int nodeID;
+	float lat;
+	float lon;
 	String name;
 	List<Node> next = new ArrayList<Node>();
 	List<Connector> edges = new ArrayList<Connector>();
@@ -15,9 +18,33 @@ public class Node extends SurfaceCircle {
 	boolean status;
 
 	public Node(Position curPos, int i) {
-		super(curPos,i);
+		super(curPos, i);
 	}
-	
+
+	public int getNodeID() {
+		return nodeID;
+	}
+
+	public void setNodeID(int nodeID) {
+		this.nodeID = nodeID;
+	}
+
+	public float getLat() {
+		return lat;
+	}
+
+	public void setLat(float lat) {
+		this.lat = lat;
+	}
+
+	public float getLon() {
+		return lon;
+	}
+
+	public void setLon(float lon) {
+		this.lon = lon;
+	}
+
 	public boolean getStatus() {
 		return status;
 	}
@@ -73,8 +100,8 @@ public class Node extends SurfaceCircle {
 	public double getDistance() {
 		return distanceToStart;
 	}
-	
-	public String toString(){
+
+	public String toString() {
 		return this.name;
 	}
 

@@ -37,15 +37,15 @@ public class NodeHandler {
 
 				Node nNode = nList.item(temp);
 
-				System.out.println("\nCurrent Element :" + nNode.getNodeName());
+				System.out.println("Current Element " + nNode.getNodeName());
 
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 
 					Element eElement = (Element) nNode;
 
 					int nodeID = Integer.parseInt(eElement.getAttribute("id"));
-					String lat = eElement.getAttribute("lat");
-					String lon = eElement.getAttribute("lon");
+					float lat = Float.parseFloat(eElement.getAttribute("lat"));
+					float lon = Float.parseFloat(eElement.getAttribute("lon"));
 
 					node1.setNodeID(nodeID);
 					node1.setLat(lat);
@@ -55,9 +55,9 @@ public class NodeHandler {
 
 			}
 
-			System.out.println(node1.getNodeID());
-			System.out.println(node1.getLat());
-			System.out.println(node1.getLon());
+			System.out.println("nodeID " + node1.getNodeID());
+			System.out.println("lat " + node1.getLat());
+			System.out.println("lon " + node1.getLon());
 
 		} catch (Exception e) {
 			e.printStackTrace();
