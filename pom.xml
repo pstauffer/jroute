@@ -36,11 +36,9 @@
 
 <repositories>
 		<repository>
-			<!-- Tentative local repo for libs that are not migrated to Maven dependency 
-				mechanism and available in online repositories. -->
 			<id>lib-repository</id>
 			<name>Local Repository</name>
-			<url>file:///${basedir}/lib/</url>
+			<url>file:///lib/</url>
 		</repository>
 	</repositories>
 
