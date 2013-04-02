@@ -33,6 +33,17 @@
   <name>jroute</name>
   <url>http://maven.apache.org</url>
 
+
+<repositories>
+		<repository>
+			<!-- Tentative local repo for libs that are not migrated to Maven dependency 
+				mechanism and available in online repositories. -->
+			<id>lib-repository</id>
+			<name>Local Repository</name>
+			<url>file:///${basedir}/lib/</url>
+		</repository>
+	</repositories>
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
