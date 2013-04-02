@@ -66,5 +66,23 @@
       <version>0.6</version>
     </dependency>
 
+    <dependency>
+      <groupId>jogl</groupId>
+      <artifactId>jogl</artifactId>
+      <version>1.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>gdal</groupId>
+      <artifactId>gdal</artifactId>
+      <version>1.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>gluegen-rt</groupId>
+      <artifactId>gluegen-rt</artifactId>
+      <version>1.0</version>
+    </dependency>
+
   </dependencies>
 </project>
