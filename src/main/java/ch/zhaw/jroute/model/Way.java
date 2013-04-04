@@ -4,9 +4,17 @@ import java.util.List;
 
 public class Way {
 	private int wayID;
-	private List<Node> nodeList;
+	private List<NodePascal> nodeList;
 
-	public Way(int wayID, List<Node> nodeList) {
+	public Way() {
+
+	}
+
+	public Way(int wayID) {
+		this.wayID = wayID;
+	}
+
+	public Way(int wayID, List<NodePascal> nodeList) {
 		this.wayID = wayID;
 		this.nodeList = nodeList;
 	}
@@ -19,11 +27,11 @@ public class Way {
 		this.wayID = wayID;
 	}
 
-	public List<Node> getNodeList() {
+	public List<NodePascal> getNodeList() {
 		return nodeList;
 	}
 
-	public void setNodeList(List<Node> nodeList) {
+	public void setNodeList(List<NodePascal> nodeList) {
 		this.nodeList = nodeList;
 	}
 
