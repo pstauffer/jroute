@@ -22,7 +22,13 @@ public class WayHandler {
 	public static void main(String argv[]) {
 
 		getWayFromID(46116390);
-		getWayFromID(46116391);
+		// getWayFromID(46116391);
+
+		getDistance((float) 47.43714, (float) 9.10741, (float) 47.42298,
+				(float) 9.13668);
+
+		// check distance 30m
+		getDistance((float) 40, (float) 10, (float) 40, (float) 10.00035);
 
 		for (Way ways : allWays) {
 			System.out.println("ways " + ways.getWayID());
@@ -33,12 +39,26 @@ public class WayHandler {
 
 	}
 
+	public static void getDistance(float lat1, float lon1, float lat2,
+			float lon2) {
+		float d_lat = (float) ((lat2 - lat1) * 111.11);
+		float d_lon = (float) ((lon2 - lon1) * Math.cos(lat2 / 360 * 3.14 * 2) * 111.11);
+		float distance = (float) Math.sqrt(d_lat * d_lat + d_lon * d_lon);
+		System.out.println("distanz: " + distance + " km");
+		System.out.println("distanz: " + distance * 1000 + " m");
+
+	}
+
 	public static void getWayFromID(int id) {
 
 		try {
 
+			// URL url = new URL(
+			// "http://api.openstreetmap.org/api/0.6/map?bbox=-85.13076,34.90578,-85.11613,34.91437");
+
 			URL url = new URL("http://www.openstreetmap.org/api/0.6/way/" + id
 					+ "/full");
+
 			URLConnection connection = url.openConnection();
 
 			DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance()
