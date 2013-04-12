@@ -15,7 +15,7 @@ import ch.zhaw.jroute.model.NodePascal;
 
 public class NodeHandler {
 
-	static NodePascal node1 = new NodePascal();
+	private static NodePascal node1 = new NodePascal();
 
 	public static void main(String argv[]) {
 

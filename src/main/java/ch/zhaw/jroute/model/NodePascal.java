@@ -1,9 +1,9 @@
 package ch.zhaw.jroute.model;
 
 public class NodePascal {
-	int nodeID;
-	float lat;
-	float lon;
+	private int nodeID;
+	private float lat;
+	private float lon;
 
 	public NodePascal() {
 

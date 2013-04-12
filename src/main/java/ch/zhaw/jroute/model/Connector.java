@@ -7,10 +7,10 @@ import gov.nasa.worldwind.render.Material;
 import gov.nasa.worldwind.render.ShapeAttributes;
 import gov.nasa.worldwindx.examples.util.DirectedPath;
 
-public class Connector extends DirectedPath{
-	double distance;
-	Node from;
-	Node to;
+public class Connector extends DirectedPath {
+	private double distance;
+	private Node from;
+	private Node to;
 	private DirectedPath path;
 
 	Connector(Node from, Node to, double distance) {
@@ -18,32 +18,31 @@ public class Connector extends DirectedPath{
 		this.to = to;
 		this.distance = distance;
 	}
-	
-	public Connector(){
+
+	public Connector() {
 		super();
-		//this.color = Color.BLACK;
-		//this.lineWidth = 3.0;
-		
-        ShapeAttributes attrs = new BasicShapeAttributes();
-        attrs.setOutlineMaterial(Material.BLACK);
-        attrs.setOutlineWidth(2d);
-        this.setAttributes(attrs);
-        this.setVisible(true);
-        this.setAltitudeMode(WorldWind.CLAMP_TO_GROUND);
-        this.setPathType(AVKey.GREAT_CIRCLE);
+		// this.color = Color.BLACK;
+		// this.lineWidth = 3.0;
+
+		ShapeAttributes attrs = new BasicShapeAttributes();
+		attrs.setOutlineMaterial(Material.BLACK);
+		attrs.setOutlineWidth(2d);
+		this.setAttributes(attrs);
+		this.setVisible(true);
+		this.setAltitudeMode(WorldWind.CLAMP_TO_GROUND);
+		this.setPathType(AVKey.GREAT_CIRCLE);
 		this.setFollowTerrain(true);
 	}
-	
-	public Connector(Node from){
+
+	public Connector(Node from) {
 		super();
 		this.setFrom(from);
-		//this.setFollowTerrain(true);
-        ShapeAttributes attrs = new BasicShapeAttributes();
-        attrs.setOutlineMaterial(Material.RED);
-        attrs.setOutlineWidth(2d);
-        attrs.setOutlineWidth(2.0);
-        
-       
+		// this.setFollowTerrain(true);
+		ShapeAttributes attrs = new BasicShapeAttributes();
+		attrs.setOutlineMaterial(Material.RED);
+		attrs.setOutlineWidth(2d);
+		attrs.setOutlineWidth(2.0);
+
 	}
 
 	public double getDistance() {

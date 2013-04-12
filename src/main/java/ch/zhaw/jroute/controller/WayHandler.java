@@ -22,7 +22,7 @@ public class WayHandler {
 	public static void main(String argv[]) {
 
 		getWayFromID(46116390);
-		// getWayFromID(46116391);
+		getWayFromID(46116391);
 
 		getDistance((float) 47.43714, (float) 9.10741, (float) 47.42298,
 				(float) 9.13668);
@@ -41,9 +41,11 @@ public class WayHandler {
 
 	public static void getDistance(float lat1, float lon1, float lat2,
 			float lon2) {
-		float d_lat = (float) ((lat2 - lat1) * 111.11);
-		float d_lon = (float) ((lon2 - lon1) * Math.cos(lat2 / 360 * 3.14 * 2) * 111.11);
-		float distance = (float) Math.sqrt(d_lat * d_lat + d_lon * d_lon);
+		float latForDistance = (float) ((lat2 - lat1) * 111.11);
+		float lonForDistance = (float) ((lon2 - lon1)
+				* Math.cos(lat2 / 360 * 3.14 * 2) * 111.11);
+		float distance = (float) Math.sqrt(latForDistance * latForDistance
+				+ lonForDistance * lonForDistance);
 		System.out.println("distanz: " + distance + " km");
 		System.out.println("distanz: " + distance * 1000 + " m");
 
