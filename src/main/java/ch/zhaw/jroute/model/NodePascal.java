@@ -9,6 +9,9 @@ public class NodePascal {
 
 	}
 
+	/**
+	 * constructor for a new node object
+	 */
 	public NodePascal(int nodeID, float lat, float lon) {
 		this.nodeID = nodeID;
 		this.lat = lat;

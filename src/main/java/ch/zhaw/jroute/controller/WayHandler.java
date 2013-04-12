@@ -16,8 +16,8 @@ import org.w3c.dom.NodeList;
 import ch.zhaw.jroute.model.NodePascal;
 import ch.zhaw.jroute.model.Way;
 
-public class WayHandler {
-	static List<Way> allWays = new ArrayList<Way>();
+class WayHandler {
+	private static List<Way> allWays = new ArrayList<Way>();
 
 	public static void main(String argv[]) {
 
@@ -39,6 +39,11 @@ public class WayHandler {
 
 	}
 
+	/**
+	 * calculate the distance between to nodes
+	 * 
+	 * @return ...
+	 */
 	public static void getDistance(float lat1, float lon1, float lat2,
 			float lon2) {
 		float latForDistance = (float) ((lat2 - lat1) * 111.11);
@@ -51,6 +56,11 @@ public class WayHandler {
 
 	}
 
+	/**
+	 * get all nodes from a wayid
+	 * 
+	 * @return ...
+	 */
 	public static void getWayFromID(int id) {
 
 		try {

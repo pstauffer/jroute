@@ -13,7 +13,7 @@ import org.w3c.dom.NodeList;
 
 import ch.zhaw.jroute.model.NodePascal;
 
-public class NodeHandler {
+class NodeHandler {
 
 	private static NodePascal node1 = new NodePascal();
 
