@@ -19,23 +19,24 @@ import java.awt.event.MouseEvent;
 import java.util.Observable;
 import java.util.Observer;
 
-import ch.zhaw.jroute.controller.INodeController;
-import ch.zhaw.jroute.controller.NodeController;
+import ch.zhaw.jroute.controller.IWaypointController;
+import ch.zhaw.jroute.controller.WaypointController;
 import ch.zhaw.jroute.view.panel.SideNavigationPanel;
 import ch.zhaw.jroute.view.template.ApplicationTemplate;
 import ch.zhaw.jroute.view.layer.*;
 
 public class JrouteView extends ApplicationTemplate.AppFrame {
 
-	private boolean nodeArmed = false;
+	private boolean waypointArmed = false;
+	private boolean connectorArmed = false;
 
 	// Layers
 	private ConnectorLayer connectorLayer = new ConnectorLayer();
-	private NodeLayer nodeLayer = new NodeLayer();
+	private WaypointLayer waypointLayer = new WaypointLayer();
 	private MarkerLayer markerLayer = new MarkerLayer();
 
 	// Controllers
-	private INodeController nodeController;
+	private IWaypointController waypointController;
 
 	// Gui components
 	private SideNavigationPanel navigationPanel;
@@ -47,7 +48,7 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 		// hide not usefull layers and add open streetmap layer
 		this.addExtraLayer();
 		
-		this.nodeController = new NodeController(this.nodeLayer, this);
+		this.waypointController = new WaypointController(this.waypointLayer, this);
 
 		// Set inital point on the map
 		this.getWwd().setValue(AVKey.INITIAL_LATITUDE, 49.06);
@@ -72,11 +73,11 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 		LayerList layers = this.getWwd().getModel().getLayers();
 		layers.add(new OSMMapnikLayer());
 		layers.add(connectorLayer);
-		layers.add(nodeLayer);
+		layers.add(waypointLayer);
 		layers.add(markerLayer);
 
 		connectorLayer.setName("Connector layer");
-		nodeLayer.setName("Node layer");
+		waypointLayer.setName("Waypoint layer");
 		markerLayer.setName("Marker layer");
 
 		for (Layer layer : layers) {
@@ -95,16 +96,43 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 		this.getWwd().redraw();
 	}
 
-	public void addNodeInputListener(){
-		if(!nodeArmed){
-			this.nodeArmed = true;
+	public void addWaypointInputListener(){
+		if(!waypointArmed){
+			this.waypointArmed = true;
 			this.getWwd().getInputHandler().addMouseListener(new MouseAdapter()
 	        {
 	            public void mouseClicked(MouseEvent mouseEvent)
 	            {
 	                if (mouseEvent.getButton() == MouseEvent.BUTTON1)
 	                {
-	                	nodeController.createNewNode(getWwd().getCurrentPosition());
+	                	waypointController.createNewNode(getWwd().getCurrentPosition());
+	                	/*addPosition();
+	                	layer.addRenderable(node);
+	
+	                    if (mouseEvent.isControlDown())
+	                        removePosition();*/
+	                	
+	                    mouseEvent.consume();
+	                }
+	            }
+	        });
+		}
+	}
+	
+	public void addConnectorInputListener(){
+		if(!connectorArmed){
+			connectorArmed = true;
+			if(waypointArmed){
+				
+			}
+			
+			this.getWwd().getInputHandler().addMouseListener(new MouseAdapter()
+	        {
+	            public void mouseClicked(MouseEvent mouseEvent)
+	            {
+	                if (mouseEvent.getButton() == MouseEvent.BUTTON1)
+	                {
+	                	waypointController.createNewNode(getWwd().getCurrentPosition());
 	                	/*addPosition();
 	                	layer.addRenderable(node);
 	
@@ -119,20 +147,28 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 	}
 	
 	private void addActionListener() {
-		this.navigationPanel.getNodePanel().getCreateNodeButton()
-				.addActionListener(new CreateNodeListener());
+		this.navigationPanel.getWaypointPanel().getCreateWaypointButton()
+				.addActionListener(new CreateWaypointListener());
 	}
 
-	private class CreateNodeListener implements ActionListener {
+	private class CreateWaypointListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent ae) {
 			((Component) getWwd()).setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
-			addNodeInputListener();
+			addWaypointInputListener();
 		}
 	}
 	
-
-	public NodeLayer getNodeLayer() {
-		return nodeLayer;
+	private class CreateConnectorListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent ae) {
+			((Component) getWwd()).setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+			//addNodeInputListener();
+		}
+	}
+	
+	
+	public WaypointLayer getWaypointLayer() {
+		return waypointLayer;
 	}
 }

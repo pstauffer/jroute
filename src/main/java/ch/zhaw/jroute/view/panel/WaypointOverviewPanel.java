@@ -12,13 +12,13 @@ import javax.swing.JPanel;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.TitledBorder;
 
-import ch.zhaw.jroute.controller.NodeController;
+import ch.zhaw.jroute.controller.WaypointController;
 
-public class NodeOverviewPanel extends JPanel{
+public class WaypointOverviewPanel extends JPanel{
 	
-	private JButton createNodeButton;
+	private JButton createWaypointBut;
 	
-	public NodeOverviewPanel(){
+	public WaypointOverviewPanel(){
 		super(new GridLayout());
 		
 		//Create the actual panel
@@ -27,19 +27,19 @@ public class NodeOverviewPanel extends JPanel{
 	
 	public void createPanel(){
 		//Set the border around the pabel
-		this.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(9, 9, 9, 9), new TitledBorder("Node")));
+		this.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(9, 9, 9, 9), new TitledBorder("Waypoint")));
 		
 		//add the buttons the panel
 		this.createButtons();
 	}
 	
 	public void createButtons(){
-		this.createNodeButton = new JButton("Create");
-		this.add(createNodeButton);
+		this.createWaypointBut = new JButton("Create");
+		this.add(createWaypointBut);
 		
 	}
 
-	public JButton getCreateNodeButton() {
-		return createNodeButton;
+	public JButton getCreateWaypointButton() {
+		return createWaypointBut;
 	}
 }

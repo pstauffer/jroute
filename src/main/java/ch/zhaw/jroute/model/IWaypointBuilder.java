@@ -2,7 +2,7 @@ package ch.zhaw.jroute.model;
 
 
 
-public interface INodeBuilder {
+public interface IWaypointBuilder {
 	
 
 

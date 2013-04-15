@@ -6,7 +6,7 @@ import java.util.Observer;
 import gov.nasa.worldwind.layers.RenderableLayer;
 import gov.nasa.worldwind.render.Renderable;
 
-public class NodeLayer extends RenderableLayer implements Observer{
+public class WaypointLayer extends RenderableLayer implements Observer{
 
 	@Override
 	public void update(Observable o, Object arg) {

@@ -1,5 +1,5 @@
 package ch.zhaw.jroute.model;
 
-public class ConnectorBuilder {
+public class ConnectorBuilder implements IConnectorBuilder{
 
 }

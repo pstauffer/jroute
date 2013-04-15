@@ -14,7 +14,7 @@ import javax.swing.JPanel;
  */
 public class SideNavigationPanel extends JPanel{
 	
-	private NodeOverviewPanel nodePanel;
+	private WaypointOverviewPanel waypointPanel;
 	private ConnectorOverviewPanel connectorPanel;
 	
 	/**
@@ -27,15 +27,15 @@ public class SideNavigationPanel extends JPanel{
 		super(new BorderLayout());
 		this.setPreferredSize(new Dimension(200,400));
 		
-		this.nodePanel = new NodeOverviewPanel();
+		this.waypointPanel = new WaypointOverviewPanel();
 		this.connectorPanel = new ConnectorOverviewPanel();
 		
-		this.add(nodePanel,BorderLayout.NORTH);
+		this.add(waypointPanel,BorderLayout.NORTH);
 		this.add(connectorPanel,BorderLayout.SOUTH);
 	}
 	
-	public NodeOverviewPanel getNodePanel() {
-		return nodePanel;
+	public WaypointOverviewPanel getWaypointPanel() {
+		return waypointPanel;
 	}
 
 	public ConnectorOverviewPanel getConnectorPanel() {

@@ -15,6 +15,8 @@ import javax.swing.border.TitledBorder;
  */
 public class ConnectorOverviewPanel extends JPanel{
 	
+	private JButton createConnectorButton;
+	
 	/**
 	 * 
 	 */
@@ -31,9 +33,8 @@ public class ConnectorOverviewPanel extends JPanel{
 	}
 	
 	public void createButtons(){
-		
-		
-		
+		this.createConnectorButton = new JButton("Create");
+		this.add(createConnectorButton);
 	}
 	
 

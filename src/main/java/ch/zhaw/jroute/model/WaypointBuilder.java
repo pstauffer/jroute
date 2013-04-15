@@ -10,32 +10,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
-public class NodeBuilder extends Observable implements INodeBuilder {
+public class WaypointBuilder extends Observable implements IWaypointBuilder {
 
-	private List<Node> nodeList = new ArrayList<Node>();
+	private List<Waypoint> waypointList = new ArrayList<Waypoint>();
 
-	public void createNodeFromPosition(Position nodePosition) {
+	public void createWaypointFromPosition(Position waypointPosition) {
 
-		if (nodePosition == null) {
+		if (waypointPosition == null) {
 			return;
 		}
 
-		Node newNode = new Node(nodePosition, 1000);
+		Waypoint newWaypoint = new Waypoint(waypointPosition, 1000);
 
-		newNode.setAttributes(getNodeStyle());
-		nodeList.add(newNode);
+		newWaypoint.setAttributes(getWaypointStyle());
+		waypointList.add(newWaypoint);
 
 		this.setChanged();
-		this.notifyObservers(newNode);
+		this.notifyObservers(newWaypoint);
 
 	}
 
 	/**
-	 * Creates the style attributes for a node
+	 * Creates the style attributes for a Waypoint
 	 * 
 	 * @return style attributes
 	 */
-	private ShapeAttributes getNodeStyle() {
+	private ShapeAttributes getWaypointStyle() {
 		Color color = new Color(0f, 0f, 1f);
 		ShapeAttributes attr = new BasicShapeAttributes();
 		attr.setDrawOutline(true);

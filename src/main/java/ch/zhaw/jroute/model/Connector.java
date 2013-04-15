@@ -9,11 +9,11 @@ import gov.nasa.worldwindx.examples.util.DirectedPath;
 
 public class Connector extends DirectedPath {
 	private double distance;
-	private Node from;
-	private Node to;
+	private Waypoint from;
+	private Waypoint to;
 	private DirectedPath path;
 
-	Connector(Node from, Node to, double distance) {
+	Connector(Waypoint from, Waypoint to, double distance) {
 		this.from = from;
 		this.to = to;
 		this.distance = distance;
@@ -34,7 +34,7 @@ public class Connector extends DirectedPath {
 		this.setFollowTerrain(true);
 	}
 
-	public Connector(Node from) {
+	public Connector(Waypoint from) {
 		super();
 		this.setFrom(from);
 		// this.setFollowTerrain(true);
@@ -53,19 +53,19 @@ public class Connector extends DirectedPath {
 		this.distance = distance;
 	}
 
-	public Node getFrom() {
+	public Waypoint getFrom() {
 		return from;
 	}
 
-	public void setFrom(Node from) {
+	public void setFrom(Waypoint from) {
 		this.from = from;
 	}
 
-	public Node getTo() {
+	public Waypoint getTo() {
 		return to;
 	}
 
-	public void setTo(Node to) {
+	public void setTo(Waypoint to) {
 		this.to = to;
 	}
 

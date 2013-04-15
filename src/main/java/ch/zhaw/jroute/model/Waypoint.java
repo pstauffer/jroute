@@ -6,18 +6,18 @@ import gov.nasa.worldwind.render.SurfaceCircle;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Node extends SurfaceCircle {
+public class Waypoint extends SurfaceCircle {
 	int nodeID;
 	float lat;
 	float lon;
 	String name;
-	List<Node> next = new ArrayList<Node>();
+	List<Waypoint> next = new ArrayList<Waypoint>();
 	List<Connector> edges = new ArrayList<Connector>();
-	Node before;
+	Waypoint before;
 	double distanceToStart;
 	boolean status;
 
-	public Node(Position curPos, int i) {
+	public Waypoint(Position curPos, int i) {
 		super(curPos, i);
 	}
 
@@ -65,7 +65,7 @@ public class Node extends SurfaceCircle {
 		return edges;
 	}
 
-	public Node(String name) {
+	public Waypoint(String name) {
 		this.name = name;
 	}
 
@@ -77,19 +77,19 @@ public class Node extends SurfaceCircle {
 		return name;
 	}
 
-	public void setNext(Node next) {
+	public void setNext(Waypoint next) {
 		this.next.add(next);
 	}
 
-	List<Node> getNext() {
+	List<Waypoint> getNext() {
 		return next;
 	}
 
-	void setBefore(Node before) {
+	void setBefore(Waypoint before) {
 		this.before = before;
 	}
 
-	Node getBefore() {
+	Waypoint getBefore() {
 		return before;
 	}
 
