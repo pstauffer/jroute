@@ -11,11 +11,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import ch.zhaw.jroute.model.NodePascal;
+import ch.zhaw.jroute.model.Waypoint;
 
 class NodeHandler {
 
-	private static NodePascal node1 = new NodePascal();
+	private static Waypoint node1 = new Waypoint();
 
 	public static void main(String argv[]) {
 

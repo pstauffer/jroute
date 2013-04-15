@@ -17,8 +17,18 @@ public class Waypoint extends SurfaceCircle {
 	double distanceToStart;
 	boolean status;
 
+	public Waypoint() {
+
+	}
+
 	public Waypoint(Position curPos, int i) {
 		super(curPos, i);
+	}
+
+	public Waypoint(int nodeID, float lat, float lon) {
+		this.nodeID = nodeID;
+		this.lat = lat;
+		this.lon = lon;
 	}
 
 	public int getNodeID() {

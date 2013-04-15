@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Way {
 	private int wayID;
-	private List<NodePascal> nodeList;
+	private List<Waypoint> waypointList;
 
 	public Way() {
 
@@ -14,9 +14,9 @@ public class Way {
 		this.wayID = wayID;
 	}
 
-	public Way(int wayID, List<NodePascal> nodeList) {
+	public Way(int wayID, List<Waypoint> waypointList) {
 		this.wayID = wayID;
-		this.nodeList = nodeList;
+		this.waypointList = waypointList;
 	}
 
 	public int getWayID() {
@@ -27,12 +27,12 @@ public class Way {
 		this.wayID = wayID;
 	}
 
-	public List<NodePascal> getNodeList() {
-		return nodeList;
+	public List<Waypoint> getWaypointList() {
+		return waypointList;
 	}
 
-	public void setNodeList(List<NodePascal> nodeList) {
-		this.nodeList = nodeList;
+	public void setWaypointList(List<Waypoint> waypointList) {
+		this.waypointList = waypointList;
 	}
 
 }

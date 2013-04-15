@@ -13,8 +13,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import ch.zhaw.jroute.model.NodePascal;
 import ch.zhaw.jroute.model.Way;
+import ch.zhaw.jroute.model.Waypoint;
 
 class WayHandler {
 	private static List<Way> allWays = new ArrayList<Way>();
@@ -32,8 +32,8 @@ class WayHandler {
 
 		for (Way ways : allWays) {
 			System.out.println("ways " + ways.getWayID());
-			for (NodePascal nodes : ways.getNodeList()) {
-				System.out.println("nodes " + nodes.getNodeID());
+			for (Waypoint waypoints : ways.getWaypointList()) {
+				System.out.println("nodes " + waypoints.getNodeID());
 			}
 		}
 
@@ -80,7 +80,7 @@ class WayHandler {
 			doc.getDocumentElement().normalize();
 
 			NodeList nList2 = doc.getElementsByTagName("node");
-			List<NodePascal> list1 = new ArrayList<NodePascal>();
+			List<Waypoint> list1 = new ArrayList<Waypoint>();
 
 			for (int temp2 = 0; temp2 < nList2.getLength(); temp2++) {
 
@@ -94,7 +94,7 @@ class WayHandler {
 					float lat = Float.parseFloat(eElement.getAttribute("lat"));
 					float lon = Float.parseFloat(eElement.getAttribute("lon"));
 
-					list1.add(new NodePascal(nodeID, lat, lon));
+					list1.add(new Waypoint(nodeID, lat, lon));
 
 				}
 
