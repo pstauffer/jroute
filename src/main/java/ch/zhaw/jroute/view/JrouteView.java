@@ -88,6 +88,9 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 			if (layer.getName().contains("Landsat")) {
 				layer.setEnabled(false);
 			}
+			if (layer.getName().contains("Blue")) {
+				layer.setEnabled(false);
+			}
 			if (layer.getName().contains("Open")) {
 				layer.setEnabled(true);
 			}
@@ -149,6 +152,7 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 	private void addActionListener() {
 		this.navigationPanel.getWaypointPanel().getCreateWaypointButton()
 				.addActionListener(new CreateWaypointListener());
+		this.navigationPanel.getConnectorPanel().getCreateConnectorButton().addActionListener(new CreateConnectorListener());
 	}
 
 	private class CreateWaypointListener implements ActionListener {
@@ -163,7 +167,7 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 		@Override
 		public void actionPerformed(ActionEvent ae) {
 			((Component) getWwd()).setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
-			//addNodeInputListener();
+			
 		}
 	}
 	

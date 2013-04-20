@@ -30,6 +30,7 @@ public class ConnectorOverviewPanel extends JPanel{
 		
 		//Create border around panel
 		this.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(9, 9, 9, 9), new TitledBorder("Connector")));
+		this.createButtons();
 	}
 	
 	public void createButtons(){
@@ -37,5 +38,7 @@ public class ConnectorOverviewPanel extends JPanel{
 		this.add(createConnectorButton);
 	}
 	
-
+	public JButton getCreateConnectorButton() {
+		return createConnectorButton;
+	}
 }

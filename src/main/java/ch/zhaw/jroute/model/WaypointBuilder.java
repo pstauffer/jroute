@@ -20,7 +20,7 @@ public class WaypointBuilder extends Observable implements IWaypointBuilder {
 			return;
 		}
 
-		Waypoint newWaypoint = new Waypoint(waypointPosition, 1000);
+		Waypoint newWaypoint = new Waypoint(waypointPosition, 50);
 
 		newWaypoint.setAttributes(getWaypointStyle());
 		waypointList.add(newWaypoint);
