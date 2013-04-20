@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Waypoint extends SurfaceCircle {
-	int nodeID;
+	int waypointID;
 	float lat;
 	float lon;
 	String name;
-	List<Waypoint> next = new ArrayList<Waypoint>();
+	List<Waypoint> nextWaypoints = new ArrayList<Waypoint>();
 	List<Connector> edges = new ArrayList<Connector>();
 	Waypoint before;
 	double distanceToStart;
@@ -26,17 +26,17 @@ public class Waypoint extends SurfaceCircle {
 	}
 
 	public Waypoint(int nodeID, float lat, float lon) {
-		this.nodeID = nodeID;
+		this.waypointID = nodeID;
 		this.lat = lat;
 		this.lon = lon;
 	}
 
 	public int getNodeID() {
-		return nodeID;
+		return waypointID;
 	}
 
 	public void setNodeID(int nodeID) {
-		this.nodeID = nodeID;
+		this.waypointID = nodeID;
 	}
 
 	public float getLat() {
@@ -88,11 +88,11 @@ public class Waypoint extends SurfaceCircle {
 	}
 
 	public void setNext(Waypoint next) {
-		this.next.add(next);
+		this.nextWaypoints.add(next);
 	}
 
 	List<Waypoint> getNext() {
-		return next;
+		return nextWaypoints;
 	}
 
 	void setBefore(Waypoint before) {
@@ -107,7 +107,7 @@ public class Waypoint extends SurfaceCircle {
 		this.distanceToStart = distance;
 	}
 
-	public double getDistance() {
+	public double getDistanceToStart() {
 		return distanceToStart;
 	}
 
