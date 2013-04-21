@@ -31,7 +31,7 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 	private boolean connectorArmed = false;
 
 	// Layers
-	private ConnectorLayer connectorLayer = new ConnectorLayer();
+	private WayLayer wayLayer = new WayLayer();
 	private WaypointLayer waypointLayer = new WaypointLayer();
 	private MarkerLayer markerLayer = new MarkerLayer();
 
@@ -68,11 +68,11 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 		// Layer layer = (Layer) new OpenStreetMapWMSLayer();
 		LayerList layers = this.getWwd().getModel().getLayers();
 		layers.add(new OSMMapnikLayer());
-		layers.add(connectorLayer);
+		layers.add(wayLayer);
 		layers.add(waypointLayer);
 		layers.add(markerLayer);
 
-		connectorLayer.setName("Connector layer");
+		wayLayer.setName("Connector layer");
 		waypointLayer.setName("Waypoint layer");
 		markerLayer.setName("Marker layer");
 
@@ -143,5 +143,9 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 	
 	public WaypointLayer getWaypointLayer() {
 		return waypointLayer;
+	}
+	
+	public WayLayer getWayLayer(){
+		return wayLayer;
 	}
 }

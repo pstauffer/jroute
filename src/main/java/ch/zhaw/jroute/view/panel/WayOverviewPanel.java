@@ -13,14 +13,14 @@ import javax.swing.border.TitledBorder;
  * Class which represent the panel where all connectors are shown
  * @author yk
  */
-public class ConnectorOverviewPanel extends JPanel{
+public class WayOverviewPanel extends JPanel{
 	
-	private JButton createConnectorButton;
+	private JButton createWayButton;
 	
 	/**
 	 * 
 	 */
-	public ConnectorOverviewPanel(){
+	public WayOverviewPanel(){
 		super(new GridLayout());
 		
 		this.createPanel();
@@ -29,16 +29,16 @@ public class ConnectorOverviewPanel extends JPanel{
 	public void createPanel(){
 		
 		//Create border around panel
-		this.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(9, 9, 9, 9), new TitledBorder("Connector")));
+		this.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(9, 9, 9, 9), new TitledBorder("Way")));
 		this.createButtons();
 	}
 	
 	public void createButtons(){
-		this.createConnectorButton = new JButton("Create");
-		this.add(createConnectorButton);
+		this.createWayButton = new JButton("Create");
+		this.add(createWayButton);
 	}
 	
 	public JButton getCreateConnectorButton() {
-		return createConnectorButton;
+		return createWayButton;
 	}
 }
