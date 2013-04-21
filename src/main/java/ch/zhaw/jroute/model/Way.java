@@ -1,34 +1,44 @@
 package ch.zhaw.jroute.model;
 
+import gov.nasa.worldwind.geom.Angle;
+import gov.nasa.worldwind.geom.Position;
+import gov.nasa.worldwindx.examples.util.DirectedPath;
+
+import java.util.ArrayList;
 import java.util.List;
 
-public class Way {
-	private Waypoint waypoint1;
-	private Waypoint waypoint2;
+public class Way extends DirectedPath {
+	private Waypoint start;
+	private Waypoint end;
 	private int wayID;
 	private List<Waypoint> waypointList;
 	double distance;
+	private List<Position> pointList = new ArrayList<Position>();
 
 	public Way() {
-
+		super();
 	}
 
-	public Way(int wayID, Waypoint waypoint1, Waypoint waypoint2,
+	public Way(int wayID, Waypoint start, Waypoint end,
 			double distance) {
+		super();
 		this.wayID = wayID;
-		this.waypoint1 = waypoint1;
-		this.waypoint2 = waypoint2;
+		this.start = start;
+		this.end = end;
 		this.distance = distance;
 	}
 
 	public Way(int wayID) {
+		super();
 		this.wayID = wayID;
 	}
 
 	public Way(int wayID, List<Waypoint> waypointList) {
+		super();
 		this.wayID = wayID;
 		this.waypointList = waypointList;
 	}
+
 
 	public double getDistance() {
 		return distance;
@@ -38,20 +48,30 @@ public class Way {
 		this.distance = distance;
 	}
 
-	public Waypoint getWaypoint1() {
-		return waypoint1;
+	public Waypoint getStart() {
+		return start;
 	}
 
-	public Waypoint getWaypoint2() {
-		return waypoint2;
+	public Waypoint getEnd() {
+		return end;
 	}
 
-	public void setWaypoint1(Waypoint waypoint1) {
-		this.waypoint1 = waypoint1;
+	public void setStart(Waypoint start) {
+		if(pointList.isEmpty()){
+			pointList.add(start.getReferencePosition());
+			pointList.add(start.getReferencePosition());
+		}
+		this.pointList.set(0, start.getReferencePosition());
+		this.setPositions(pointList);
+		
+		this.start = start;
 	}
 
-	public void setWaypoint2(Waypoint waypoint2) {
-		this.waypoint2 = waypoint2;
+	public void setEnd(Waypoint end) {
+		this.pointList.set(1, end.getReferencePosition());
+		this.setPositions(pointList);
+		
+		this.end = end;
 	}
 
 	public int getWayID() {

@@ -12,7 +12,8 @@ public class WaypointLayer extends RenderableLayer implements Observer{
 	public void update(Observable o, Object arg) {
 		// TODO Auto-generated method stub
 		this.addRenderable((Renderable) arg);
-		
 	}
+
+	
 	
 }

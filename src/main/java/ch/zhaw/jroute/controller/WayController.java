@@ -20,12 +20,15 @@ public class WayController implements IWayController{
 	private JrouteView view;
 	private IWayBuilder wayBuilder;
 	private WayMouseAdapter mouseAdapter;
+	private WayPositionListener positionListener;
+	private boolean active;
 	
 	public WayController(JrouteView view, IWayBuilder wayBuilder){
 		this.view = view;
 		this.wayBuilder = wayBuilder;
 		
 		this.mouseAdapter = new WayMouseAdapter();
+		this.positionListener = new WayPositionListener();
 		
 		this.wayBuilder.registerObserver(view.getWayLayer());
 	}
@@ -36,11 +39,19 @@ public class WayController implements IWayController{
 
 	public void removeWayInputListener() {
 		view.getWwd().getInputHandler().removeMouseListener(mouseAdapter);
+		view.getWwd().removePositionListener(positionListener);	
 	}
 	
 	private void createNewLine(){
 		
 		Waypoint currentWaypoint = view.getWaypointAtPosition();
+		
+		if(currentWaypoint == null){
+			return;
+		}
+		view.getWwd().addPositionListener(positionListener);
+		active = true;
+		wayBuilder.createNewWay(currentWaypoint);
 	}
 	
 	private class WayMouseAdapter extends MouseAdapter{
@@ -62,8 +73,9 @@ public class WayController implements IWayController{
 
 		@Override
 		public void moved(PositionEvent arg0) {
-			// TODO Auto-generated method stub
-			
+			if(active){
+				wayBuilder.moveWayEndpoint(view.getWwd().getCurrentPosition());
+			}
 		}
 		
 	}

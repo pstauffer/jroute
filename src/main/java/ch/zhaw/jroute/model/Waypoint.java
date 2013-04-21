@@ -12,7 +12,6 @@ public class Waypoint extends SurfaceCircle {
 	float lon;
 	String name;
 	List<Waypoint> nextWaypoints = new ArrayList<Waypoint>();
-	List<Connector> edges = new ArrayList<Connector>();
 	Waypoint before;
 	double distanceToStart;
 	boolean status;
@@ -65,14 +64,6 @@ public class Waypoint extends SurfaceCircle {
 
 	public void setRedStatus() {
 		status = false;
-	}
-
-	public void setEdge(Connector edge) {
-		this.edges.add(edge);
-	}
-
-	public List<Connector> getEdge() {
-		return edges;
 	}
 
 	public Waypoint(String name) {

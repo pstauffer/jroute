@@ -19,9 +19,19 @@ public class WayBuilder extends Observable implements IWayBuilder {
 	public void registerObserver(Observer obs) {
 		this.addObserver(obs);
 	}
-	
-	public void createNewLine(Position pos){
-		
+
+	@Override
+	public void createNewWay(Waypoint start) {
+		Way newWay = new Way();
+		newWay.setStart(start);
+		this.setChanged();
+		this.notifyObservers(newWay);
+	}
+
+	@Override
+	public void moveWayEndpoint(Position newPosition) {
+		this.setChanged();
+		this.notifyObservers(newPosition);
 	}
 
 }

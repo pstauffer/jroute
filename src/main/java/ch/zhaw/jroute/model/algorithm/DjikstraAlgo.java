@@ -60,11 +60,11 @@ public class DjikstraAlgo {
 	static List<Waypoint> getConnectedWaypoints(Waypoint waypoint) {
 		List<Waypoint> connectedWaypoints = new ArrayList<Waypoint>();
 		for (Way ways : allWays) {
-			if (ways.getWaypoint1().equals(waypoint)) {
-				connectedWaypoints.add(ways.getWaypoint2());
+			if (ways.getStart().equals(waypoint)) {
+				connectedWaypoints.add(ways.getEnd());
 			}
-			if (ways.getWaypoint2().equals(waypoint)) {
-				connectedWaypoints.add(ways.getWaypoint1());
+			if (ways.getEnd().equals(waypoint)) {
+				connectedWaypoints.add(ways.getStart());
 			}
 		}
 		return connectedWaypoints;
