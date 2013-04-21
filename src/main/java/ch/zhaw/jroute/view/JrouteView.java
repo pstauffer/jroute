@@ -47,8 +47,6 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 
 		// hide not usefull layers and add open streetmap layer
 		this.addExtraLayer();
-		
-		this.waypointController = new WaypointController(this.waypointLayer, this);
 
 		// Set inital point on the map
 		this.getWwd().setValue(AVKey.INITIAL_LATITUDE, 49.06);
@@ -60,8 +58,6 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 
 		//add side panel to the window
 		this.getContentPane().add(this.navigationPanel, BorderLayout.WEST);
-		
-		this.addActionListener();
 	}
 
 	/**
@@ -98,29 +94,6 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 
 		this.getWwd().redraw();
 	}
-
-	public void addWaypointInputListener(){
-		if(!waypointArmed){
-			this.waypointArmed = true;
-			this.getWwd().getInputHandler().addMouseListener(new MouseAdapter()
-	        {
-	            public void mouseClicked(MouseEvent mouseEvent)
-	            {
-	                if (mouseEvent.getButton() == MouseEvent.BUTTON1)
-	                {
-	                	waypointController.createNewNode(getWwd().getCurrentPosition());
-	                	/*addPosition();
-	                	layer.addRenderable(node);
-	
-	                    if (mouseEvent.isControlDown())
-	                        removePosition();*/
-	                	
-	                    mouseEvent.consume();
-	                }
-	            }
-	        });
-		}
-	}
 	
 	public void addConnectorInputListener(){
 		if(!connectorArmed){
@@ -149,18 +122,14 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 		}
 	}
 	
-	private void addActionListener() {
+	public void addWaypointActionListener(ActionListener listener){
 		this.navigationPanel.getWaypointPanel().getCreateWaypointButton()
-				.addActionListener(new CreateWaypointListener());
-		this.navigationPanel.getConnectorPanel().getCreateConnectorButton().addActionListener(new CreateConnectorListener());
+		.addActionListener(listener);
 	}
-
-	private class CreateWaypointListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent ae) {
-			((Component) getWwd()).setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
-			addWaypointInputListener();
-		}
+	
+	public void addWayActionListener(ActionListener listener){
+		this.navigationPanel.getConnectorPanel().getCreateConnectorButton()
+		.addActionListener(listener);
 	}
 	
 	private class CreateConnectorListener implements ActionListener {

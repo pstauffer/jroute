@@ -1,4 +1,4 @@
-package ch.zhaw.jroute.controller;
+package ch.zhaw.jroute.model.algorithm;
 
 import java.util.ArrayList;
 import java.util.List;

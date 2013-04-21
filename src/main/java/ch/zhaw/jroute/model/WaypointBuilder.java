@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
+import java.util.Observer;
 
 public class WaypointBuilder extends Observable implements IWaypointBuilder {
 
@@ -49,6 +50,12 @@ public class WaypointBuilder extends Observable implements IWaypointBuilder {
 		attr.setDrawInterior(true);
 
 		return attr;
+	}
+
+
+	@Override
+	public void registerObserver(Observer obs) {
+		this.addObserver(obs);
 	}
 
 }
