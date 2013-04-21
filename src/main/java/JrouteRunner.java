@@ -1,3 +1,4 @@
+import ch.zhaw.jroute.controller.GUIController;
 import ch.zhaw.jroute.controller.WayController;
 import ch.zhaw.jroute.controller.WaypointController;
 import ch.zhaw.jroute.model.WayBuilder;
@@ -19,10 +20,7 @@ public class JrouteRunner {
 		//Model
 		WaypointBuilder waypointBuilder = new WaypointBuilder();
 		WayBuilder wayBuilder = new WayBuilder();
-		
-		//Controller
-		WaypointController waypointController = new WaypointController(view,waypointBuilder);
-		WayController wayController = new WayController(view,wayBuilder);
+		GUIController guiController = new GUIController(view,waypointBuilder,wayBuilder);
 	}
 
 }

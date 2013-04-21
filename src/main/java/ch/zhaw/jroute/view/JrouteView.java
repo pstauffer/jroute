@@ -1,34 +1,24 @@
 package ch.zhaw.jroute.view;
 
-import gov.nasa.worldwind.WorldWindow;
 import gov.nasa.worldwind.avlist.AVKey;
-
-import gov.nasa.worldwind.layers.AnnotationLayer;
 import gov.nasa.worldwind.layers.Layer;
 import gov.nasa.worldwind.layers.LayerList;
 import gov.nasa.worldwind.layers.MarkerLayer;
+import gov.nasa.worldwind.pick.PickedObject;
+import gov.nasa.worldwind.pick.PickedObjectList;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.Observable;
-import java.util.Observer;
 
 import ch.zhaw.jroute.controller.IWaypointController;
-import ch.zhaw.jroute.controller.WaypointController;
+import ch.zhaw.jroute.model.Waypoint;
+import ch.zhaw.jroute.view.layer.OSMMapnikLayer;
+import ch.zhaw.jroute.view.layer.WayLayer;
+import ch.zhaw.jroute.view.layer.WaypointLayer;
 import ch.zhaw.jroute.view.panel.SideNavigationPanel;
 import ch.zhaw.jroute.view.template.ApplicationTemplate;
-import ch.zhaw.jroute.view.layer.*;
 
 public class JrouteView extends ApplicationTemplate.AppFrame {
-
-	private boolean waypointArmed = false;
-	private boolean connectorArmed = false;
 
 	// Layers
 	private WayLayer wayLayer = new WayLayer();
@@ -95,33 +85,6 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 		this.getWwd().redraw();
 	}
 	
-	public void addConnectorInputListener(){
-		if(!connectorArmed){
-			connectorArmed = true;
-			if(waypointArmed){
-				
-			}
-			
-			this.getWwd().getInputHandler().addMouseListener(new MouseAdapter()
-	        {
-	            public void mouseClicked(MouseEvent mouseEvent)
-	            {
-	                if (mouseEvent.getButton() == MouseEvent.BUTTON1)
-	                {
-	                	waypointController.createNewNode(getWwd().getCurrentPosition());
-	                	/*addPosition();
-	                	layer.addRenderable(node);
-	
-	                    if (mouseEvent.isControlDown())
-	                        removePosition();*/
-	                	
-	                    mouseEvent.consume();
-	                }
-	            }
-	        });
-		}
-	}
-	
 	public void addWaypointActionListener(ActionListener listener){
 		this.navigationPanel.getWaypointPanel().getCreateWaypointButton()
 		.addActionListener(listener);
@@ -132,12 +95,17 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 		.addActionListener(listener);
 	}
 	
-	private class CreateConnectorListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent ae) {
-			((Component) getWwd()).setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
-			
+	public Waypoint getWaypointAtPosition(){
+		PickedObjectList list = this.getWwd().getObjectsAtCurrentPosition();
+		Waypoint currentWaypoint = null;
+		
+		for(PickedObject obj : list){
+			if (obj.getObject() instanceof Waypoint) {
+				currentWaypoint = (Waypoint) obj.getObject();
+			}
 		}
+		
+		return currentWaypoint;
 	}
 	
 	
@@ -148,4 +116,5 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 	public WayLayer getWayLayer(){
 		return wayLayer;
 	}
+	
 }

@@ -17,6 +17,8 @@ public class WaypointController implements IWaypointController {
 	
 	private IWaypointBuilder waypointBuilder;
 	private JrouteView view;
+	private WaypointMouseAdapter mouseAdapter;
+	private IWayController wayController;
 	
 	public WaypointController(JrouteView view, IWaypointBuilder builder){
 		
@@ -24,43 +26,36 @@ public class WaypointController implements IWaypointController {
 		this.waypointBuilder = builder;
 		this.waypointBuilder.registerObserver(view.getWaypointLayer());
 		
-		view.addWaypointActionListener(new CreateWaypointListener());
+		this.mouseAdapter = new WaypointMouseAdapter();
+		
+		this.wayController = wayController;
 	}
 	
-	/* (non-Javadoc)
-	 * @see ch.zhaw.jroute.controller.INodeController#createNewNode(gov.nasa.worldwind.geom.Position)
-	 */
-	@Override
 	public void createNewNode(Position position){
 		waypointBuilder.createWaypointFromPosition(view.getWwd().getCurrentPosition());
 	}
 	
 	public void addWaypointInputListener(){
-			view.getWwd().getInputHandler().addMouseListener(new MouseAdapter()
-	        {
-	            public void mouseClicked(MouseEvent mouseEvent)
-	            {
-	                if (mouseEvent.getButton() == MouseEvent.BUTTON1)
-	                {
-	                	createNewNode(view.getWwd().getCurrentPosition());
-	                	/*addPosition();
-	                	layer.addRenderable(node);
-	
-	                    if (mouseEvent.isControlDown())
-	                        removePosition();*/
-	                	
-	                    mouseEvent.consume();
-	                }
-	            }
-	        });
-		
+		view.getWwd().getInputHandler().addMouseListener(mouseAdapter);
 	}
 	
-	private class CreateWaypointListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent ae) {
-			((Component) view.getWwd()).setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
-			addWaypointInputListener();
+	public void removeWaypointInputListener() {
+		view.getWwd().getInputHandler().removeMouseListener(mouseAdapter);
+	}
+	
+	private class WaypointMouseAdapter extends MouseAdapter{
+		
+		public void mouseClicked(MouseEvent mouseEvent) {
+			if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
+				createNewNode(view.getWwd().getCurrentPosition());
+				/*
+				 * addPosition(); layer.addRenderable(node);
+				 * 
+				 * if (mouseEvent.isControlDown()) removePosition();
+				 */
+
+				mouseEvent.consume();
+			}
 		}
 	}
 }

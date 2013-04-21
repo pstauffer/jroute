@@ -1,5 +1,7 @@
 package ch.zhaw.jroute.model;
 
-public interface IWayBuilder {
+import java.util.Observer;
 
+public interface IWayBuilder {
+	public void registerObserver(Observer obs);
 }
