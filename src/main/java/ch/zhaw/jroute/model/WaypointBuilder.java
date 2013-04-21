@@ -30,6 +30,8 @@ public class WaypointBuilder extends Observable implements IWaypointBuilder {
 
 	}
 
+	
+	//TODO: need to place this in the view
 	/**
 	 * Creates the style attributes for a Waypoint
 	 * 

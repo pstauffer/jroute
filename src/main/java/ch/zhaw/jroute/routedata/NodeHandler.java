@@ -1,4 +1,4 @@
-package ch.zhaw.jroute.controller;
+package ch.zhaw.jroute.routedata;
 
 import java.net.URL;
 import java.net.URLConnection;
