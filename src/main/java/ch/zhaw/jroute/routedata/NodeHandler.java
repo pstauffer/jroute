@@ -47,7 +47,7 @@ class NodeHandler {
 					float lat = Float.parseFloat(eElement.getAttribute("lat"));
 					float lon = Float.parseFloat(eElement.getAttribute("lon"));
 
-					node1.setNodeID(nodeID);
+					node1.setWaypointID(nodeID);
 					node1.setLat(lat);
 					node1.setLon(lon);
 
@@ -55,7 +55,7 @@ class NodeHandler {
 
 			}
 
-			System.out.println("nodeID " + node1.getNodeID());
+			System.out.println("nodeID " + node1.getWaypointID());
 			System.out.println("lat " + node1.getLat());
 			System.out.println("lon " + node1.getLon());
 

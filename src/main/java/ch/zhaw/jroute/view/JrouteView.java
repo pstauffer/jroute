@@ -1,14 +1,18 @@
 package ch.zhaw.jroute.view;
 
 import gov.nasa.worldwind.avlist.AVKey;
+import gov.nasa.worldwind.geom.Position;
+import gov.nasa.worldwind.layers.AnnotationLayer;
 import gov.nasa.worldwind.layers.Layer;
 import gov.nasa.worldwind.layers.LayerList;
 import gov.nasa.worldwind.layers.MarkerLayer;
 import gov.nasa.worldwind.pick.PickedObject;
 import gov.nasa.worldwind.pick.PickedObjectList;
+import gov.nasa.worldwind.util.measure.LengthMeasurer;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import ch.zhaw.jroute.controller.IWaypointController;
 import ch.zhaw.jroute.model.Waypoint;
@@ -21,10 +25,12 @@ import ch.zhaw.jroute.view.template.ApplicationTemplate;
 public class JrouteView extends ApplicationTemplate.AppFrame {
 
 	// Layers
-	private WayLayer wayLayer = new WayLayer();
-	private WaypointLayer waypointLayer = new WaypointLayer();
-	private MarkerLayer markerLayer = new MarkerLayer();
-
+	private AnnotationLayer wayAnnotationLayer = new AnnotationLayer();
+	private AnnotationLayer waypointAnnotationLayer = new AnnotationLayer();
+	private WayLayer wayLayer;
+	private WaypointLayer waypointLayer;
+	private LengthMeasurer lenghtMeasurer = new LengthMeasurer();
+	
 	// Controllers
 	private IWaypointController waypointController;
 
@@ -34,7 +40,10 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 	public JrouteView() {
 		super(true, false, false);
 		this.setSize(850, 800);
-
+		
+		wayLayer = new WayLayer(this.getWwd(),wayAnnotationLayer);
+		waypointLayer = new WaypointLayer(waypointAnnotationLayer);
+		
 		// hide not usefull layers and add open streetmap layer
 		this.addExtraLayer();
 
@@ -60,12 +69,14 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 		layers.add(new OSMMapnikLayer());
 		layers.add(wayLayer);
 		layers.add(waypointLayer);
-		layers.add(markerLayer);
-
+		layers.add(wayAnnotationLayer);
+		layers.add(waypointAnnotationLayer);
+		
 		wayLayer.setName("Connector layer");
 		waypointLayer.setName("Waypoint layer");
-		markerLayer.setName("Marker layer");
-
+		wayAnnotationLayer.setName("Way Annotation layer");
+		waypointAnnotationLayer.setName("Waypoint Annotation layer");
+		
 		for (Layer layer : layers) {
 			// layer.setEnabled(false);
 			if (layer.getName().contains("Place")) {
@@ -108,6 +119,16 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 		return currentWaypoint;
 	}
 	
+	//Maybe this is wrong position for this
+	public double calculateDistance(Position start,Position end){
+		ArrayList<Position> tempPos = new ArrayList<Position>();
+		
+		tempPos.add(start);
+		tempPos.add(end);
+		
+		lenghtMeasurer.setPositions(tempPos);
+		return lenghtMeasurer.getLength(this.getWwd().getModel().getGlobe());
+	}
 	
 	public WaypointLayer getWaypointLayer() {
 		return waypointLayer;

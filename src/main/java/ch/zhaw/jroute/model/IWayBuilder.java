@@ -10,6 +10,8 @@ public interface IWayBuilder {
 	public void createNewWay(Waypoint start);
 	
 	public void moveWayEndpoint(Position newPosition);
+	
+	public void finishWay(Waypoint end, double distance);
 }
 
 

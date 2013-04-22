@@ -12,7 +12,8 @@ public class Way extends DirectedPath {
 	private Waypoint end;
 	private int wayID;
 	private List<Waypoint> waypointList;
-	double distance;
+	private double distance;
+	private String name;
 	private List<Position> pointList = new ArrayList<Position>();
 
 	public Way() {
@@ -61,14 +62,14 @@ public class Way extends DirectedPath {
 			pointList.add(start.getReferencePosition());
 			pointList.add(start.getReferencePosition());
 		}
-		this.pointList.set(0, start.getReferencePosition());
+		this.pointList.set(0, (Position) start.getCenter());
 		this.setPositions(pointList);
 		
 		this.start = start;
 	}
 
 	public void setEnd(Waypoint end) {
-		this.pointList.set(1, end.getReferencePosition());
+		this.pointList.set(1, (Position) end.getCenter());
 		this.setPositions(pointList);
 		
 		this.end = end;
@@ -88,6 +89,14 @@ public class Way extends DirectedPath {
 
 	public void setWaypointList(List<Waypoint> waypointList) {
 		this.waypointList = waypointList;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }

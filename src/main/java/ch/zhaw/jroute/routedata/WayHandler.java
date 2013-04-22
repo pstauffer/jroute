@@ -33,7 +33,7 @@ class WayHandler {
 		for (Way ways : allWays) {
 			System.out.println("ways " + ways.getWayID());
 			for (Waypoint waypoints : ways.getWaypointList()) {
-				System.out.println("nodes " + waypoints.getNodeID());
+				System.out.println("nodes " + waypoints.getWaypointID());
 			}
 		}
 

@@ -22,6 +22,8 @@ public class WayController implements IWayController{
 	private WayMouseAdapter mouseAdapter;
 	private WayPositionListener positionListener;
 	private boolean active;
+	private boolean clicked = false;
+	private Waypoint tempStart;
 	
 	public WayController(JrouteView view, IWayBuilder wayBuilder){
 		this.view = view;
@@ -51,19 +53,35 @@ public class WayController implements IWayController{
 		}
 		view.getWwd().addPositionListener(positionListener);
 		active = true;
+		clicked = true;
+		tempStart = currentWaypoint;
 		wayBuilder.createNewWay(currentWaypoint);
+	}
+	
+	private void finishLine(){
+		Waypoint currentWaypoint = view.getWaypointAtPosition();
+		
+		if(currentWaypoint == null){
+			return;
+		}
+		view.getWwd().removePositionListener(positionListener);
+		active = false;
+		clicked = false;
+		
+		double distance = view.calculateDistance(tempStart.getReferencePosition(), currentWaypoint.getReferencePosition());
+		
+		wayBuilder.finishWay(currentWaypoint,distance);
 	}
 	
 	private class WayMouseAdapter extends MouseAdapter{
 		
 		public void mouseClicked(MouseEvent mouseEvent) {
 			if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
-				/*
-				 * addPosition(); layer.addRenderable(node);
-				 * 
-				 * if (mouseEvent.isControlDown()) removePosition();
-				 */
-				createNewLine();
+				if(!clicked){
+					createNewLine();
+				}else{
+					finishLine();
+				}
 				mouseEvent.consume();
 			}
 		}
