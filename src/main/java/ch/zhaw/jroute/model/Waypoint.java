@@ -54,8 +54,6 @@ public class Waypoint extends SurfaceCircle {
 		this.lon = lon;
 	}
 
-	
-
 	public Waypoint(String name) {
 		this.name = name;
 	}
@@ -76,15 +74,15 @@ public class Waypoint extends SurfaceCircle {
 		return nextWaypoints;
 	}
 
-	void setBefore(Waypoint before) {
+	public void setWaypointBefore(Waypoint before) {
 		this.before = before;
 	}
 
-	Waypoint getBefore() {
+	public Waypoint getWaypointBefore() {
 		return before;
 	}
 
-	void setDistance(double distance) {
+	public void setDistanceToStart(double distance) {
 		this.distanceToStart = distance;
 	}
 
