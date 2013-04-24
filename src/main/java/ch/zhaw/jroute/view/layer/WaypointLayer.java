@@ -28,7 +28,6 @@ public class WaypointLayer extends RenderableLayer implements Observer{
 	
 	public WaypointLayer(AnnotationLayer waypointAnnotationLayer){
 		super();
-		this.setWaypointStyle();
 		this.setAnnotationStyle();
 		this.waypointAnnotationLayer = waypointAnnotationLayer;
 	}
@@ -36,20 +35,22 @@ public class WaypointLayer extends RenderableLayer implements Observer{
 	public void update(Observable o, Object arg) {
 		
 		Waypoint waypoint = (Waypoint)arg;
-		
+		waypoint.setAttributes(getShapeStyle(Color.GRAY));
 		for(Renderable temp : this.getRenderables()){
 			Waypoint existingWp = (Waypoint)temp;
 			
 			if(existingWp.getWaypointID() == waypoint.getWaypointID()){
 				this.removeRenderable(existingWp);
 				//Some crazy stuff happens
-				//handleExistingWaypoint(waypoint);
+				waypoint = handleExistingWaypoint(waypoint);
 			}
 		}
 		
-		waypoint.setAttributes(shapeStyle);
+		
 		addAnnotation(waypoint);
 		this.addRenderable(waypoint);
+		
+
 	}
 	
 	private void addAnnotation(Waypoint waypoint){
@@ -59,32 +60,34 @@ public class WaypointLayer extends RenderableLayer implements Observer{
 	}
 	
 	//TODO: UGLY REDOOOO!!!
-	private void handleExistingWaypoint(Waypoint waypoint){
+	private Waypoint handleExistingWaypoint(Waypoint waypoint){
 		switch(waypoint.getStatus()){
 		case undefined:
-			shapeStyle.setInteriorMaterial(new Material(Color.GRAY));
-			shapeStyle.setOutlineMaterial(new Material(Color.GRAY));
-			waypoint.setAttributes(shapeStyle);
+			waypoint.setAttributes(getShapeStyle(Color.GRAY));
 			break;
 		case start:
-			shapeStyle.setInteriorMaterial(new Material(Color.GREEN));
-			shapeStyle.setOutlineMaterial(new Material(Color.GREEN));
-			waypoint.setAttributes(shapeStyle);
+			waypoint.setAttributes(getShapeStyle(Color.GREEN));
 			break;
 		case end:
-			shapeStyle.setInteriorMaterial(new Material(Color.RED));
-			shapeStyle.setOutlineMaterial(new Material(Color.RED));
-			waypoint.setAttributes(shapeStyle);
+			waypoint.setAttributes(getShapeStyle(Color.RED));
 			break;
 		default:
 			break;
 		}
 		
-		addAnnotation(waypoint);
-		this.addRenderable(waypoint);
-		
-		//shapeStyle.setInteriorMaterial(new Material(Color.GRAY));
-		//shapeStyle.setOutlineMaterial(new Material(Color.GRAY));
+		return waypoint;
+	}
+	
+	private BasicShapeAttributes getShapeStyle(Color color){
+		BasicShapeAttributes shapeStyle = new BasicShapeAttributes();
+		shapeStyle.setDrawOutline(true);
+		shapeStyle.setInteriorMaterial(new Material(color));
+		shapeStyle.setInteriorOpacity(1.0);
+		shapeStyle.setOutlineMaterial(new Material(color));
+		shapeStyle.setOutlineOpacity(1.0);
+		shapeStyle.setOutlineWidth(2.0);
+		shapeStyle.setDrawInterior(true);
+		return shapeStyle;
 	}
 
 	/**
@@ -92,16 +95,7 @@ public class WaypointLayer extends RenderableLayer implements Observer{
 	 * 
 	 * @return style attributes
 	 */
-	private void setWaypointStyle() {
-		shapeStyle = new BasicShapeAttributes();
-		shapeStyle.setDrawOutline(true);
-		shapeStyle.setInteriorMaterial(new Material(Color.GRAY));
-		shapeStyle.setInteriorOpacity(1.0);
-		shapeStyle.setOutlineMaterial(new Material(Color.GRAY));
-		shapeStyle.setOutlineOpacity(1.0);
-		shapeStyle.setOutlineWidth(2.0);
-		shapeStyle.setDrawInterior(true);
-	}
+
 	
 	private void setAnnotationStyle(){
         annotationStyle = new AnnotationAttributes();
