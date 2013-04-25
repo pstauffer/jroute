@@ -5,28 +5,29 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import ch.zhaw.jroute.model.Way;
 import ch.zhaw.jroute.model.Waypoint;
 
 public class DjikstraAlgo implements IShortestPathAlgorithm {
 	List<Way> allWays = new ArrayList<Way>();
-	HashSet<Waypoint> allPoints = new HashSet<Waypoint>();
+	Set<Waypoint> allPoints = new HashSet<Waypoint>();
 	List<Waypoint> redWaypoints = new ArrayList<Waypoint>();
-	HashSet<Waypoint> greenWaypoints = new HashSet<Waypoint>();
+	Set<Waypoint> greenWaypoints = new HashSet<Waypoint>();
 
 	public DjikstraAlgo() {
 	}
 
 	@Override
 	public List<Way> getShortestPath(Waypoint start, Waypoint end,
-			ArrayList<Way> allWaysForInterface) {
+			List<Way> allWaysForInterface) {
 
-		HashSet<Waypoint> allPointsForInterface = new HashSet<Waypoint>();
+		Set<Waypoint> allPointsForInterface = new HashSet<Waypoint>();
 		List<Waypoint> redWaypointsForInterface = new ArrayList<Waypoint>();
-		HashSet<Waypoint> greenWaypointsForInterface = new HashSet<Waypoint>();
-		ArrayList<Waypoint> shortestWaypointPathForInterface = new ArrayList<Waypoint>();
-		ArrayList<Way> shortestWayForInterface = new ArrayList<Way>();
+		Set<Waypoint> greenWaypointsForInterface = new HashSet<Waypoint>();
+		List<Waypoint> shortestWaypointPathForInterface = new ArrayList<Waypoint>();
+		List<Way> shortestWayForInterface = new ArrayList<Way>();
 
 		for (Way ways : allWaysForInterface) {
 			allPointsForInterface.add(ways.getStart());

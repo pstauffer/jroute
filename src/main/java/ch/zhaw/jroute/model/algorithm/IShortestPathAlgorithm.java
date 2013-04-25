@@ -1,6 +1,5 @@
 package ch.zhaw.jroute.model.algorithm;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ch.zhaw.jroute.model.Way;
@@ -17,5 +16,5 @@ public interface IShortestPathAlgorithm {
 	 * @return List<Way> Wege die am kürzesten von start nach end führen
 	 */
 	public List<Way> getShortestPath(Waypoint start, Waypoint end,
-			ArrayList<Way> allWays);
+			List<Way> allWays);
 }

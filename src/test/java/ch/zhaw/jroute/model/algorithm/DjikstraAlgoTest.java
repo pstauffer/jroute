@@ -12,7 +12,7 @@ import ch.zhaw.jroute.model.Way;
 import ch.zhaw.jroute.model.Waypoint;
 
 public class DjikstraAlgoTest {
-	ArrayList<Way> allWays;
+	List<Way> allWays;
 	Waypoint A;
 	Waypoint B;
 	Waypoint C;

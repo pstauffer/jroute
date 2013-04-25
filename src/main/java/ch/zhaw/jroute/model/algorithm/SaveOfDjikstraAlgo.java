@@ -21,7 +21,7 @@ public class SaveOfDjikstraAlgo implements IShortestPathAlgorithm {
 
 	@Override
 	public List<Way> getShortestPath(Waypoint start, Waypoint end,
-			ArrayList<Way> allWaysForInterface) {
+			List<Way> allWaysForInterface) {
 
 		HashSet<Waypoint> allPointsForInterface = new HashSet<Waypoint>();
 		List<Waypoint> redWaypointsForInterface = new ArrayList<Waypoint>();
@@ -167,13 +167,13 @@ public class SaveOfDjikstraAlgo implements IShortestPathAlgorithm {
 
 		Way way1 = new Way(1, A, B, 2);
 		Way way2 = new Way(2, A, C, 5);
-		Way way3 = new Way(3, A, D, 7);
+		Way way3 = new Way(3, A, E, 7);
 		Way way4 = new Way(4, B, E, 8);
 		Way way5 = new Way(5, D, H, 6);
 		Way way6 = new Way(6, C, F, 15);
 		Way way7 = new Way(7, E, A, 9);
 		Way way8 = new Way(8, B, G, 1);
-		Way way9 = new Way(9, B, I, 6);
+		Way way9 = new Way(9, D, I, 6);
 
 		allWays.add(way1);
 		allWays.add(way2);
@@ -270,7 +270,7 @@ public class SaveOfDjikstraAlgo implements IShortestPathAlgorithm {
 
 		ArrayList<Waypoint> shortestPath = new ArrayList<Waypoint>();
 		ArrayList<Way> shortestWayPath = new ArrayList<Way>();
-		Waypoint finish = G;
+		Waypoint finish = I;
 		shortestPath.add(finish);
 
 		System.out.println("get shortest path from " + startWaypoint.getName()
