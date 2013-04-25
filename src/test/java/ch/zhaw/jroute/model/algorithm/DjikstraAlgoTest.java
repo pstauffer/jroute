@@ -1,42 +1,59 @@
 package ch.zhaw.jroute.model.algorithm;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import org.junit.Test;
 
 import ch.zhaw.jroute.model.Way;
 import ch.zhaw.jroute.model.Waypoint;
 
 public class DjikstraAlgoTest {
+	ArrayList<Way> allWays;
+	Waypoint A;
+	Waypoint B;
+	Waypoint C;
+	Waypoint D;
+	Waypoint E;
+	Waypoint F;
+	Waypoint G;
+	Waypoint H;
+	Waypoint I;
+	Way way1;
+	Way way2;
+	Way way3;
+	Way way4;
+	Way way5;
+	Way way6;
+	Way way7;
+	Way way8;
+	Way way9;
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+	public void createTestSzenario() {
 
-		ArrayList<Way> allWays = new ArrayList<Way>();
+		allWays = new ArrayList<Way>();
 
-		Waypoint A = new Waypoint("A");
-		Waypoint B = new Waypoint("B");
-		Waypoint C = new Waypoint("C");
-		Waypoint D = new Waypoint("D");
-		Waypoint E = new Waypoint("E");
-		Waypoint F = new Waypoint("F");
-		Waypoint G = new Waypoint("G");
-		Waypoint H = new Waypoint("H");
-		Waypoint I = new Waypoint("I");
+		A = new Waypoint("A");
+		B = new Waypoint("B");
+		C = new Waypoint("C");
+		D = new Waypoint("D");
+		E = new Waypoint("E");
+		F = new Waypoint("F");
+		G = new Waypoint("G");
+		H = new Waypoint("H");
+		I = new Waypoint("I");
 
-		Waypoint startWaypoint = A;
-		Waypoint endWaypoint = G;
-
-		Way way1 = new Way(1, A, B, 2);
-		Way way2 = new Way(2, A, C, 5);
-		Way way3 = new Way(3, A, D, 7);
-		Way way4 = new Way(4, B, E, 8);
-		Way way5 = new Way(5, D, H, 6);
-		Way way6 = new Way(6, C, F, 15);
-		Way way7 = new Way(7, E, A, 9);
-		Way way8 = new Way(8, B, G, 1);
-		Way way9 = new Way(9, B, I, 6);
+		way1 = new Way(1, A, B, 2);
+		way2 = new Way(2, A, C, 5);
+		way3 = new Way(3, A, D, 7);
+		way4 = new Way(4, B, E, 8);
+		way5 = new Way(5, D, H, 6);
+		way6 = new Way(6, C, F, 15);
+		way7 = new Way(7, E, A, 9);
+		way8 = new Way(8, B, G, 1);
+		way9 = new Way(9, B, I, 6);
 
 		allWays.add(way1);
 		allWays.add(way2);
@@ -48,14 +65,23 @@ public class DjikstraAlgoTest {
 		allWays.add(way8);
 		allWays.add(way9);
 
+	}
+
+	@Test
+	public void shortestPath() {
+
+		createTestSzenario();
+
+		Waypoint startWaypoint = A;
+		Waypoint endWaypoint = G;
+
 		DjikstraAlgo algo = new DjikstraAlgo();
 
 		List<Way> shortestWay = algo.getShortestPath(startWaypoint,
 				endWaypoint, allWays);
 
-		for (Way ways : shortestWay) {
-			System.out.println(ways.getWayID());
-		}
+		assertEquals(1, shortestWay.get(0).getWayID());
+		assertEquals(8, shortestWay.get(1).getWayID());
 
 	}
 
