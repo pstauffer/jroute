@@ -16,6 +16,7 @@ public class SideNavigationPanel extends JPanel{
 	
 	private WaypointOverviewPanel waypointPanel;
 	private WayOverviewPanel wayPanel;
+	private ControlPanel controlPanel;
 	
 	/**
 	 * 
@@ -29,8 +30,10 @@ public class SideNavigationPanel extends JPanel{
 		
 		this.waypointPanel = new WaypointOverviewPanel();
 		this.wayPanel = new WayOverviewPanel();
+		this.controlPanel = new ControlPanel();
 		
 		this.add(waypointPanel,BorderLayout.NORTH);
+		this.add(controlPanel,BorderLayout.CENTER);
 		this.add(wayPanel,BorderLayout.SOUTH);
 	}
 	
@@ -38,8 +41,12 @@ public class SideNavigationPanel extends JPanel{
 		return waypointPanel;
 	}
 
-	public WayOverviewPanel getConnectorPanel() {
+	public WayOverviewPanel getWayPanel() {
 		return wayPanel;
+	}
+	
+	public ControlPanel getControlPanel(){
+		return controlPanel;
 	}
 	
 	

@@ -15,6 +15,7 @@ public class Way extends DirectedPath {
 	private double distance;
 	private String name;
 	private List<Position> pointList = new ArrayList<Position>();
+	private WayStatusEnum status;
 
 	public Way() {
 		super();
@@ -97,6 +98,14 @@ public class Way extends DirectedPath {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public WayStatusEnum getStatus() {
+		return status;
+	}
+
+	public void setStatus(WayStatusEnum status) {
+		this.status = status;
 	}
 
 }

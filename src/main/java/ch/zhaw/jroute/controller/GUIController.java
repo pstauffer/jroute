@@ -17,6 +17,7 @@ public class GUIController {
 
 	private WaypointController waypointController;
 	private WayController wayController;
+	private AlgorithmController algoController;
 
 	boolean armedWay = false;
 	boolean armedWaypoint = false;
@@ -33,12 +34,21 @@ public class GUIController {
 		// Controller
 		this.waypointController = new WaypointController(view, waypointBuilder);
 		this.wayController = new WayController(view, wayBuilder);
+		this.algoController = new AlgorithmController(wayBuilder,waypointBuilder);
 
 		view.addWaypointActionListener(new CreateWaypointListener());
 		view.addWayActionListener(new CreateWayListener());
 		view.addStartWaypointActionListener(new StartWaypointListener());
 		view.addEndWaypointActionListener(new EndWaypointListener());
-
+		view.addCalculateRouteActionListener(new CreateCalcRouteListener());
+		
+	}
+	
+	private class CreateCalcRouteListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent ae) {
+			algoController.StartAlgorithm();
+		}
 	}
 
 	private class CreateWaypointListener implements ActionListener {

@@ -95,5 +95,19 @@ public class WaypointBuilder extends Observable implements IWaypointBuilder {
 		this.setChanged();
 		this.notifyObservers(waypoint);
 	}
+	
+	public HashMap<Integer, Waypoint> getWaypointList() {
+		return waypointList;
+	}
+
+
+	public Waypoint getStartWaypoint() {
+		return startWaypoint;
+	}
+
+
+	public Waypoint getEndWaypoint() {
+		return endWaypoint;
+	}
 
 }

@@ -6,12 +6,13 @@ import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
 public class WayBuilder extends Observable implements IWayBuilder {
 	
-	HashMap<Integer, Way> allWays = new HashMap<Integer, Way>();
+	Map<Integer, Way> allWays = new HashMap<Integer, Way>();
 	private Way activeWay = new Way();
 	private int id = 0;
 	
@@ -49,4 +50,15 @@ public class WayBuilder extends Observable implements IWayBuilder {
 		this.notifyObservers(newPosition);
 	}
 
+	public Map<Integer, Way> getAllWays() {
+		return allWays;
+	}
+
+	@Override
+	public void showShortestPath(List<Way> resultList) {
+		for(Way resultWay : resultList){
+			
+		}
+		
+	}
 }

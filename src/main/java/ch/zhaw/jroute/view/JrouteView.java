@@ -102,7 +102,7 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 	}
 
 	public void addWayActionListener(ActionListener listener) {
-		this.navigationPanel.getConnectorPanel().getCreateConnectorButton()
+		this.navigationPanel.getWayPanel().getCreateConnectorButton()
 				.addActionListener(listener);
 	}
 
@@ -113,6 +113,11 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 
 	public void addEndWaypointActionListener(ActionListener listener) {
 		this.navigationPanel.getWaypointPanel().getEndWaypointButton()
+				.addActionListener(listener);
+	}
+	
+	public void addCalculateRouteActionListener(ActionListener listener) {
+		this.navigationPanel.getControlPanel().getStartAlgorithmButton()
 				.addActionListener(listener);
 	}
 
