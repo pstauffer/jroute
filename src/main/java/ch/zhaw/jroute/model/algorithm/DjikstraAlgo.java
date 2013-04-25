@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import ch.zhaw.jroute.model.Way;
+import ch.zhaw.jroute.model.WayStatusEnum;
 import ch.zhaw.jroute.model.Waypoint;
 
 public class DjikstraAlgo implements IShortestPathAlgorithm {
@@ -124,9 +125,11 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 			if (finishForInterface.getWaypointBefore().equals(
 					startWaypointForInterface)) {
 				shortestWaypointPathForInterface.add(startWaypointForInterface);
-				shortestWayForInterface.add(getWay(
+				Way newWay = getWay(
 						startWaypointForInterface.getWaypointBefore(),
-						finishForInterface, allWaysForInterface));
+						finishForInterface, allWaysForInterface);
+				shortestWayForInterface.add(newWay);
+				newWay.setStatus(WayStatusEnum.result);
 				break;
 			}
 

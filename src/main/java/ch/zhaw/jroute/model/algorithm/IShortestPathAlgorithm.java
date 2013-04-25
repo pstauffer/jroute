@@ -15,6 +15,5 @@ public interface IShortestPathAlgorithm {
 	 *            with distance between the waypoints
 	 * @return List<Way> Wege die am kürzesten von start nach end führen
 	 */
-	public List<Way> getShortestPath(Waypoint start, Waypoint end,
-			List<Way> allWays);
+	List<Way> getShortestPath(Waypoint start, Waypoint end, List<Way> allWays);
 }
