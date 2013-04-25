@@ -1,6 +1,7 @@
 package ch.zhaw.jroute.model.algorithm;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +68,11 @@ public class DjikstraAlgoTest {
 
 	}
 
+	/**
+	 * check a route from point A to point G
+	 * 
+	 * @author Pascal S.
+	 */
 	@Test
 	public void shortestPathPart1() {
 
@@ -80,11 +86,27 @@ public class DjikstraAlgoTest {
 		List<Way> shortestWay = algo.getShortestPath(startWaypoint,
 				endWaypoint, allWays);
 
-		assertEquals(1, shortestWay.get(0).getWayID());
-		assertEquals(8, shortestWay.get(1).getWayID());
+		int WayID0 = shortestWay.get(0).getWayID();
+		int WayID1 = shortestWay.get(1).getWayID();
+
+		int ExpectedWayID0 = 1;
+		int ExpectedWayID1 = 8;
+
+		// variant 1
+		assertEquals(ExpectedWayID0, WayID0);
+		assertEquals(ExpectedWayID1, WayID1);
+
+		// variant 2
+		assertTrue(WayID0 == ExpectedWayID0);
+		assertTrue(WayID1 == ExpectedWayID1);
 
 	}
 
+	/**
+	 * check a route from point A to point I
+	 * 
+	 * @author Pascal S.
+	 */
 	@Test
 	public void shortestPathPart2() {
 
@@ -98,8 +120,17 @@ public class DjikstraAlgoTest {
 		List<Way> shortestWay = algo.getShortestPath(startWaypoint,
 				endWaypoint, allWays);
 
-		assertEquals(1, shortestWay.get(0).getWayID());
-		assertEquals(9, shortestWay.get(1).getWayID());
+		int WayID0 = shortestWay.get(0).getWayID();
+		int WayID1 = shortestWay.get(1).getWayID();
+
+		int ExpectedWayID0 = 1;
+		int ExpectedWayID1 = 9;
+
+		assertEquals(ExpectedWayID0, WayID0);
+		assertEquals(ExpectedWayID1, WayID1);
+
+		assertTrue(WayID0 == ExpectedWayID0);
+		assertTrue(WayID1 == ExpectedWayID1);
 
 	}
 
