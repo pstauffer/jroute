@@ -17,6 +17,8 @@ public class WaypointBuilder extends Observable implements IWaypointBuilder {
 	private HashMap<Integer,Waypoint> waypointList = new HashMap<Integer,Waypoint>();
 	private int currentLetter = 65; //A
 	private int id = 0;
+	private Waypoint startWaypoint;
+	private Waypoint endWaypoint;
 
 	public void createWaypointFromPosition(Position waypointPosition) {
 
@@ -52,8 +54,41 @@ public class WaypointBuilder extends Observable implements IWaypointBuilder {
 
 
 	@Override
-	public void setStartEndpoint(WaypointStatusEnum status, Waypoint waypoint) {
-		//TODO: Add a check if start and end are allready set
+	public void setStartWaypoint(WaypointStatusEnum status, Waypoint waypoint) {
+		if(status == WaypointStatusEnum.undefined){
+			startWaypoint = null;
+		}else if(startWaypoint == null){
+			startWaypoint = waypoint;
+		}
+		else{
+			startWaypoint.setStatus(WaypointStatusEnum.undefined);
+			waypointList.put(startWaypoint.getWaypointID(), startWaypoint);
+			this.setChanged();
+			this.notifyObservers(startWaypoint);
+			startWaypoint = waypoint;
+		}
+		
+		waypoint.setStatus(status);
+		waypointList.put(waypoint.getWaypointID(), waypoint);
+		
+		this.setChanged();
+		this.notifyObservers(waypoint);
+	}
+	
+	public void setEndWaypoint(WaypointStatusEnum status, Waypoint waypoint) {
+		if(status == WaypointStatusEnum.undefined){
+			endWaypoint = null;
+		}else if(endWaypoint == null){
+			endWaypoint = waypoint;
+		}
+		else{
+			endWaypoint.setStatus(WaypointStatusEnum.undefined);
+			waypointList.put(endWaypoint.getWaypointID(), endWaypoint);
+			this.setChanged();
+			this.notifyObservers(endWaypoint);
+			endWaypoint = waypoint;
+		}
+		
 		waypoint.setStatus(status);
 		waypointList.put(waypoint.getWaypointID(), waypoint);
 		

@@ -30,7 +30,7 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 	private WayLayer wayLayer;
 	private WaypointLayer waypointLayer;
 	private LengthMeasurer lenghtMeasurer = new LengthMeasurer();
-	
+
 	// Controllers
 	private IWaypointController waypointController;
 
@@ -40,10 +40,10 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 	public JrouteView() {
 		super(true, false, false);
 		this.setSize(850, 800);
-		
-		wayLayer = new WayLayer(this.getWwd(),wayAnnotationLayer);
+
+		wayLayer = new WayLayer(this.getWwd(), wayAnnotationLayer);
 		waypointLayer = new WaypointLayer(waypointAnnotationLayer);
-		
+
 		// hide not usefull layers and add open streetmap layer
 		this.addExtraLayer();
 
@@ -51,11 +51,11 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 		this.getWwd().setValue(AVKey.INITIAL_LATITUDE, 49.06);
 		this.getWwd().setValue(AVKey.INITIAL_LONGITUDE, -122.77);
 		this.getWwd().setValue(AVKey.INITIAL_ALTITUDE, 22000);
-		
-		//create side panel
+
+		// create side panel
 		this.navigationPanel = new SideNavigationPanel(this.getWwd());
 
-		//add side panel to the window
+		// add side panel to the window
 		this.getContentPane().add(this.navigationPanel, BorderLayout.WEST);
 	}
 
@@ -71,12 +71,12 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 		layers.add(waypointLayer);
 		layers.add(wayAnnotationLayer);
 		layers.add(waypointAnnotationLayer);
-		
+
 		wayLayer.setName("Connector layer");
 		waypointLayer.setName("Waypoint layer");
 		wayAnnotationLayer.setName("Way Annotation layer");
 		waypointAnnotationLayer.setName("Waypoint Annotation layer");
-		
+
 		for (Layer layer : layers) {
 			// layer.setEnabled(false);
 			if (layer.getName().contains("Place")) {
@@ -95,47 +95,57 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 
 		this.getWwd().redraw();
 	}
-	
-	public void addWaypointActionListener(ActionListener listener){
+
+	public void addWaypointActionListener(ActionListener listener) {
 		this.navigationPanel.getWaypointPanel().getCreateWaypointButton()
-		.addActionListener(listener);
+				.addActionListener(listener);
 	}
-	
-	public void addWayActionListener(ActionListener listener){
+
+	public void addWayActionListener(ActionListener listener) {
 		this.navigationPanel.getConnectorPanel().getCreateConnectorButton()
-		.addActionListener(listener);
+				.addActionListener(listener);
 	}
-	
-	public Waypoint getWaypointAtPosition(){
+
+	public void addStartWaypointActionListener(ActionListener listener) {
+		this.navigationPanel.getWaypointPanel().getStartWaypointButton()
+				.addActionListener(listener);
+	}
+
+	public void addEndWaypointActionListener(ActionListener listener) {
+		this.navigationPanel.getWaypointPanel().getEndWaypointButton()
+				.addActionListener(listener);
+	}
+
+	public Waypoint getWaypointAtPosition() {
 		PickedObjectList list = this.getWwd().getObjectsAtCurrentPosition();
 		Waypoint currentWaypoint = null;
-		
-		for(PickedObject obj : list){
+
+		for (PickedObject obj : list) {
 			if (obj.getObject() instanceof Waypoint) {
 				currentWaypoint = (Waypoint) obj.getObject();
 			}
 		}
-		
+
 		return currentWaypoint;
 	}
-	
-	//Maybe this is wrong position for this
-	public double calculateDistance(Position start,Position end){
+
+	// Maybe this is wrong position for this
+	public double calculateDistance(Position start, Position end) {
 		ArrayList<Position> tempPos = new ArrayList<Position>();
-		
+
 		tempPos.add(start);
 		tempPos.add(end);
-		
+
 		lenghtMeasurer.setPositions(tempPos);
 		return lenghtMeasurer.getLength(this.getWwd().getModel().getGlobe());
 	}
-	
+
 	public WaypointLayer getWaypointLayer() {
 		return waypointLayer;
 	}
-	
-	public WayLayer getWayLayer(){
+
+	public WayLayer getWayLayer() {
 		return wayLayer;
 	}
-	
+
 }

@@ -2,6 +2,7 @@ package ch.zhaw.jroute.view.panel;
 
 import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,10 +17,12 @@ import ch.zhaw.jroute.controller.WaypointController;
 
 public class WaypointOverviewPanel extends JPanel{
 	
-	private JButton createWaypointBut;
+	private JButton createWaypointButton;
+	private JButton startWaypointButton;
+	private JButton endWaypointButton;
 	
 	public WaypointOverviewPanel(){
-		super(new GridLayout());
+		super(new GridLayout(0,2));
 		
 		//Create the actual panel
 		this.createPanel();
@@ -34,12 +37,30 @@ public class WaypointOverviewPanel extends JPanel{
 	}
 	
 	public void createButtons(){
-		this.createWaypointBut = new JButton("Create");
-		this.add(createWaypointBut);
+		this.createWaypointButton = new JButton("Create");
+		JButton placeholderButton = new JButton();
+		placeholderButton.setVisible(false);
+		
+		//placeholderButton.setPreferredSize(new Dimension(0,0));
+		
+		this.startWaypointButton = new JButton("Start");
+		this.endWaypointButton = new JButton("End");
+		this.add(createWaypointButton);
+		this.add(placeholderButton);
+		this.add(startWaypointButton);
+		this.add(endWaypointButton);
 		
 	}
 
 	public JButton getCreateWaypointButton() {
-		return createWaypointBut;
+		return createWaypointButton;
+	}
+
+	public JButton getStartWaypointButton() {
+		return startWaypointButton;
+	}
+
+	public JButton getEndWaypointButton() {
+		return endWaypointButton;
 	}
 }

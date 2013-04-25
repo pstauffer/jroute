@@ -20,6 +20,8 @@ public class WaypointController implements IWaypointController {
 	private IWaypointBuilder waypointBuilder;
 	private JrouteView view;
 	private WaypointMouseAdapter mouseAdapter;
+	private StartWaypointMouseAdapter startMouseAdapter;
+	private EndWaypointMouseAdapter endMouseAdapter;
 	private IWayController wayController;
 	
 	public WaypointController(JrouteView view, IWaypointBuilder builder){
@@ -29,6 +31,8 @@ public class WaypointController implements IWaypointController {
 		this.waypointBuilder.registerObserver(view.getWaypointLayer());
 		
 		this.mouseAdapter = new WaypointMouseAdapter();
+		this.startMouseAdapter = new StartWaypointMouseAdapter();
+		this.endMouseAdapter = new EndWaypointMouseAdapter();
 		
 		this.wayController = wayController;
 	}
@@ -45,16 +49,42 @@ public class WaypointController implements IWaypointController {
 		view.getWwd().getInputHandler().removeMouseListener(mouseAdapter);
 	}
 	
-	private void handleExistingWaypoint(Waypoint existingWp){
+	public void addStartWaypointInputListener(){
+		view.getWwd().getInputHandler().addMouseListener(startMouseAdapter);
+	}
+	
+	public void removeStartWaypointInputListener() {
+		view.getWwd().getInputHandler().removeMouseListener(startMouseAdapter);
+	}
+	
+	public void addEndWaypointInputListener(){
+		view.getWwd().getInputHandler().addMouseListener(endMouseAdapter);
+	}
+	
+	public void removeEndWaypointInputListener() {
+		view.getWwd().getInputHandler().removeMouseListener(endMouseAdapter);
+	}
+	
+	private void setStartWaypoint(Waypoint existingWp){
 		switch(existingWp.getStatus()){
 		case undefined:
-			waypointBuilder.setStartEndpoint(WaypointStatusEnum.start, existingWp);
+			waypointBuilder.setStartWaypoint(WaypointStatusEnum.start, existingWp);
 			break;
 		case start:
-			waypointBuilder.setStartEndpoint(WaypointStatusEnum.end, existingWp);
+			waypointBuilder.setStartWaypoint(WaypointStatusEnum.undefined, existingWp);
+			break;
+		default:
+			break;
+		}
+	}
+	
+	private void setEndWaypoint(Waypoint existingWp){
+		switch(existingWp.getStatus()){
+		case undefined:
+			waypointBuilder.setEndWaypoint(WaypointStatusEnum.end, existingWp);
 			break;
 		case end:
-			waypointBuilder.setStartEndpoint(WaypointStatusEnum.undefined, existingWp);
+			waypointBuilder.setEndWaypoint(WaypointStatusEnum.undefined, existingWp);
 			break;
 		default:
 			break;
@@ -67,7 +97,7 @@ public class WaypointController implements IWaypointController {
 			if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
 				Waypoint existingWp = view.getWaypointAtPosition();
 				if(existingWp!=null){
-					handleExistingWaypoint(existingWp);
+					return;
 				}else{
 					createNewNode(view.getWwd().getCurrentPosition());
 				}
@@ -76,4 +106,38 @@ public class WaypointController implements IWaypointController {
 			}
 		}
 	}
+	
+	private class StartWaypointMouseAdapter extends MouseAdapter{
+		
+		public void mouseClicked(MouseEvent mouseEvent) {
+			if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
+				Waypoint existingWp = view.getWaypointAtPosition();
+				if(existingWp!=null){
+					setStartWaypoint(existingWp);
+				}else{
+					return;
+				}
+
+				mouseEvent.consume();
+			}
+		}
+	}
+	
+	private class EndWaypointMouseAdapter extends MouseAdapter{
+		
+		public void mouseClicked(MouseEvent mouseEvent) {
+			if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
+				Waypoint existingWp = view.getWaypointAtPosition();
+				if(existingWp!=null){
+					setEndWaypoint(existingWp);
+				}else{
+					return;
+				}
+
+				mouseEvent.consume();
+			}
+		}
+	}
+	
+	
 }
