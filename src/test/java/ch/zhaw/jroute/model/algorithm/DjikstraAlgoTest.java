@@ -68,7 +68,7 @@ public class DjikstraAlgoTest {
 	}
 
 	@Test
-	public void shortestPath() {
+	public void shortestPathPart1() {
 
 		createTestSzenario();
 
@@ -82,6 +82,24 @@ public class DjikstraAlgoTest {
 
 		assertEquals(1, shortestWay.get(0).getWayID());
 		assertEquals(8, shortestWay.get(1).getWayID());
+
+	}
+
+	@Test
+	public void shortestPathPart2() {
+
+		createTestSzenario();
+
+		Waypoint startWaypoint = A;
+		Waypoint endWaypoint = I;
+
+		DjikstraAlgo algo = new DjikstraAlgo();
+
+		List<Way> shortestWay = algo.getShortestPath(startWaypoint,
+				endWaypoint, allWays);
+
+		assertEquals(1, shortestWay.get(0).getWayID());
+		assertEquals(9, shortestWay.get(1).getWayID());
 
 	}
 
