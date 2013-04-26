@@ -147,6 +147,12 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 
 		}
 
+		for (Way way : allWays) {
+			if (way.getStatus() != WayStatusEnum.result) {
+				way.setStatus(WayStatusEnum.noResult);
+			}
+		}
+
 		Collections.reverse(shortestWaypointPathForInterface);
 		Collections.reverse(shortestWayForInterface);
 
