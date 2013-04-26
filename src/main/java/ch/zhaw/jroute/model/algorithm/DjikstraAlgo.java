@@ -136,10 +136,11 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 			// add the beforePoint to the list
 			shortestWaypointPathForInterface.add(finishForInterface
 					.getWaypointBefore());
-			shortestWayForInterface
-					.add(getWay(finishForInterface,
-							finishForInterface.getWaypointBefore(),
-							allWaysForInterface));
+			Way newWay = getWay(finishForInterface,
+					finishForInterface.getWaypointBefore(), allWaysForInterface);
+
+			shortestWayForInterface.add(newWay);
+			newWay.setStatus(WayStatusEnum.result);
 
 			// set the beforePoint as activePoint for the next looping
 			Waypoint nextForInterface = finishForInterface.getWaypointBefore();

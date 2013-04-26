@@ -12,9 +12,6 @@ import ch.zhaw.jroute.model.Waypoint;
 
 public class SaveOfDjikstraAlgo {
 
-	public SaveOfDjikstraAlgo() {
-	}
-
 	private static List<Way> allWays = new ArrayList<Way>();
 	private static Set<Waypoint> allPoints = new HashSet<Waypoint>();
 	private static List<Waypoint> redWaypoints = new ArrayList<Waypoint>();

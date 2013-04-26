@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.Test;
 
 import ch.zhaw.jroute.model.Way;
+import ch.zhaw.jroute.model.WayStatusEnum;
 import ch.zhaw.jroute.model.Waypoint;
 
 public class DjikstraAlgoTest {
@@ -88,9 +89,13 @@ public class DjikstraAlgoTest {
 
 		int WayID0 = shortestWay.get(0).getWayID();
 		int WayID1 = shortestWay.get(1).getWayID();
+		WayStatusEnum WayStatus0 = shortestWay.get(0).getStatus();
+		WayStatusEnum WayStatus1 = shortestWay.get(1).getStatus();
 
 		int ExpectedWayID0 = 1;
 		int ExpectedWayID1 = 8;
+		WayStatusEnum ExpectedWayStatus0 = WayStatusEnum.result;
+		WayStatusEnum ExpectedWayStatus1 = WayStatusEnum.result;
 
 		// variant 1
 		assertEquals(ExpectedWayID0, WayID0);
@@ -99,6 +104,9 @@ public class DjikstraAlgoTest {
 		// variant 2
 		assertTrue(WayID0 == ExpectedWayID0);
 		assertTrue(WayID1 == ExpectedWayID1);
+
+		assertEquals(ExpectedWayStatus0, WayStatus0);
+		assertEquals(ExpectedWayStatus1, WayStatus1);
 
 	}
 
