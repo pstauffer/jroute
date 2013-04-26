@@ -12,13 +12,13 @@ import ch.zhaw.jroute.model.WayStatusEnum;
 import ch.zhaw.jroute.model.Waypoint;
 
 public class DjikstraAlgo implements IShortestPathAlgorithm {
-	List<Way> allWays = new ArrayList<Way>();
-	Set<Waypoint> allPoints = new HashSet<Waypoint>();
-	List<Waypoint> redWaypoints = new ArrayList<Waypoint>();
-	Set<Waypoint> greenWaypoints = new HashSet<Waypoint>();
 
 	public DjikstraAlgo() {
 	}
+
+	/**
+	 * to do: exception for endpoint, which is not reachable
+	 */
 
 	@Override
 	public List<Way> getShortestPath(Waypoint start, Waypoint end,
@@ -30,9 +30,10 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 		List<Waypoint> shortestWaypointPathForInterface = new ArrayList<Waypoint>();
 		List<Way> shortestWayForInterface = new ArrayList<Way>();
 
-		for (Way ways : allWaysForInterface) {
-			allPointsForInterface.add(ways.getStart());
-			allPointsForInterface.add(ways.getEnd());
+		for (Way way : allWaysForInterface) {
+			allPointsForInterface.add(way.getStart());
+			allPointsForInterface.add(way.getEnd());
+			way.setStatus(WayStatusEnum.noResult);
 		}
 
 		// set startpoint
@@ -148,12 +149,6 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 
 		}
 
-		for (Way way : allWays) {
-			if (way.getStatus() != WayStatusEnum.result) {
-				way.setStatus(WayStatusEnum.noResult);
-			}
-		}
-
 		Collections.reverse(shortestWaypointPathForInterface);
 		Collections.reverse(shortestWayForInterface);
 
@@ -171,7 +166,7 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 		return null;
 	}
 
-	Comparator<Waypoint> sortByDistance = new Comparator<Waypoint>() {
+	private Comparator<Waypoint> sortByDistance = new Comparator<Waypoint>() {
 		public int compare(Waypoint point1, Waypoint point2) {
 			return (int) (point1.getDistanceToStart() - point2
 					.getDistanceToStart());

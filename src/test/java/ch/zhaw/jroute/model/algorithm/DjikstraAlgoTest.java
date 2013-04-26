@@ -89,13 +89,9 @@ public class DjikstraAlgoTest {
 
 		int WayID0 = shortestWay.get(0).getWayID();
 		int WayID1 = shortestWay.get(1).getWayID();
-		WayStatusEnum WayStatus0 = shortestWay.get(0).getStatus();
-		WayStatusEnum WayStatus1 = shortestWay.get(1).getStatus();
 
 		int ExpectedWayID0 = 1;
 		int ExpectedWayID1 = 8;
-		WayStatusEnum ExpectedWayStatus0 = WayStatusEnum.result;
-		WayStatusEnum ExpectedWayStatus1 = WayStatusEnum.result;
 
 		// variant 1
 		assertEquals(ExpectedWayID0, WayID0);
@@ -105,8 +101,53 @@ public class DjikstraAlgoTest {
 		assertTrue(WayID0 == ExpectedWayID0);
 		assertTrue(WayID1 == ExpectedWayID1);
 
+	}
+
+	/**
+	 * to do: check noResult as status... check graph check, if no route to
+	 * endpoint exist... check all values from the points and ways
+	 */
+
+	@Test
+	public void checkStatusResult() {
+
+		createTestSzenario();
+
+		Waypoint startWaypoint = A;
+		Waypoint endWaypoint = G;
+
+		DjikstraAlgo algo = new DjikstraAlgo();
+
+		List<Way> shortestWay = algo.getShortestPath(startWaypoint,
+				endWaypoint, allWays);
+
+		WayStatusEnum WayStatus0 = shortestWay.get(0).getStatus();
+		WayStatusEnum WayStatus1 = shortestWay.get(1).getStatus();
+		WayStatusEnum ExpectedWayStatus0 = WayStatusEnum.result;
+		WayStatusEnum ExpectedWayStatus1 = WayStatusEnum.result;
 		assertEquals(ExpectedWayStatus0, WayStatus0);
 		assertEquals(ExpectedWayStatus1, WayStatus1);
+
+	}
+
+	@Test
+	public void checkStatusNoResult() {
+
+		createTestSzenario();
+
+		Waypoint startWaypoint = A;
+		Waypoint endWaypoint = G;
+
+		DjikstraAlgo algo = new DjikstraAlgo();
+
+		algo.getShortestPath(startWaypoint, endWaypoint, allWays);
+
+		WayStatusEnum WayStatus5 = allWays.get(5).getStatus();
+		WayStatusEnum WayStatus6 = allWays.get(6).getStatus();
+		WayStatusEnum ExpectedWayStatus5 = WayStatusEnum.noResult;
+		WayStatusEnum ExpectedWayStatus6 = WayStatusEnum.noResult;
+		assertEquals(ExpectedWayStatus5, WayStatus5);
+		assertEquals(ExpectedWayStatus6, WayStatus6);
 
 	}
 
