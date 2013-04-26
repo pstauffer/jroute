@@ -11,6 +11,8 @@ import java.util.Observable;
 import java.util.Observer;
 
 import ch.zhaw.jroute.model.Way;
+import ch.zhaw.jroute.model.WayStatusEnum;
+import ch.zhaw.jroute.model.Waypoint;
 
 import gov.nasa.worldwind.WorldWind;
 import gov.nasa.worldwind.WorldWindow;
@@ -26,90 +28,136 @@ import gov.nasa.worldwind.render.Material;
 import gov.nasa.worldwind.render.Renderable;
 import gov.nasa.worldwind.render.ShapeAttributes;
 
-public class WayLayer extends RenderableLayer implements Observer{
+public class WayLayer extends RenderableLayer implements Observer {
 
 	private Way currentWay;
-	private ShapeAttributes shapeStyle;
 	private AnnotationLayer wayAnnotationLayer;
 	private AnnotationAttributes annotationStyle;
 	private WorldWindow worldWindow;
-	
-	public WayLayer(WorldWindow worldWindow, AnnotationLayer wayAnnotationLayer){
+
+	public WayLayer(WorldWindow worldWindow, AnnotationLayer wayAnnotationLayer) {
 		super();
-		this.setShapeAttributes();
 		this.setAnnotationAttributes();
-		
+
 		this.worldWindow = worldWindow;
 		this.wayAnnotationLayer = wayAnnotationLayer;
 	}
-	
-	private void setShapeAttributes(){
-        shapeStyle = new BasicShapeAttributes();
-        shapeStyle.setOutlineMaterial(Material.BLACK);
-        shapeStyle.setOutlineWidth(2d);
+
+	private ShapeAttributes getShapeStyle(Color color) {
+		ShapeAttributes shapeStyle = new BasicShapeAttributes();
+		shapeStyle.setOutlineMaterial(new Material(color));
+		shapeStyle.setOutlineWidth(2d);
+		return shapeStyle;
 	}
-	
-	private void setAnnotationAttributes(){
+
+	private void setAnnotationAttributes() {
 		AnnotationAttributes defaultAttributes = new AnnotationAttributes();
-        defaultAttributes.setCornerRadius(10);
-        defaultAttributes.setInsets(new Insets(8, 8, 8, 8));
-        defaultAttributes.setBackgroundColor(new Color(0f, 0f, 0f, .5f));
-        defaultAttributes.setTextColor(Color.WHITE);
-        //defaultAttributes.setDrawOffset(new Point(25, 25));
-        defaultAttributes.setDistanceMinScale(.5);
-        defaultAttributes.setDistanceMaxScale(2);
-        defaultAttributes.setDistanceMinOpacity(.5);
-        //defaultAttributes.setLeaderGapWidth(14);
-        defaultAttributes.setDrawOffset(new Point(20, 40));
-		
+		defaultAttributes.setCornerRadius(10);
+		defaultAttributes.setInsets(new Insets(8, 8, 8, 8));
+		defaultAttributes.setBackgroundColor(new Color(0f, 0f, 0f, .5f));
+		defaultAttributes.setTextColor(Color.WHITE);
+		// defaultAttributes.setDrawOffset(new Point(25, 25));
+		defaultAttributes.setDistanceMinScale(.5);
+		defaultAttributes.setDistanceMaxScale(2);
+		defaultAttributes.setDistanceMinOpacity(.5);
+		// defaultAttributes.setLeaderGapWidth(14);
+		defaultAttributes.setDrawOffset(new Point(20, 40));
+
 		annotationStyle = new AnnotationAttributes();
 		annotationStyle.setDefaults(defaultAttributes);
-		annotationStyle.setFrameShape(AVKey.SHAPE_NONE);  // No frame
+		annotationStyle.setFrameShape(AVKey.SHAPE_NONE); // No frame
 		annotationStyle.setFont(Font.decode("Arial-PLAIN-14"));
 		annotationStyle.setTextColor(Color.BLACK);
-        annotationStyle.setTextAlign(AVKey.CENTER);
-        annotationStyle.setDrawOffset(new Point(0, 5)); // centered just above
-       // geoAttr.setEffect(AVKey.TEXT_EFFECT_OUTLINE);  // Black outline
-        annotationStyle.setBackgroundColor(Color.BLACK);
+		annotationStyle.setTextAlign(AVKey.CENTER);
+		annotationStyle.setDrawOffset(new Point(0, 5)); // centered just above
+		// geoAttr.setEffect(AVKey.TEXT_EFFECT_OUTLINE); // Black outline
+		annotationStyle.setBackgroundColor(Color.BLACK);
 	}
-	
+
 	public void update(Observable arg0, Object arg1) {
-		if(arg1 instanceof Way){
-			currentWay = (Way)arg1;
-			currentWay.setAttributes(shapeStyle);
-			
+		if (arg1 instanceof List<?>) {
+			List<Way> resultList = (List<Way>) arg1;
+			for (Way resultWay : resultList) {
+				if (resultWay.getStatus() == WayStatusEnum.result) {
+					for (Renderable temp : this.getRenderables()) {
+						Way existingWay = (Way) temp;
+
+						if (resultWay.getWayID() == existingWay.getWayID()) {
+							this.removeRenderable(existingWay);
+
+							resultWay = handleExistingWay(resultWay);
+							resultWay.setFollowTerrain(true);
+							resultWay.setVisible(true);
+							resultWay.setAltitudeMode(WorldWind.CLAMP_TO_GROUND);
+							resultWay.setPathType(AVKey.LINEAR);
+							this.addRenderable(resultWay);
+						}
+					}
+				}
+			}
+		}
+		else if (arg1 instanceof Way) {
+
+			currentWay = (Way) arg1;
+			currentWay.setAttributes(getShapeStyle(Color.BLACK));
 			currentWay.setFollowTerrain(true);
 			currentWay.setVisible(true);
 			currentWay.setAltitudeMode(WorldWind.CLAMP_TO_GROUND);
 			currentWay.setPathType(AVKey.LINEAR);
-	        this.addRenderable(currentWay);
-	        //this.wwd.redraw();
-			
-		}else if(arg1 instanceof Position){
+			this.addRenderable(currentWay);
+			// this.wwd.redraw();
+
+		} else if (arg1 instanceof Position) {
 			List<Position> newPositions = new ArrayList<Position>();
-			newPositions.addAll((Collection<? extends Position>) currentWay.getPositions());
+			newPositions.addAll((Collection<? extends Position>) currentWay
+					.getPositions());
 			newPositions.set(1, (Position) arg1);
 			currentWay.setPositions(newPositions);
-		}else if(arg1 == null){
+		} else if (arg1 == null) {
 			addAnnotation(currentWay);
 			return;
 		}
+		this.worldWindow.redraw();
 	}
-	
-	private void addAnnotation(Way newWay){
-		double meters = (double)Math.round((newWay.getDistance()/1000) * 100) / 100;
-		Position middle = calcMiddle(newWay.getStart().getReferencePosition(),newWay.getEnd().getReferencePosition());
-		GlobeAnnotation anno = new GlobeAnnotation(Double.toString(meters),middle, this.annotationStyle);
+
+	private Way handleExistingWay(Way way) {
+		switch (way.getStatus()) {
+		case undefined:
+			way.setAttributes(getShapeStyle(Color.BLACK));
+			break;
+		case result:
+			way.setAttributes(getShapeStyle(Color.GREEN));
+			break;
+		case noResult:
+			way.setAttributes(getShapeStyle(Color.RED));
+			break;
+		default:
+			break;
+		}
+
+		return way;
+	}
+
+	private void addAnnotation(Way newWay) {
+		double meters = (double) Math
+				.round((newWay.getDistance() / 1000) * 100) / 100;
+		Position middle = calcMiddle(newWay.getStart().getReferencePosition(),
+				newWay.getEnd().getReferencePosition());
+		GlobeAnnotation anno = new GlobeAnnotation(Double.toString(meters),
+				middle, this.annotationStyle);
 		anno.setAltitudeMode(WorldWind.CLAMP_TO_GROUND);
 		wayAnnotationLayer.addAnnotation(anno);
 	}
-	
-	private Position calcMiddle(Position pos1,Position pos2){
-		
-		Angle newLatitude = Angle.fromDegrees((pos1.latitude.degrees + pos2.latitude.degrees)/2.0);
-		Angle newLongitude = Angle.fromDegrees((pos1.longitude.degrees + pos2.longitude.degrees)/2.0);
-		double height = worldWindow.getModel().getGlobe().getElevation(newLatitude,newLongitude);
-		
-		return new Position(newLatitude,newLongitude,height);
+
+	private Position calcMiddle(Position pos1, Position pos2) {
+
+		Angle newLatitude = Angle
+				.fromDegrees((pos1.latitude.degrees + pos2.latitude.degrees) / 2.0);
+		Angle newLongitude = Angle
+				.fromDegrees((pos1.longitude.degrees + pos2.longitude.degrees) / 2.0);
+		double height = worldWindow.getModel().getGlobe()
+				.getElevation(newLatitude, newLongitude);
+
+		return new Position(newLatitude, newLongitude, height);
 	}
 }

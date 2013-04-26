@@ -38,6 +38,7 @@ public class WayBuilder extends Observable implements IWayBuilder {
 		activeWay.setName(activeWay.getStart().getName() + "-" + end.getName());
 		activeWay.setWayID(id);
 		activeWay.setDistance(distance);
+		activeWay.setStatus(WayStatusEnum.undefined);
 		allWays.put(id,activeWay);
 		id++;
 		this.setChanged();
@@ -57,8 +58,10 @@ public class WayBuilder extends Observable implements IWayBuilder {
 	@Override
 	public void showShortestPath(List<Way> resultList) {
 		for(Way resultWay : resultList){
-			
+			this.allWays.put(resultWay.getWayID(), resultWay);
 		}
 		
+		this.setChanged();
+		this.notifyObservers(resultList);	
 	}
 }

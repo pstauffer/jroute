@@ -25,7 +25,7 @@ public class AlgorithmController implements IAlgorithmController {
 	public void StartAlgorithm() {
 		List<Way> wayList = new ArrayList<Way>(wayBuilder.getAllWays().values());
 		List<Way> resultList = this.algorithm.getShortestPath(waypointBuilder.getStartWaypoint(), waypointBuilder.getEndWaypoint(),wayList );
-		
+		wayBuilder.showShortestPath(resultList);
 	}
 
 }
