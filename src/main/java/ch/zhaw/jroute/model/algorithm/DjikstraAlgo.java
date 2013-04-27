@@ -12,11 +12,11 @@ import ch.zhaw.jroute.model.WayStatusEnum;
 import ch.zhaw.jroute.model.Waypoint;
 
 public class DjikstraAlgo implements IShortestPathAlgorithm {
-	Set<Waypoint> allPointsList;
-	List<Waypoint> redWaypointList;
-	Set<Waypoint> greenWaypointList;
-	List<Waypoint> shortestWaypointList;
-	List<Way> shortestWayList;
+	private Set<Waypoint> allPointsList;
+	private List<Waypoint> redWaypointList;
+	private Set<Waypoint> greenWaypointList;
+	private List<Waypoint> shortestWaypointList;
+	private List<Way> shortestWayList;
 
 	public DjikstraAlgo() {
 		allPointsList = new HashSet<Waypoint>();
@@ -121,9 +121,8 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 
 		if (waypoint.getDistanceToStart() == Integer.MAX_VALUE) {
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 
 	}
 
@@ -141,30 +140,30 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 		}
 
 		shortestWaypointList.add(endWaypoint);
+		Waypoint tempPoint = endWaypoint;
 
 		for (int b = 0; b < greenWaypointList.size(); b++) {
 
 			// stop the loop, if the beforePoint is the startPoint
-			if (endWaypoint.getWaypointBefore().equals(startWaypoint)) {
+			if (tempPoint.getWaypointBefore().equals(startWaypoint)) {
 				shortestWaypointList.add(startWaypoint);
 				Way newWay = getWay(startWaypoint.getWaypointBefore(),
-						endWaypoint, allWaysForInterface);
+						tempPoint, allWaysForInterface);
 				shortestWayList.add(newWay);
 				newWay.setStatus(WayStatusEnum.result);
 				break;
 			}
 
 			// add the beforePoint to the list
-			shortestWaypointList.add(endWaypoint.getWaypointBefore());
-			Way newWay = getWay(endWaypoint, endWaypoint.getWaypointBefore(),
+			shortestWaypointList.add(tempPoint.getWaypointBefore());
+			Way newWay = getWay(tempPoint, tempPoint.getWaypointBefore(),
 					allWaysForInterface);
 
 			shortestWayList.add(newWay);
 			newWay.setStatus(WayStatusEnum.result);
 
 			// set the beforePoint as activePoint for the next looping
-			Waypoint nextForInterface = endWaypoint.getWaypointBefore();
-			endWaypoint = nextForInterface;
+			tempPoint = tempPoint.getWaypointBefore();
 
 		}
 
