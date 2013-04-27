@@ -12,150 +12,185 @@ import ch.zhaw.jroute.model.WayStatusEnum;
 import ch.zhaw.jroute.model.Waypoint;
 
 public class DjikstraAlgo implements IShortestPathAlgorithm {
+	Set<Waypoint> allPointsList;
+	List<Waypoint> redWaypointList;
+	Set<Waypoint> greenWaypointList;
+	List<Waypoint> shortestWaypointList;
+	List<Way> shortestWayList;
 
 	public DjikstraAlgo() {
+		allPointsList = new HashSet<Waypoint>();
+		redWaypointList = new ArrayList<Waypoint>();
+		greenWaypointList = new HashSet<Waypoint>();
+		shortestWaypointList = new ArrayList<Waypoint>();
+		shortestWayList = new ArrayList<Way>();
 	}
 
 	/**
 	 * to do: exception for endpoint, which is not reachable
 	 */
 
-	@Override
-	public List<Way> getShortestPath(Waypoint start, Waypoint end,
-			List<Way> allWaysForInterface) {
+	void preparation(Waypoint startWaypoint, List<Way> allWaysList) {
 
-		Set<Waypoint> allPointsForInterface = new HashSet<Waypoint>();
-		List<Waypoint> redWaypointsForInterface = new ArrayList<Waypoint>();
-		Set<Waypoint> greenWaypointsForInterface = new HashSet<Waypoint>();
-		List<Waypoint> shortestWaypointPathForInterface = new ArrayList<Waypoint>();
-		List<Way> shortestWayForInterface = new ArrayList<Way>();
-
-		for (Way way : allWaysForInterface) {
-			allPointsForInterface.add(way.getStart());
-			allPointsForInterface.add(way.getEnd());
-			way.setStatus(WayStatusEnum.noResult);
+		for (Way way : allWaysList) {
+			Waypoint from = way.getStart();
+			Waypoint to = way.getEnd();
+			allPointsList.add(from);
+			allPointsList.add(to);
+			from.setDistanceToStart(Integer.MAX_VALUE);
+			to.setDistanceToStart(Integer.MAX_VALUE);
+			from.setWaypointBefore(null);
+			to.setWaypointBefore(null);
 		}
-
-		// set startpoint
-		Waypoint startWaypointForInterface = start;
 
 		// preparation for run
-		greenWaypointsForInterface.clear();
-		redWaypointsForInterface.clear();
-		Waypoint nextWaypointForInterface;
-
-		// preparation for all points
-		for (Waypoint all : allPointsForInterface) {
-			all.setDistanceToStart(Integer.MAX_VALUE);
-			all.setWaypointBefore(null);
-		}
+		greenWaypointList.clear();
+		redWaypointList.clear();
 
 		// preparation for startpoint
-		redWaypointsForInterface.add(startWaypointForInterface);
-		startWaypointForInterface.setDistanceToStart(0);
-		startWaypointForInterface.setWaypointBefore(startWaypointForInterface);
-		nextWaypointForInterface = startWaypointForInterface;
+		redWaypointList.add(startWaypoint);
+		startWaypoint.setDistanceToStart(0);
+		startWaypoint.setWaypointBefore(startWaypoint);
+
+	}
+
+	void calculateGraph(Waypoint startWaypoint, List<Way> allWaysList) {
+		Waypoint nextWaypointForCalculating = startWaypoint;
 
 		// worst-case => dijkstra (points * points)
-		int runs = allPointsForInterface.size() * allPointsForInterface.size();
+		int runs = allPointsList.size() * allPointsList.size();
 
 		for (int i = 0; i < runs; i++) {
 
-			if (redWaypointsForInterface.isEmpty()) {
+			if (redWaypointList.isEmpty()) {
 				break;
 			}
 
-			nextWaypointForInterface = getShortestDistanceRedWaypoint(redWaypointsForInterface);
+			nextWaypointForCalculating = getShortestDistanceRedWaypoint(redWaypointList);
 
 			for (Way nextWay : getConnectedForwardWays(
-					nextWaypointForInterface, allWaysForInterface)) {
+					nextWaypointForCalculating, allWaysList)) {
 
 				Waypoint connectedForwardWaypoint = nextWay.getEnd();
-				if (!greenWaypointsForInterface
-						.contains(connectedForwardWaypoint)) {
-					redWaypointsForInterface.add(connectedForwardWaypoint);
+				if (!greenWaypointList.contains(connectedForwardWaypoint)) {
+					redWaypointList.add(connectedForwardWaypoint);
 				}
 
 				double connectedForwardDistance = nextWay.getDistance();
 				double connectedForwardWaypointDistanceToStart = connectedForwardWaypoint
 						.getDistanceToStart();
-				double additionDistance = (nextWaypointForInterface
+				double additionDistance = (nextWaypointForCalculating
 						.getDistanceToStart() + connectedForwardDistance);
 				if (additionDistance < connectedForwardWaypointDistanceToStart) {
 					connectedForwardWaypoint
-							.setWaypointBefore(nextWaypointForInterface);
+							.setWaypointBefore(nextWaypointForCalculating);
 					connectedForwardWaypoint
 							.setDistanceToStart(additionDistance);
 				}
-				redWaypointsForInterface.remove(nextWaypointForInterface);
-				greenWaypointsForInterface.add(nextWaypointForInterface);
+				redWaypointList.remove(nextWaypointForCalculating);
+				greenWaypointList.add(nextWaypointForCalculating);
 			}
 
 			for (Way nextWay : getConnectedBackwardWays(
-					nextWaypointForInterface, allWaysForInterface)) {
+					nextWaypointForCalculating, allWaysList)) {
 
 				Waypoint connectedBackwardWaypoint = nextWay.getStart();
-				if (!greenWaypointsForInterface
-						.contains(connectedBackwardWaypoint)) {
-					redWaypointsForInterface.add(connectedBackwardWaypoint);
+				if (!greenWaypointList.contains(connectedBackwardWaypoint)) {
+					redWaypointList.add(connectedBackwardWaypoint);
 				}
 
 				double connectedBackwardDistance = nextWay.getDistance();
 				double connectedBackwardWaypointDistanceToStart = connectedBackwardWaypoint
 						.getDistanceToStart();
-				double additionDistance = (nextWaypointForInterface
+				double additionDistance = (nextWaypointForCalculating
 						.getDistanceToStart() + connectedBackwardDistance);
 				if (additionDistance < connectedBackwardWaypointDistanceToStart) {
 					connectedBackwardWaypoint
-							.setWaypointBefore(nextWaypointForInterface);
+							.setWaypointBefore(nextWaypointForCalculating);
 					connectedBackwardWaypoint
 							.setDistanceToStart(additionDistance);
 				}
-				redWaypointsForInterface.remove(nextWaypointForInterface);
-				greenWaypointsForInterface.add(nextWaypointForInterface);
+				redWaypointList.remove(nextWaypointForCalculating);
+				greenWaypointList.add(nextWaypointForCalculating);
 			}
 
 		}
+	}
 
-		Waypoint finishForInterface = end;
-		shortestWaypointPathForInterface.add(finishForInterface);
+	boolean checkUnreachableWaypoint(Waypoint waypoint) {
 
-		for (int b = 0; b < greenWaypointsForInterface.size(); b++) {
+		if (waypoint.getDistanceToStart() == Integer.MAX_VALUE) {
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
+	@Override
+	public List<Way> getShortestPath(Waypoint startWaypoint,
+			Waypoint endWaypoint, List<Way> allWaysForInterface) {
+
+		preparation(startWaypoint, allWaysForInterface);
+		calculateGraph(startWaypoint, allWaysForInterface);
+		setWayStatus(allWaysForInterface);
+
+		if (checkUnreachableWaypoint(endWaypoint)) {
+			throw new IllegalArgumentException("EndWaypoint is not reachable: "
+					+ endWaypoint);
+		}
+
+		shortestWaypointList.add(endWaypoint);
+
+		for (int b = 0; b < greenWaypointList.size(); b++) {
 
 			// stop the loop, if the beforePoint is the startPoint
-			if (finishForInterface.getWaypointBefore().equals(
-					startWaypointForInterface)) {
-				shortestWaypointPathForInterface.add(startWaypointForInterface);
-				Way newWay = getWay(
-						startWaypointForInterface.getWaypointBefore(),
-						finishForInterface, allWaysForInterface);
-				shortestWayForInterface.add(newWay);
+			if (endWaypoint.getWaypointBefore().equals(startWaypoint)) {
+				shortestWaypointList.add(startWaypoint);
+				Way newWay = getWay(startWaypoint.getWaypointBefore(),
+						endWaypoint, allWaysForInterface);
+				shortestWayList.add(newWay);
 				newWay.setStatus(WayStatusEnum.result);
 				break;
 			}
 
 			// add the beforePoint to the list
-			shortestWaypointPathForInterface.add(finishForInterface
-					.getWaypointBefore());
-			Way newWay = getWay(finishForInterface,
-					finishForInterface.getWaypointBefore(), allWaysForInterface);
+			shortestWaypointList.add(endWaypoint.getWaypointBefore());
+			Way newWay = getWay(endWaypoint, endWaypoint.getWaypointBefore(),
+					allWaysForInterface);
 
-			shortestWayForInterface.add(newWay);
+			shortestWayList.add(newWay);
 			newWay.setStatus(WayStatusEnum.result);
 
 			// set the beforePoint as activePoint for the next looping
-			Waypoint nextForInterface = finishForInterface.getWaypointBefore();
-			finishForInterface = nextForInterface;
+			Waypoint nextForInterface = endWaypoint.getWaypointBefore();
+			endWaypoint = nextForInterface;
 
 		}
 
-		Collections.reverse(shortestWaypointPathForInterface);
-		Collections.reverse(shortestWayForInterface);
+		Collections.reverse(shortestWaypointList);
+		Collections.reverse(shortestWayList);
 
-		return shortestWayForInterface;
+		return shortestWayList;
 	}
 
-	Way getWay(Waypoint point1, Waypoint point2, List<Way> ways) {
+	private void setWayStatus(List<Way> allWays) {
+
+		for (Way way : allWays) {
+			Waypoint point1 = way.getStart();
+			Waypoint point2 = way.getEnd();
+
+			if (checkUnreachableWaypoint(point1)
+					|| checkUnreachableWaypoint(point2)) {
+				way.setStatus(WayStatusEnum.undefined);
+			} else {
+				way.setStatus(WayStatusEnum.noResult);
+			}
+		}
+
+	}
+
+	private Way getWay(Waypoint point1, Waypoint point2, List<Way> ways) {
 		for (Way way : ways) {
 			if ((way.getStart().equals(point1) && way.getEnd().equals(point2))
 					|| (way.getStart().equals(point2) && way.getEnd().equals(
@@ -173,12 +208,12 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 		}
 	};
 
-	Waypoint getShortestDistanceRedWaypoint(List<Waypoint> redWaypoints) {
+	private Waypoint getShortestDistanceRedWaypoint(List<Waypoint> redWaypoints) {
 		Collections.sort(redWaypoints, sortByDistance);
 		return redWaypoints.get(0);
 	}
 
-	List<Way> getConnectedBackwardWays(Waypoint waypoint, List<Way> ways) {
+	private List<Way> getConnectedBackwardWays(Waypoint waypoint, List<Way> ways) {
 		List<Way> connectedBackwardWays = new ArrayList<Way>();
 		for (Way way : ways) {
 			if (way.getEnd().equals(waypoint)) {
@@ -188,7 +223,7 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 		return connectedBackwardWays;
 	}
 
-	List<Way> getConnectedForwardWays(Waypoint waypoint, List<Way> ways) {
+	private List<Way> getConnectedForwardWays(Waypoint waypoint, List<Way> ways) {
 		List<Way> connectedForwardWays = new ArrayList<Way>();
 		for (Way way : ways) {
 			if (way.getStart().equals(waypoint)) {
