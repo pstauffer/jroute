@@ -26,10 +26,6 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 		shortestWayList = new ArrayList<Way>();
 	}
 
-	/**
-	 * to do: exception for endpoint, which is not reachable
-	 */
-
 	void preparation(Waypoint startWaypoint, List<Way> allWaysList) {
 
 		for (Way way : allWaysList) {
@@ -68,8 +64,10 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 
 			nextWaypointForCalculating = getShortestDistanceRedWaypoint(redWaypointList);
 
-			for (Way nextWay : getConnectedForwardWays(
-					nextWaypointForCalculating, allWaysList)) {
+			List<Way> nextForwardWaysForCalculating = getConnectedForwardWays(
+					nextWaypointForCalculating, allWaysList);
+
+			for (Way nextWay : nextForwardWaysForCalculating) {
 
 				Waypoint connectedForwardWaypoint = nextWay.getEnd();
 				if (!greenWaypointList.contains(connectedForwardWaypoint)) {
@@ -91,8 +89,10 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 				greenWaypointList.add(nextWaypointForCalculating);
 			}
 
-			for (Way nextWay : getConnectedBackwardWays(
-					nextWaypointForCalculating, allWaysList)) {
+			List<Way> nextBackwardWaysForCalculating = getConnectedBackwardWays(
+					nextWaypointForCalculating, allWaysList);
+
+			for (Way nextWay : nextBackwardWaysForCalculating) {
 
 				Waypoint connectedBackwardWaypoint = nextWay.getStart();
 				if (!greenWaypointList.contains(connectedBackwardWaypoint)) {
@@ -128,11 +128,12 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 
 	@Override
 	public List<Way> getShortestPath(Waypoint startWaypoint,
-			Waypoint endWaypoint, List<Way> allWaysForInterface) {
+			Waypoint endWaypoint, List<Way> allWays) {
 
-		preparation(startWaypoint, allWaysForInterface);
-		calculateGraph(startWaypoint, allWaysForInterface);
-		setWayStatus(allWaysForInterface);
+		createCopysFromWays(allWays);
+		preparation(startWaypoint, allWays);
+		calculateGraph(startWaypoint, allWays);
+		setWayStatus(allWays);
 
 		if (checkUnreachableWaypoint(endWaypoint)) {
 			throw new IllegalArgumentException("EndWaypoint is not reachable: "
@@ -148,7 +149,7 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 			if (tempPoint.getWaypointBefore().equals(startWaypoint)) {
 				shortestWaypointList.add(startWaypoint);
 				Way newWay = getWay(startWaypoint.getWaypointBefore(),
-						tempPoint, allWaysForInterface);
+						tempPoint, allWays);
 				shortestWayList.add(newWay);
 				newWay.setStatus(WayStatusEnum.result);
 				break;
@@ -157,7 +158,7 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 			// add the beforePoint to the list
 			shortestWaypointList.add(tempPoint.getWaypointBefore());
 			Way newWay = getWay(tempPoint, tempPoint.getWaypointBefore(),
-					allWaysForInterface);
+					allWays);
 
 			shortestWayList.add(newWay);
 			newWay.setStatus(WayStatusEnum.result);
@@ -171,6 +172,22 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 		Collections.reverse(shortestWayList);
 
 		return shortestWayList;
+	}
+
+	public void createCopysFromWays(List<Way> allWays) {
+		List<Way> copyOfAllWays = new ArrayList<Way>();
+		copyOfAllWays.addAll(allWays);
+
+		System.out.println(allWays.get(0).getEnd().getDistanceToStart());
+		System.out.println(copyOfAllWays.get(0).getEnd().getDistanceToStart());
+
+		allWays.get(0).getEnd().setDistanceToStart(3.0);
+
+		System.out.println(allWays.get(0).getEnd().getDistanceToStart());
+		System.out.println(copyOfAllWays.get(0).getEnd().getDistanceToStart());
+
+		// List<Waypoint> copyOfAllWaypoints = new ArrayList<Waypoint>();
+		// copyOfAllWays.get(0).getWaypointList().addAll(copyOfAllWaypoints);
 	}
 
 	private void setWayStatus(List<Way> allWays) {
