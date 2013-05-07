@@ -17,15 +17,21 @@ import ch.zhaw.jroute.model.Way;
 import ch.zhaw.jroute.model.Waypoint;
 
 class WayHandler {
+	private static final int TestWayID1 = 46116390;
+	private static final int TestWayID2 = 46116391;
+	private static final double TestLat1 = 47.43714;
+	private static final double TestLat2 = 47.42298;
+	private static final double TestLon1 = 9.10741;
+	private static final double TestLon2 = 9.13668;
+
 	private static List<Way> allWays = new ArrayList<Way>();
 
 	public static void main(String argv[]) {
 
-		getWayFromID(46116390);
-		getWayFromID(46116391);
+		getWayFromID(TestWayID1);
+		getWayFromID(TestWayID2);
 
-		getDistance((float) 47.43714, (float) 9.10741, (float) 47.42298,
-				(float) 9.13668);
+		getDistance(TestLat1, TestLon1, TestLat2, TestLon2);
 
 		// check distance 30m
 		getDistance((float) 40, (float) 10, (float) 40, (float) 10.00035);
@@ -44,8 +50,8 @@ class WayHandler {
 	 * 
 	 * @return ...
 	 */
-	public static void getDistance(float lat1, float lon1, float lat2,
-			float lon2) {
+	public static void getDistance(double lat1, double lon1, double lat2,
+			double lon2) {
 		float latForDistance = (float) ((lat2 - lat1) * 111.11);
 		float lonForDistance = (float) ((lon2 - lon1)
 				* Math.cos(lat2 / 360 * 3.14 * 2) * 111.11);
