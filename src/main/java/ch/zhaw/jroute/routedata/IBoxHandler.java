@@ -18,7 +18,8 @@ public interface IBoxHandler {
 	 * @param top
 	 *            (is the latitude of the top side of the box)
 	 * 
-	 * @return List<Way> alle Wege und zugehoerigen Waypoints inkl. Lat und Lon
+	 * @return List<Way> all Way included the Waypoints with longitude and
+	 *         latitude
 	 */
 	Set<Way> getAllWays(double left, double bottom, double right, double top);
 }

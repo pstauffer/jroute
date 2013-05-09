@@ -10,7 +10,7 @@ import java.util.Set;
 public class Way extends DirectedPath {
 	private Waypoint start;
 	private Waypoint end;
-	private int wayID;
+	private float wayID;
 	private Set<Waypoint> waypointList;
 	private double distance;
 	private String name;
@@ -29,12 +29,12 @@ public class Way extends DirectedPath {
 		this.distance = distance;
 	}
 
-	public Way(int wayID) {
+	public Way(float wayID) {
 		super();
 		this.wayID = wayID;
 	}
 
-	public Way(int wayID, Set<Waypoint> waypointList) {
+	public Way(float wayID, Set<Waypoint> waypointList) {
 		super();
 		this.wayID = wayID;
 		this.waypointList = waypointList;
@@ -74,11 +74,11 @@ public class Way extends DirectedPath {
 		this.end = end;
 	}
 
-	public int getWayID() {
+	public float getWayID() {
 		return wayID;
 	}
 
-	public void setWayID(int wayID) {
+	public void setWayID(float wayID) {
 		this.wayID = wayID;
 	}
 

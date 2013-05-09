@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Waypoint extends SurfaceCircle {
-	private int waypointID;
+	private float waypointID;
 	private float lat;
 	private float lon;
 	private String name;
@@ -24,17 +24,17 @@ public class Waypoint extends SurfaceCircle {
 		super(curPos, i);
 	}
 
-	public Waypoint(int nodeID, float lat, float lon) {
+	public Waypoint(float nodeID, float lat, float lon) {
 		this.waypointID = nodeID;
 		this.lat = lat;
 		this.lon = lon;
 	}
 
-	public int getWaypointID() {
+	public float getWaypointID() {
 		return waypointID;
 	}
 
-	public void setWaypointID(int nodeID) {
+	public void setWaypointID(float nodeID) {
 		this.waypointID = nodeID;
 	}
 

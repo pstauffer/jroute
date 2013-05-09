@@ -25,13 +25,17 @@ public class BoxHandler implements IBoxHandler {
 	@Override
 	public Set<Way> getAllWays(double left, double bottom, double right,
 			double top) {
+
+		String openStreetMapBoxURL = "http://api.openstreetmap.org/api/0.6/map?bbox=";
 		Set<Waypoint> waypointsInBox = new HashSet<Waypoint>();
 		Set<Way> waysInBox = new HashSet<Way>();
 
+		checkCoordinates(left, bottom, right, top);
+
 		try {
 
-			URL url = new URL("http://api.openstreetmap.org/api/0.6/map?bbox="
-					+ left + "," + bottom + "," + right + "," + top);
+			URL url = new URL(openStreetMapBoxURL + left + "," + bottom + ","
+					+ right + "," + top);
 			URLConnection connection = url.openConnection();
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
 					.newInstance();
@@ -45,7 +49,7 @@ public class BoxHandler implements IBoxHandler {
 				Node waypointItem = allWaypoints.item(temp);
 				if (waypointItem.getNodeType() == Node.ELEMENT_NODE) {
 					Element waypointElement = (Element) waypointItem;
-					Integer nodeID = Integer.parseInt(waypointElement
+					float nodeID = Float.parseFloat(waypointElement
 							.getAttribute("id"));
 					float nodeLat = Float.parseFloat(waypointElement
 							.getAttribute("lat"));
@@ -87,8 +91,8 @@ public class BoxHandler implements IBoxHandler {
 
 							Element waypointOfTheWayElement = (Element) waypointOfTheWayItem;
 
-							int nodeID = Integer
-									.parseInt(waypointOfTheWayElement
+							float nodeID = Float
+									.parseFloat(waypointOfTheWayElement
 											.getAttribute("ref"));
 
 							for (Waypoint wp : waypointsInBox) {
@@ -107,6 +111,8 @@ public class BoxHandler implements IBoxHandler {
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
+			// throw new
+			// IllegalArgumentException("nodelimit? box to big?");
 			e.printStackTrace();
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
@@ -117,4 +123,23 @@ public class BoxHandler implements IBoxHandler {
 		return (HashSet<Way>) waysInBox;
 	}
 
+	private void checkCoordinates(double left, double bottom, double right,
+			double top) {
+		if (left > 90 || left < -90) {
+			throw new IllegalArgumentException(
+					"left longitude must be between -90 and 90");
+		}
+		if (right > 90 || right < -90) {
+			throw new IllegalArgumentException(
+					"left longitude must be between -90 and 90");
+		}
+		if (top > 180 || top < -180) {
+			throw new IllegalArgumentException(
+					"top latitude must be between -180 and 180");
+		}
+		if (bottom > 180 || bottom < -180) {
+			throw new IllegalArgumentException(
+					"bottom latitude must be between -180 and 180");
+		}
+	}
 }
