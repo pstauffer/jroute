@@ -92,17 +92,12 @@ public class DjikstraAlgoTest {
 		List<Way> shortestWay = algo.getShortestPath(startWaypoint,
 				endWaypoint, allWays);
 
-		int WayID0 = shortestWay.get(0).getWayID();
-		int WayID1 = shortestWay.get(1).getWayID();
+		float WayID0 = shortestWay.get(0).getWayID();
+		float WayID1 = shortestWay.get(1).getWayID();
 
-		int ExpectedWayID0 = 1;
-		int ExpectedWayID1 = 8;
+		float ExpectedWayID0 = 1;
+		float ExpectedWayID1 = 8;
 
-		// variant 1
-		assertEquals(ExpectedWayID0, WayID0);
-		assertEquals(ExpectedWayID1, WayID1);
-
-		// variant 2
 		assertTrue(WayID0 == ExpectedWayID0);
 		assertTrue(WayID1 == ExpectedWayID1);
 
@@ -274,14 +269,11 @@ public class DjikstraAlgoTest {
 		List<Way> shortestWay = algo.getShortestPath(startWaypoint,
 				endWaypoint, allWays);
 
-		int WayID0 = shortestWay.get(0).getWayID();
-		int WayID8 = shortestWay.get(1).getWayID();
+		float WayID0 = shortestWay.get(0).getWayID();
+		float WayID8 = shortestWay.get(1).getWayID();
 
-		int ExpectedWayID1 = 1;
-		int ExpectedWayID9 = 9;
-
-		assertEquals(ExpectedWayID1, WayID0);
-		assertEquals(ExpectedWayID9, WayID8);
+		float ExpectedWayID1 = 1;
+		float ExpectedWayID9 = 9;
 
 		assertTrue(WayID0 == ExpectedWayID1);
 		assertTrue(WayID8 == ExpectedWayID9);
@@ -301,17 +293,14 @@ public class DjikstraAlgoTest {
 		List<Way> shortestWay = algo.getShortestPath(startWaypoint,
 				endWaypoint, allWays);
 
-		int WayID0 = shortestWay.get(0).getWayID();
-		int WayID7 = shortestWay.get(1).getWayID();
-		int WayID9 = shortestWay.get(2).getWayID();
+		float WayID0 = shortestWay.get(0).getWayID();
+		float WayID7 = shortestWay.get(1).getWayID();
+		float WayID9 = shortestWay.get(2).getWayID();
 
-		int ExpectedWayID1 = 1;
-		int ExpectedWayID8 = 8;
-		int ExpectedWayID10 = 10;
+		float ExpectedWayID1 = 1;
+		float ExpectedWayID8 = 8;
+		float ExpectedWayID10 = 10;
 
-		assertEquals(ExpectedWayID1, WayID0);
-		assertEquals(ExpectedWayID8, WayID7);
-		assertEquals(ExpectedWayID10, WayID9);
 		assertTrue(WayID0 == ExpectedWayID1);
 		assertTrue(WayID7 == ExpectedWayID8);
 		assertTrue(WayID9 == ExpectedWayID10);
