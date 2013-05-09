@@ -3,7 +3,9 @@ package ch.zhaw.jroute.routedata;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -86,7 +88,7 @@ class WayHandler {
 			doc.getDocumentElement().normalize();
 
 			NodeList nList2 = doc.getElementsByTagName("node");
-			List<Waypoint> list1 = new ArrayList<Waypoint>();
+			Set<Waypoint> list1 = new HashSet<Waypoint>();
 
 			for (int temp2 = 0; temp2 < nList2.getLength(); temp2++) {
 

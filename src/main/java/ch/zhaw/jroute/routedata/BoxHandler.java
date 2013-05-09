@@ -1,7 +1,9 @@
 package ch.zhaw.jroute.routedata;
 
-import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,28 +17,32 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import ch.zhaw.jroute.model.Way;
 import ch.zhaw.jroute.model.Waypoint;
 
-public class BBoxHandlerTest {
-	private static Set<Waypoint> waypointHashSet = new HashSet<Waypoint>();
+public class BoxHandler implements IBoxHandler {
 
-	public static void main(String[] args) {
-
-		File xmlFile = new File(
-				"src/test/java/ch/zhaw/jroute/routedata/APIMock.xml");
-		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+	@Override
+	public Set<Way> getAllWays(double left, double bottom, double right,
+			double top) {
+		Set<Waypoint> waypointsInBox = new HashSet<Waypoint>();
+		Set<Way> waysInBox = new HashSet<Way>();
 
 		try {
+
+			URL url = new URL("http://api.openstreetmap.org/api/0.6/map?bbox="
+					+ left + "," + bottom + "," + right + "," + top);
+			URLConnection connection = url.openConnection();
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
+					.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			Document document = dBuilder.parse(xmlFile);
+			Document document = dBuilder.parse(connection.getInputStream());
 			document.getDocumentElement().normalize();
 
+			// get all the waypoints
 			NodeList allWaypoints = document.getElementsByTagName("node");
-			System.out.println("----------------------------");
 			for (int temp = 0; temp < allWaypoints.getLength(); temp++) {
 				Node waypointItem = allWaypoints.item(temp);
-				System.out.println("\nCurrent Element :"
-						+ waypointItem.getNodeName());
 				if (waypointItem.getNodeType() == Node.ELEMENT_NODE) {
 					Element waypointElement = (Element) waypointItem;
 					Integer nodeID = Integer.parseInt(waypointElement
@@ -49,59 +55,66 @@ public class BBoxHandlerTest {
 					Waypoint tempWaypoint = new Waypoint(nodeID, nodeLat,
 							nodeLon);
 
-					waypointHashSet.add(tempWaypoint);
-
-					System.out.println("node id : "
-							+ tempWaypoint.getWaypointID());
-					System.out.println("lat : " + tempWaypoint.getLat());
-					System.out.println("lon : " + tempWaypoint.getLon());
+					waypointsInBox.add(tempWaypoint);
 
 				}
 			}
 
+			// get all the ways with reference to the waypoints
 			NodeList allWays = document.getElementsByTagName("way");
-			System.out.println("----------------------------");
 			for (int temp = 0; temp < allWays.getLength(); temp++) {
+
+				Set<Waypoint> tempWaypointList = new HashSet<Waypoint>();
+
 				Node wayItem = allWays.item(temp);
-				System.out.println("\nCurrent Element :"
-						+ wayItem.getNodeName());
 				if (wayItem.getNodeType() == Node.ELEMENT_NODE) {
 					Element wayElement = (Element) wayItem;
-					System.out.println("way id : "
-							+ wayElement.getAttribute("id"));
 
+					int WayID = Integer.parseInt(wayElement.getAttribute("id"));
+
+					Way tempWay = new Way(WayID);
+					waysInBox.add(tempWay);
+
+					// get all the nodes from the way
 					NodeList allWaypointsOfTheWays = wayElement
 							.getElementsByTagName("nd");
 
-					// get all the nodes from the way
 					for (int i = 0; i < allWaypointsOfTheWays.getLength(); i++) {
+
 						Node WaypointOfTheWayItem = allWaypointsOfTheWays
 								.item(i);
-						System.out.println("\nCurrent Element :"
-								+ WaypointOfTheWayItem.getNodeName());
 						if (WaypointOfTheWayItem.getNodeType() == Node.ELEMENT_NODE) {
-							Element waypointOfTheWayElement = (Element) WaypointOfTheWayItem;
-							System.out.println("node id : "
-									+ waypointOfTheWayElement
-											.getAttribute("ref"));
-						}
 
+							Element waypointOfTheWayElement = (Element) WaypointOfTheWayItem;
+
+							int nodeID = Integer
+									.parseInt(waypointOfTheWayElement
+											.getAttribute("ref"));
+
+							for (Waypoint wp : waypointsInBox) {
+								if (wp.getWaypointID() == nodeID) {
+									tempWaypointList.add(wp);
+								}
+							}
+
+							tempWay.setWaypointList(tempWaypointList);
+						}
 					}
 
 				}
-				System.out.println("----------------------------");
-
 			}
 
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		} catch (SAXException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 
-		System.out.println(waypointHashSet.size());
-
+		return (HashSet<Way>) waysInBox;
 	}
+
 }
