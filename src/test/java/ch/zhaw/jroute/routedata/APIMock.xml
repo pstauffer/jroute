@@ -4,81 +4,27 @@
  <node id="319408586" lat="51.5074089" lon="-0.1080108" user="smsm1" uid="6871" visible="true" version="1" changeset="440330" timestamp="2008-12-17T01:18:42Z"/>
  <node id="319408587" lat="51.5074343" lon="-0.1081264" user="smsm1" uid="6871" visible="true" version="1" changeset="440330" timestamp="2008-12-17T01:18:42Z"/>
  <node id="913315265" lat="51.5074046" lon="-0.1077597" user="Harry Wood" uid="1611" visible="true" version="1" changeset="5786482" timestamp="2010-09-15T11:59:58Z"/>
- <node id="913315129" lat="51.5074681" lon="-0.1077805" user="Harry Wood" uid="1611" visible="true" version="1" changeset="5786482" timestamp="2010-09-15T11:59:52Z"/>
- <node id="913315143" lat="51.5076240" lon="-0.1076236" user="Harry Wood" uid="1611" visible="true" version="1" changeset="5786482" timestamp="2010-09-15T11:59:53Z"/>
- <node id="913315332" lat="51.5076183" lon="-0.1081499" user="Harry Wood" uid="1611" visible="true" version="1" changeset="5786482" timestamp="2010-09-15T12:00:01Z"/>
- <node id="913315355" lat="51.5076213" lon="-0.1077980" user="Harry Wood" uid="1611" visible="true" version="1" changeset="5786482" timestamp="2010-09-15T12:00:02Z"/>
- <node id="913315293" lat="51.5075578" lon="-0.1081441" user="Harry Wood" uid="1611" visible="true" version="2" changeset="5796777" timestamp="2010-09-16T15:45:52Z"/>
  <node id="304994979" lat="51.5074015" lon="-0.1084121" user="Harry Wood" uid="1611" visible="true" version="5" changeset="5786482" timestamp="2010-09-15T12:00:21Z"/>
- <node id="304994980" lat="51.5074645" lon="-0.1075735" user="BiIbo" uid="3516" visible="true" version="2" changeset="388960" timestamp="2009-02-13T00:41:47Z">
-  <tag k="barrier" v="gate"/>
- </node>
- <node id="913315191" lat="51.5075478" lon="-0.1084043" user="Harry Wood" uid="1611" visible="true" version="2" changeset="5796777" timestamp="2010-09-16T15:45:53Z"/>
  <node id="913315198" lat="51.5073117" lon="-0.1077294" user="Harry Wood" uid="1611" visible="true" version="1" changeset="5786482" timestamp="2010-09-15T11:59:55Z"/>
- <node id="913315222" lat="51.5077385" lon="-0.1084759" user="Harry Wood" uid="1611" visible="true" version="1" changeset="5786482" timestamp="2010-09-15T11:59:56Z"/>
- <node id="913315228" lat="51.5070351" lon="-0.1081604" user="Derick Rethans" uid="37137" visible="true" version="3" changeset="11225931" timestamp="2012-04-08T15:38:34Z"/>
- <node id="913315229" lat="51.5071877" lon="-0.1077174" user="Harry Wood" uid="1611" visible="true" version="1" changeset="5786482" timestamp="2010-09-15T11:59:56Z"/>
- <node id="913315239" lat="51.5074381" lon="-0.1083557" user="Harry Wood" uid="1611" visible="true" version="1" changeset="5786482" timestamp="2010-09-15T11:59:57Z"/>
- <node id="913315242" lat="51.5074468" lon="-0.1082310" user="Harry Wood" uid="1611" visible="true" version="1" changeset="5786482" timestamp="2010-09-15T11:59:57Z"/>
- <node id="913315278" lat="51.5072812" lon="-0.1080600" user="Harry Wood" uid="1611" visible="true" version="1" changeset="5786482" timestamp="2010-09-15T11:59:59Z"/>
  <node id="913315305" lat="51.5071117" lon="-0.1076883" user="Derick Rethans" uid="37137" visible="true" version="2" changeset="11225931" timestamp="2012-04-08T15:38:35Z"/>
  <node id="913315315" lat="51.5071419" lon="-0.1074396" user="Harry Wood" uid="1611" visible="true" version="1" changeset="5786482" timestamp="2010-09-15T12:00:00Z"/>
  <node id="913315328" lat="51.5073721" lon="-0.1082076" user="Harry Wood" uid="1611" visible="true" version="1" changeset="5786482" timestamp="2010-09-15T12:00:01Z"/>
  <node id="913315348" lat="51.5073147" lon="-0.1076811" user="Harry Wood" uid="1611" visible="true" version="1" changeset="5786482" timestamp="2010-09-15T12:00:02Z"/>
  <node id="913315351" lat="51.5071418" lon="-0.1080137" user="Harry Wood" uid="1611" visible="true" version="1" changeset="5786482" timestamp="2010-09-15T12:00:02Z"/>
- <node id="913315362" lat="51.5077517" lon="-0.1076352" user="Harry Wood" uid="1611" visible="true" version="1" changeset="5786482" timestamp="2010-09-15T12:00:03Z"/>
- <node id="913315371" lat="51.5076121" lon="-0.1084672" user="Harry Wood" uid="1611" visible="true" version="2" changeset="5796777" timestamp="2010-09-16T15:45:53Z"/>
- <node id="913315375" lat="51.5070550" lon="-0.1080186" user="Derick Rethans" uid="37137" visible="true" version="2" changeset="11225931" timestamp="2012-04-08T15:38:35Z"/>
- <node id="913315397" lat="51.5071990" lon="-0.1076521" user="Harry Wood" uid="1611" visible="true" version="1" changeset="5786482" timestamp="2010-09-15T12:00:05Z"/>
- <node id="914653884" lat="51.5071166" lon="-0.1082030" user="Derick Rethans" uid="37137" visible="true" version="2" changeset="11225931" timestamp="2012-04-08T15:38:37Z"/>
- <node id="914653889" lat="51.5075538" lon="-0.1081798" user="Harry Wood" uid="1611" visible="true" version="1" changeset="5796777" timestamp="2010-09-16T15:45:49Z"/>
- <node id="914653902" lat="51.5075721" lon="-0.1081872" user="Harry Wood" uid="1611" visible="true" version="1" changeset="5796777" timestamp="2010-09-16T15:45:49Z"/>
- <node id="1707216715" lat="51.5074759" lon="-0.1074655" user="Derick Rethans" uid="37137" visible="true" version="1" changeset="11225931" timestamp="2012-04-08T15:37:32Z"/>
- <way id="77618445" user="Harry Wood" uid="1611" visible="true" version="2" changeset="5796777" timestamp="2010-09-16T15:45:54Z">
-  <nd ref="913315222"/>
-  <nd ref="913315371"/>
-  <nd ref="913315332"/>
-  <nd ref="913315293"/>
-  <nd ref="914653889"/>
-  <nd ref="914653902"/>
-  <nd ref="913315191"/>
-  <nd ref="913315239"/>
-  <nd ref="913315242"/>
-  <nd ref="913315129"/>
-  <nd ref="913315355"/>
-  <nd ref="913315143"/>
-  <nd ref="913315362"/>
-  <nd ref="913315222"/>
-  <tag k="building" v="yes"/>
-  <tag k="source" v="yahoo"/>
- </way>
  <way id="77618442" user="Harry Wood" uid="1611" visible="true" version="2" changeset="5796777" timestamp="2010-09-16T15:45:52Z">
-  <nd ref="913315375"/>
-  <nd ref="913315228"/>
-  <nd ref="914653884"/>
-  <nd ref="913315239"/>
-  <nd ref="913315242"/>
   <nd ref="913315328"/>
   <nd ref="913315265"/>
   <nd ref="913315198"/>
-  <nd ref="913315278"/>
   <nd ref="913315351"/>
-  <nd ref="913315375"/>
   <tag k="building" v="yes"/>
   <tag k="source" v="yahoo"/>
  </way>
  <way id="77618455" user="Harry Wood" uid="1611" visible="true" version="1" changeset="5786482" timestamp="2010-09-15T12:00:13Z">
-  <nd ref="913315143"/>
   <nd ref="913315315"/>
   <nd ref="913315305"/>
-  <nd ref="913315229"/>
-  <nd ref="913315397"/>
   <nd ref="913315348"/>
   <nd ref="913315198"/>
   <nd ref="913315265"/>
-  <nd ref="913315129"/>
-  <nd ref="913315355"/>
-  <nd ref="913315143"/>
   <tag k="building" v="yes"/>
   <tag k="source" v="yahoo"/>
  </way>
@@ -86,8 +32,6 @@
   <nd ref="304994979"/>
   <nd ref="319408587"/>
   <nd ref="319408586"/>
-  <nd ref="304994980"/>
-  <nd ref="1707216715"/>
   <tag k="access" v="private"/>
   <tag k="highway" v="service"/>
  </way>
