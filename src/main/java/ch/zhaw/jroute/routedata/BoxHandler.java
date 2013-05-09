@@ -70,9 +70,9 @@ public class BoxHandler implements IBoxHandler {
 				if (wayItem.getNodeType() == Node.ELEMENT_NODE) {
 					Element wayElement = (Element) wayItem;
 
-					int WayID = Integer.parseInt(wayElement.getAttribute("id"));
+					int wayID = Integer.parseInt(wayElement.getAttribute("id"));
 
-					Way tempWay = new Way(WayID);
+					Way tempWay = new Way(wayID);
 					waysInBox.add(tempWay);
 
 					// get all the nodes from the way
@@ -81,11 +81,11 @@ public class BoxHandler implements IBoxHandler {
 
 					for (int i = 0; i < allWaypointsOfTheWays.getLength(); i++) {
 
-						Node WaypointOfTheWayItem = allWaypointsOfTheWays
+						Node waypointOfTheWayItem = allWaypointsOfTheWays
 								.item(i);
-						if (WaypointOfTheWayItem.getNodeType() == Node.ELEMENT_NODE) {
+						if (waypointOfTheWayItem.getNodeType() == Node.ELEMENT_NODE) {
 
-							Element waypointOfTheWayElement = (Element) WaypointOfTheWayItem;
+							Element waypointOfTheWayElement = (Element) waypointOfTheWayItem;
 
 							int nodeID = Integer
 									.parseInt(waypointOfTheWayElement
