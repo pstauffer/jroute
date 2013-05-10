@@ -26,7 +26,7 @@ public class BoxHandler implements IBoxHandler {
 	public Set<Way> getAllWays(double left, double bottom, double right,
 			double top) {
 
-		String openStreetMapBoxURL = "http://api.openstreetmap.org/api/0.6/map?bbox=";
+		final String openStreetMapBoxURL = "http://api.openstreetmap.org/api/0.6/map?bbox=";
 		Set<Waypoint> waypointsInBox = new HashSet<Waypoint>();
 		Set<Way> waysInBox = new HashSet<Way>();
 
@@ -43,7 +43,7 @@ public class BoxHandler implements IBoxHandler {
 			Document document = dBuilder.parse(connection.getInputStream());
 			document.getDocumentElement().normalize();
 
-			// get all the waypoints
+			// get all the waypoints inclusive the coordinates
 			NodeList allWaypoints = document.getElementsByTagName("node");
 			for (int temp = 0; temp < allWaypoints.getLength(); temp++) {
 				Node waypointItem = allWaypoints.item(temp);
@@ -98,6 +98,9 @@ public class BoxHandler implements IBoxHandler {
 							for (Waypoint wp : waypointsInBox) {
 								if (wp.getWaypointID() == nodeID) {
 									tempWaypointList.add(wp);
+								} else {
+									throw new IllegalArgumentException(
+											"waypoint not found in xml");
 								}
 							}
 
