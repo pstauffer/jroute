@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -23,12 +25,12 @@ import ch.zhaw.jroute.model.Waypoint;
 public class BoxHandler implements IBoxHandler {
 
 	@Override
-	public Set<Way> getAllWays(double left, double bottom, double right,
+	public List<Way> getAllWays(double left, double bottom, double right,
 			double top) {
 
 		final String openStreetMapBoxURL = "http://api.openstreetmap.org/api/0.6/map?bbox=";
-		Set<Waypoint> waypointsInBox = new HashSet<Waypoint>();
-		Set<Way> waysInBox = new HashSet<Way>();
+		List<Waypoint> waypointsInBox = new ArrayList<Waypoint>();
+		List<Way> waysInBox = new ArrayList<Way>();
 
 		checkCoordinates(left, bottom, right, top);
 
@@ -68,7 +70,7 @@ public class BoxHandler implements IBoxHandler {
 			NodeList allWays = document.getElementsByTagName("way");
 			for (int temp = 0; temp < allWays.getLength(); temp++) {
 
-				Set<Waypoint> tempWaypointList = new HashSet<Waypoint>();
+				List<Waypoint> tempWaypointList = new ArrayList<Waypoint>();
 
 				Node wayItem = allWays.item(temp);
 				if (wayItem.getNodeType() == Node.ELEMENT_NODE) {
@@ -99,12 +101,13 @@ public class BoxHandler implements IBoxHandler {
 								if (wp.getWaypointID() == nodeID) {
 									tempWaypointList.add(wp);
 								} else {
-									throw new IllegalArgumentException(
-											"waypoint not found in xml");
+									//throw new IllegalArgumentException(
+									//		"waypoint not found in xml");
 								}
 							}
-
-							tempWay.setWaypointList(tempWaypointList);
+							List<Waypoint> wpList = new ArrayList<Waypoint>(tempWaypointList);
+							tempWay.setWaypointList(wpList);
+							tempWaypointList.clear();
 						}
 					}
 
@@ -123,7 +126,7 @@ public class BoxHandler implements IBoxHandler {
 			e.printStackTrace();
 		}
 
-		return (HashSet<Way>) waysInBox;
+		return (ArrayList<Way>) waysInBox;
 	}
 
 	private void checkCoordinates(double left, double bottom, double right,

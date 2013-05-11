@@ -14,7 +14,7 @@ import java.util.Observer;
 
 public class WaypointBuilder extends Observable implements IWaypointBuilder {
 
-	private HashMap<Integer,Waypoint> waypointList = new HashMap<Integer,Waypoint>();
+	private HashMap<Float,Waypoint> waypointList = new HashMap<Float,Waypoint>();
 	private int currentLetter = 65; //A
 	private int id = 0;
 	private Waypoint startWaypoint;
@@ -26,17 +26,17 @@ public class WaypointBuilder extends Observable implements IWaypointBuilder {
 			return;
 		}
 
-		Waypoint newWaypoint = new Waypoint(waypointPosition, 50);
+		Waypoint newWaypoint = new Waypoint(waypointPosition, 10);
 		
         char c = (char)this.currentLetter;
         String text = String.valueOf(c);
-        newWaypoint.setName(text);
+        newWaypoint.setName(Integer.toString(id));
    
         newWaypoint.setWaypointID(id);
         
         newWaypoint.setStatus(WaypointStatusEnum.undefined);
         
-		waypointList.put(id,newWaypoint);
+		waypointList.put((float)id,newWaypoint);
 		
 		currentLetter++;
 		id++;
@@ -45,7 +45,6 @@ public class WaypointBuilder extends Observable implements IWaypointBuilder {
 		this.notifyObservers(newWaypoint);
 
 	}
-
 
 	@Override
 	public void registerObserver(Observer obs) {
@@ -96,7 +95,7 @@ public class WaypointBuilder extends Observable implements IWaypointBuilder {
 		this.notifyObservers(waypoint);
 	}
 	
-	public HashMap<Integer, Waypoint> getWaypointList() {
+	public HashMap<Float, Waypoint> getWaypointList() {
 		return waypointList;
 	}
 

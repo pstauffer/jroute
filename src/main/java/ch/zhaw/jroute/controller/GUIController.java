@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 
 import ch.zhaw.jroute.model.IWayBuilder;
 import ch.zhaw.jroute.model.IWaypointBuilder;
+import ch.zhaw.jroute.routedata.IBoxHandler;
 import ch.zhaw.jroute.view.JrouteView;
 
 public class GUIController {
@@ -18,6 +19,7 @@ public class GUIController {
 	private WaypointController waypointController;
 	private WayController wayController;
 	private AlgorithmController algoController;
+	private MapDataController mapDataController;
 
 	boolean armedWay = false;
 	boolean armedWaypoint = false;
@@ -25,7 +27,7 @@ public class GUIController {
 	boolean armedEndWaypoint = false;
 
 	public GUIController(JrouteView view, IWaypointBuilder waypointBuilder,
-			IWayBuilder wayBuilder) {
+			IWayBuilder wayBuilder, IBoxHandler boxHandler) {
 
 		this.view = view;
 		this.wayBuilder = wayBuilder;
@@ -35,12 +37,14 @@ public class GUIController {
 		this.waypointController = new WaypointController(view, waypointBuilder);
 		this.wayController = new WayController(view, wayBuilder);
 		this.algoController = new AlgorithmController(wayBuilder,waypointBuilder);
+		this.mapDataController = new MapDataController(boxHandler,waypointBuilder, wayBuilder);
 
 		view.addWaypointActionListener(new CreateWaypointListener());
 		view.addWayActionListener(new CreateWayListener());
 		view.addStartWaypointActionListener(new StartWaypointListener());
 		view.addEndWaypointActionListener(new EndWaypointListener());
 		view.addCalculateRouteActionListener(new CreateCalcRouteListener());
+		view.addGetDataActionListener(new CreateGetDataListener());
 		
 	}
 	
@@ -49,6 +53,15 @@ public class GUIController {
 		public void actionPerformed(ActionEvent ae) {
 			algoController.StartAlgorithm();
 		}
+	}
+	
+	private class CreateGetDataListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			mapDataController.getDataForMapSection();
+		}
+		
 	}
 
 	private class CreateWaypointListener implements ActionListener {

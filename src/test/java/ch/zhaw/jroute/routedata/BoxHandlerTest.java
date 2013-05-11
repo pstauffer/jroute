@@ -4,7 +4,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -36,7 +38,7 @@ public class BoxHandlerTest {
 
 	@Test
 	public void amountOfWaypointsInWays() {
-		HashSet<Way> ways = getAllWaysInBox();
+		Set<Way> ways = getAllWaysInBox();
 
 		int size = 0;
 		for (Way way : ways) {
@@ -238,7 +240,7 @@ public class BoxHandlerTest {
 			NodeList allWays = document.getElementsByTagName("way");
 			for (int temp = 0; temp < allWays.getLength(); temp++) {
 
-				Set<Waypoint> tempWaypointList = new HashSet<Waypoint>();
+				List<Waypoint> tempWaypointList = new ArrayList<Waypoint>();
 
 				Node wayItem = allWays.item(temp);
 				if (wayItem.getNodeType() == Node.ELEMENT_NODE) {

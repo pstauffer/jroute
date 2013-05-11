@@ -12,6 +12,7 @@ import javax.swing.border.TitledBorder;
 public class ControlPanel extends JPanel{
 	
 	private JButton startAlgorithmButton;
+	private JButton getMapDataButton;
 	
 	public ControlPanel(){
 		super(new GridLayout());
@@ -28,10 +29,16 @@ public class ControlPanel extends JPanel{
 	
 	public void createButtons(){
 		startAlgorithmButton = new JButton("Calculate Route");
+		getMapDataButton = new JButton("Get Data");
 		this.add(startAlgorithmButton);
+		this.add(getMapDataButton);
 	}
 
 	public JButton getStartAlgorithmButton() {
 		return startAlgorithmButton;
+	}
+	
+	public JButton getMapDataButton(){
+		return getMapDataButton;
 	}
 }

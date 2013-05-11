@@ -25,7 +25,7 @@ public class WaypointLayer extends RenderableLayer implements Observer{
 	private ShapeAttributes shapeStyle;
 	private AnnotationAttributes annotationStyle;
 	private AnnotationLayer waypointAnnotationLayer;
-	
+	int i = 0;
 	public WaypointLayer(AnnotationLayer waypointAnnotationLayer){
 		super();
 		this.setAnnotationStyle();
@@ -36,6 +36,8 @@ public class WaypointLayer extends RenderableLayer implements Observer{
 		
 		Waypoint waypoint = (Waypoint)arg;
 		waypoint.setAttributes(getShapeStyle(Color.GRAY));
+		
+		
 		for(Renderable temp : this.getRenderables()){
 			Waypoint existingWp = (Waypoint)temp;
 			
@@ -45,8 +47,8 @@ public class WaypointLayer extends RenderableLayer implements Observer{
 				waypoint = handleExistingWaypoint(waypoint);
 			}
 		}
-		
-		
+		System.out.println(i);
+		i++;
 		addAnnotation(waypoint);
 		this.addRenderable(waypoint);
 		

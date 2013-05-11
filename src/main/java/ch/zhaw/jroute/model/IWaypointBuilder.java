@@ -13,7 +13,7 @@ public interface IWaypointBuilder {
 	public void createWaypointFromPosition(Position waypointPosition);
 	public void setStartWaypoint(WaypointStatusEnum status,Waypoint waypoint);
 	public void setEndWaypoint(WaypointStatusEnum status, Waypoint waypoint);
-	public HashMap<Integer, Waypoint> getWaypointList();
+	public HashMap<Float, Waypoint> getWaypointList();
 	public Waypoint getStartWaypoint();
 	public Waypoint getEndWaypoint();
 }

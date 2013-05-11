@@ -58,7 +58,7 @@ public class WayBuilder extends Observable implements IWayBuilder {
 	@Override
 	public void showShortestPath(List<Way> resultList) {
 		for(Way resultWay : resultList){
-			this.allWays.put(resultWay.getWayID(), resultWay);
+			this.allWays.put((int) resultWay.getWayID(), resultWay);
 		}
 		
 		this.setChanged();

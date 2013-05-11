@@ -88,7 +88,7 @@ class WayHandler {
 			doc.getDocumentElement().normalize();
 
 			NodeList nList2 = doc.getElementsByTagName("node");
-			Set<Waypoint> list1 = new HashSet<Waypoint>();
+			List<Waypoint> list1 = new ArrayList<Waypoint>();
 
 			for (int temp2 = 0; temp2 < nList2.getLength(); temp2++) {
 

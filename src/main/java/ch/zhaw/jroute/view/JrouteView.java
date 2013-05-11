@@ -57,6 +57,7 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 
 		// add side panel to the window
 		this.getContentPane().add(this.navigationPanel, BorderLayout.WEST);
+		
 	}
 
 	/**
@@ -118,6 +119,11 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 	
 	public void addCalculateRouteActionListener(ActionListener listener) {
 		this.navigationPanel.getControlPanel().getStartAlgorithmButton()
+				.addActionListener(listener);
+	}
+	
+	public void addGetDataActionListener(ActionListener listener){
+		this.navigationPanel.getControlPanel().getMapDataButton()
 				.addActionListener(listener);
 	}
 
