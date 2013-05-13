@@ -5,12 +5,11 @@ import gov.nasa.worldwindx.examples.util.DirectedPath;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class Way extends DirectedPath {
 	private Waypoint start;
 	private Waypoint end;
-	private float wayID;
+	private long wayID;
 	private List<Waypoint> waypointList;
 	private double distance;
 	private String name;
@@ -21,7 +20,7 @@ public class Way extends DirectedPath {
 		super();
 	}
 
-	public Way(int wayID, Waypoint start, Waypoint end, double distance) {
+	public Way(long wayID, Waypoint start, Waypoint end, double distance) {
 		super();
 		this.wayID = wayID;
 		this.start = start;
@@ -29,12 +28,12 @@ public class Way extends DirectedPath {
 		this.distance = distance;
 	}
 
-	public Way(float wayID) {
+	public Way(long wayID) {
 		super();
 		this.wayID = wayID;
 	}
 
-	public Way(float wayID, List<Waypoint> waypointList) {
+	public Way(long wayID, List<Waypoint> waypointList) {
 		super();
 		this.wayID = wayID;
 		this.waypointList = waypointList;
@@ -74,11 +73,11 @@ public class Way extends DirectedPath {
 		this.end = end;
 	}
 
-	public float getWayID() {
+	public long getWayID() {
 		return wayID;
 	}
 
-	public void setWayID(float wayID) {
+	public void setWayID(long wayID) {
 		this.wayID = wayID;
 	}
 

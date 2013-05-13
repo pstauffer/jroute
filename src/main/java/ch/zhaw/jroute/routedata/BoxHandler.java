@@ -5,9 +5,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -51,11 +49,11 @@ public class BoxHandler implements IBoxHandler {
 				Node waypointItem = allWaypoints.item(temp);
 				if (waypointItem.getNodeType() == Node.ELEMENT_NODE) {
 					Element waypointElement = (Element) waypointItem;
-					float nodeID = Float.parseFloat(waypointElement
+					long nodeID = Long.parseLong(waypointElement
 							.getAttribute("id"));
-					float nodeLat = Float.parseFloat(waypointElement
+					double nodeLat = Double.parseDouble(waypointElement
 							.getAttribute("lat"));
-					float nodeLon = Float.parseFloat(waypointElement
+					double nodeLon = Double.parseDouble(waypointElement
 							.getAttribute("lon"));
 
 					Waypoint tempWaypoint = new Waypoint(nodeID, nodeLat,
@@ -76,7 +74,7 @@ public class BoxHandler implements IBoxHandler {
 				if (wayItem.getNodeType() == Node.ELEMENT_NODE) {
 					Element wayElement = (Element) wayItem;
 
-					int wayID = Integer.parseInt(wayElement.getAttribute("id"));
+					long wayID = Long.parseLong(wayElement.getAttribute("id"));
 
 					Way tempWay = new Way(wayID);
 					waysInBox.add(tempWay);
@@ -93,21 +91,20 @@ public class BoxHandler implements IBoxHandler {
 
 							Element waypointOfTheWayElement = (Element) waypointOfTheWayItem;
 
-							float nodeID = Float
-									.parseFloat(waypointOfTheWayElement
+							long nodeID = Long
+									.parseLong(waypointOfTheWayElement
 											.getAttribute("ref"));
 
 							for (Waypoint wp : waypointsInBox) {
 								if (wp.getWaypointID() == nodeID) {
 									tempWaypointList.add(wp);
 								} else {
-									//throw new IllegalArgumentException(
-									//		"waypoint not found in xml");
+									// throw new IllegalArgumentException(
+									// "waypoint not found in xml");
 								}
 							}
-							List<Waypoint> wpList = new ArrayList<Waypoint>(tempWaypointList);
-							tempWay.setWaypointList(wpList);
-							tempWaypointList.clear();
+							tempWay.setWaypointList(tempWaypointList);
+
 						}
 					}
 
