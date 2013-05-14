@@ -1,7 +1,7 @@
 package ch.zhaw.jroute.routedata;
 
+import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 
 import ch.zhaw.jroute.model.Way;
 
@@ -21,6 +21,8 @@ public interface IBoxHandler {
 	 * 
 	 * @return List<Way> all Way included the Waypoints with longitude and
 	 *         latitude
+	 * @throws IOException
 	 */
-	List<Way> getAllWays(double left, double bottom, double right, double top);
+	List<Way> getAllWays(double left, double bottom, double right, double top)
+			throws IOException;
 }

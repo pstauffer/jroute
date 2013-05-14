@@ -1,5 +1,8 @@
 package ch.zhaw.jroute.routedata;
 
+import gov.nasa.worldwind.geom.Angle;
+import gov.nasa.worldwind.geom.Position;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -24,7 +27,7 @@ public class BoxHandler implements IBoxHandler {
 
 	@Override
 	public List<Way> getAllWays(double left, double bottom, double right,
-			double top) {
+			double top) throws IOException {
 
 		final String openStreetMapBoxURL = "http://api.openstreetmap.org/api/0.6/map?bbox=";
 		List<Waypoint> waypointsInBox = new ArrayList<Waypoint>();
@@ -58,6 +61,15 @@ public class BoxHandler implements IBoxHandler {
 
 					Waypoint tempWaypoint = new Waypoint(nodeID, nodeLat,
 							nodeLon);
+
+					// set position (lon and lat in one value)
+					Angle lat = Angle
+							.fromDegreesLatitude(tempWaypoint.getLat());
+					Angle lon = Angle
+							.fromDegreesLatitude(tempWaypoint.getLon());
+
+					Position pos = new Position(lat, lon, 0);
+					tempWaypoint.setCenter(pos);
 
 					waypointsInBox.add(tempWaypoint);
 
@@ -103,6 +115,18 @@ public class BoxHandler implements IBoxHandler {
 									// "waypoint not found in xml");
 								}
 							}
+
+							// set start and end of the way
+							Waypoint tempStartWaypoint = tempWaypointList
+									.get(0);
+							int lastTempWaypoint = tempWaypointList.size() - 1;
+							Waypoint tempEndWaypoint = tempWaypointList
+									.get(lastTempWaypoint);
+
+							tempWay.setStart(tempStartWaypoint);
+							tempWay.setEnd(tempEndWaypoint);
+
+							// set waypointlist for the way
 							tempWay.setWaypointList(tempWaypointList);
 
 						}
@@ -112,10 +136,6 @@ public class BoxHandler implements IBoxHandler {
 			}
 
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			// throw new
-			// IllegalArgumentException("nodelimit? box to big?");
 			e.printStackTrace();
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
