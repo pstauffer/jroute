@@ -9,6 +9,7 @@ public class WayBuilderTest {
 
 	@Before
 	public void setUp() throws Exception {
+		
 	}
 
 	@Test
