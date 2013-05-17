@@ -50,6 +50,8 @@ public class BoxHandler implements IBoxHandler {
 			NodeList allWaypoints = document.getElementsByTagName("node");
 			for (int temp = 0; temp < allWaypoints.getLength(); temp++) {
 				Node waypointItem = allWaypoints.item(temp);
+
+				
 				if (waypointItem.getNodeType() == Node.ELEMENT_NODE) {
 					Element waypointElement = (Element) waypointItem;
 					long nodeID = Long.parseLong(waypointElement
@@ -83,6 +85,7 @@ public class BoxHandler implements IBoxHandler {
 				List<Waypoint> tempWaypointList = new ArrayList<Waypoint>();
 
 				Node wayItem = allWays.item(temp);
+				
 				if (wayItem.getNodeType() == Node.ELEMENT_NODE) {
 					Element wayElement = (Element) wayItem;
 

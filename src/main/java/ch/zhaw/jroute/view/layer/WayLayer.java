@@ -75,6 +75,8 @@ public class WayLayer extends RenderableLayer implements Observer {
 	}
 
 	public void update(Observable arg0, Object arg1) {
+		
+		//This handles if the layer is updated with the results of the dijkstra
 		if (arg1 instanceof List<?>) {
 			List<Way> resultList = (List<Way>) arg1;
 			for (Way resultWay : resultList) {
@@ -96,6 +98,8 @@ public class WayLayer extends RenderableLayer implements Observer {
 				}
 			}
 		}
+		
+		//Adds a new Way to the Map
 		else if (arg1 instanceof Way) {
 
 			currentWay = (Way) arg1;
@@ -107,6 +111,7 @@ public class WayLayer extends RenderableLayer implements Observer {
 			this.addRenderable(currentWay);
 			// this.wwd.redraw();
 
+		//Updates the current way with a new position
 		} else if (arg1 instanceof Position) {
 			List<Position> newPositions = new ArrayList<Position>();
 			newPositions.addAll((Collection<? extends Position>) currentWay

@@ -11,6 +11,7 @@ import org.junit.Test;
 import ch.zhaw.jroute.model.Way;
 import ch.zhaw.jroute.model.WayStatusEnum;
 import ch.zhaw.jroute.model.Waypoint;
+import ch.zhaw.jroute.model.algorithm.DjikstraAlgo;
 
 public class DjikstraAlgoTest {
 	List<Way> allWays;

@@ -4,6 +4,7 @@ import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.LatLon;
 import gov.nasa.worldwind.geom.Position;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -33,20 +34,30 @@ public class MapDataController {
 		double bottom = waypointBuilder.getStartWaypoint().getCenter().getLatitude().degrees + 0.0000005;
 		double top = waypointBuilder.getEndWaypoint().getCenter().getLatitude().degrees - 0.0000005;
 		
-		List<Way> wayData = this.boxHandler.getAllWays(left, bottom, right, top);
+		List<Way> wayData = null;
+		try {
+			wayData = this.boxHandler.getAllWays(left, bottom, right, top);
+		} catch (IOException e) {
+			//TODO: Handle Exception
+		}
 		
 		for(Way way : wayData){
-			for(Waypoint waypoint : way.getWaypointList()){
+			
+			/*for(Waypoint waypoint : way.getWaypointList()){
 				Angle lat = Angle.fromDegreesLatitude(waypoint.getLat());
 				Angle lon = Angle.fromDegreesLatitude(waypoint.getLon());
 				
 				Position pos = new Position(lat,lon,0);
-				waypoint.setCenter(pos);
 				waypointBuilder.createWaypointFromPosition(pos);
-			}
+			}*/
 			
-			wayBuilder.createNewWay(way.getWaypointList().get(0));
-			wayBuilder.finishWay(way.getWaypointList().get(way.getWaypointList().size()-1), 0);
+			//wayBuilder.createNewWay(way.getWaypointList().get(0));
+			//wayBuilder.finishWay(way.getWaypointList().get(way.getWaypointList().size()-1), 0);
+			
+			waypointBuilder.createWaypointFromPosition((Position) way.getStart().getCenter());
+			waypointBuilder.createWaypointFromPosition((Position) way.getEnd().getCenter());
+			
+			wayBuilder.addExistingWay(way);
 		}
 		
 	}

@@ -33,6 +33,19 @@ public class WayBuilder extends Observable implements IWayBuilder {
 		this.notifyObservers(activeWay);
 	}
 	
+	public void addExistingWay(Way existingWay){
+		List<Position> newPositions = new ArrayList<Position>();
+		
+		for(Waypoint waypoint : existingWay.getWaypointList()){
+			newPositions.add((Position) waypoint.getCenter());
+		}
+		
+		existingWay.setPositions(newPositions);
+		
+		this.setChanged();
+		this.notifyObservers(existingWay);
+	}
+	
 	public void finishWay(Waypoint end,double distance){
 		activeWay.setEnd(end);
 		activeWay.setName(activeWay.getStart().getName() + "-" + end.getName());
@@ -54,6 +67,7 @@ public class WayBuilder extends Observable implements IWayBuilder {
 	public Map<Integer, Way> getAllWays() {
 		return allWays;
 	}
+	
 
 	@Override
 	public void showShortestPath(List<Way> resultList) {
