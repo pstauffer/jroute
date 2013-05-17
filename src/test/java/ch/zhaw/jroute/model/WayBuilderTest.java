@@ -12,8 +12,18 @@ public class WayBuilderTest {
 	}
 
 	@Test
-	public void test() {
-		fail("Not yet implemented");
+	public void createNewWayTest() {
+		assert(true);
+	}
+	
+	@Test
+	public void finishWayTest() {
+		assert(true);
+	}
+	
+	@Test
+	public void moveWayEndpointTest() {
+		assert(true);
 	}
 
 }

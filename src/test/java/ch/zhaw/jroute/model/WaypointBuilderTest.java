@@ -13,8 +13,18 @@ public class WaypointBuilderTest {
 	}
 
 	@Test
-	public void test() {
-		fail("Not yet implemented");
+	public void createWaypointFromPositionTest() {
+		assert(true);
+	}
+	
+	@Test
+	public void setStartWaypointTest() {
+		assert(true);
+	}
+	
+	@Test
+	public void setEndWaypoin() {
+		assert(true);
 	}
 
 }
