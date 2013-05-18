@@ -4,7 +4,6 @@ import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.Position;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -13,10 +12,12 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -24,129 +25,164 @@ import ch.zhaw.jroute.model.Way;
 import ch.zhaw.jroute.model.Waypoint;
 
 public class BoxHandler implements IBoxHandler {
+	private final String openStreetMapBoxURL = "http://api.openstreetmap.org/api/0.6/map?bbox=";
+	private static List<Waypoint> MatchingWaypointList = new ArrayList<Waypoint>();
+	private static List<Way> MatchingWayList = new ArrayList<Way>();
+	private static List<String> streetFilterList = new ArrayList<String>();
 
 	@Override
 	public List<Way> getAllWays(double left, double bottom, double right,
 			double top) throws IOException {
 
-		final String openStreetMapBoxURL = "http://api.openstreetmap.org/api/0.6/map?bbox=";
-		List<Waypoint> waypointsInBox = new ArrayList<Waypoint>();
-		List<Way> waysInBox = new ArrayList<Way>();
-
+		// check for correct coordinates
 		checkCoordinates(left, bottom, right, top);
+
+		// create url
+		URL boxURL = new URL(openStreetMapBoxURL + left + "," + bottom + ","
+				+ right + "," + top);
+
+		// start timer for connection
+		long startTime = System.nanoTime();
+
+		// get document via connection
+		Document document = makeConnection(boxURL);
+
+		// stop timer for connection
+		long endTime = System.nanoTime();
+		long tookTime = endTime - startTime;
+		System.out.println("get all data took: " + tookTime + " ns");
+
+		// create xpath instance
+		XPath xpath = XPathFactory.newInstance().newXPath();
+
+		// set street filter
+		addStreetFilter("motorway");
+		// addStreetFilter("tertiary");
+		// addStreetFilter("residential");
 
 		try {
 
-			URL url = new URL(openStreetMapBoxURL + left + "," + bottom + ","
-					+ right + "," + top);
-			URLConnection connection = url.openConnection();
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
-					.newInstance();
-			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			Document document = dBuilder.parse(connection.getInputStream());
-			document.getDocumentElement().normalize();
+			// get all ways, which match with the filter
+			setSelectedWays(document, xpath, streetFilterList);
 
-			// get all the waypoints inclusive the coordinates
-			NodeList allWaypoints = document.getElementsByTagName("node");
-			for (int temp = 0; temp < allWaypoints.getLength(); temp++) {
-				Node waypointItem = allWaypoints.item(temp);
+			// set all waypoints for the ways
+			setWaypointsForWays(MatchingWayList, document, xpath);
 
-				
-				if (waypointItem.getNodeType() == Node.ELEMENT_NODE) {
-					Element waypointElement = (Element) waypointItem;
-					long nodeID = Long.parseLong(waypointElement
-							.getAttribute("id"));
-					double nodeLat = Double.parseDouble(waypointElement
-							.getAttribute("lat"));
-					double nodeLon = Double.parseDouble(waypointElement
-							.getAttribute("lon"));
+			// get and set all waypoint values
+			setValuesForWaypoints(MatchingWaypointList, document, xpath);
 
-					Waypoint tempWaypoint = new Waypoint(nodeID, nodeLat,
-							nodeLon);
-
-					// set position (lon and lat in one value)
-					Angle lat = Angle
-							.fromDegreesLatitude(tempWaypoint.getLat());
-					Angle lon = Angle
-							.fromDegreesLatitude(tempWaypoint.getLon());
-
-					Position pos = new Position(lat, lon, 0);
-					tempWaypoint.setCenter(pos);
-
-					waypointsInBox.add(tempWaypoint);
-
-				}
-			}
-
-			// get all the ways with reference to the waypoints
-			NodeList allWays = document.getElementsByTagName("way");
-			for (int temp = 0; temp < allWays.getLength(); temp++) {
-
-				List<Waypoint> tempWaypointList = new ArrayList<Waypoint>();
-
-				Node wayItem = allWays.item(temp);
-				
-				if (wayItem.getNodeType() == Node.ELEMENT_NODE) {
-					Element wayElement = (Element) wayItem;
-
-					long wayID = Long.parseLong(wayElement.getAttribute("id"));
-
-					Way tempWay = new Way(wayID);
-					waysInBox.add(tempWay);
-
-					// get all the nodes from the way
-					NodeList allWaypointsOfTheWays = wayElement
-							.getElementsByTagName("nd");
-
-					for (int i = 0; i < allWaypointsOfTheWays.getLength(); i++) {
-
-						Node waypointOfTheWayItem = allWaypointsOfTheWays
-								.item(i);
-						if (waypointOfTheWayItem.getNodeType() == Node.ELEMENT_NODE) {
-
-							Element waypointOfTheWayElement = (Element) waypointOfTheWayItem;
-
-							long nodeID = Long
-									.parseLong(waypointOfTheWayElement
-											.getAttribute("ref"));
-
-							for (Waypoint wp : waypointsInBox) {
-								if (wp.getWaypointID() == nodeID) {
-									tempWaypointList.add(wp);
-								} else {
-									// throw new IllegalArgumentException(
-									// "waypoint not found in xml");
-								}
-							}
-
-							// set start and end of the way
-							Waypoint tempStartWaypoint = tempWaypointList
-									.get(0);
-							int lastTempWaypoint = tempWaypointList.size() - 1;
-							Waypoint tempEndWaypoint = tempWaypointList
-									.get(lastTempWaypoint);
-
-							tempWay.setStart(tempStartWaypoint);
-							tempWay.setEnd(tempEndWaypoint);
-
-							// set waypointlist for the way
-							tempWay.setWaypointList(tempWaypointList);
-
-						}
-					}
-
-				}
-			}
-
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		} catch (SAXException e) {
+		} catch (XPathExpressionException e) {
 			e.printStackTrace();
 		}
 
-		return (ArrayList<Way>) waysInBox;
+		return MatchingWayList;
+	}
+
+	private static void addStreetFilter(String filter) {
+		streetFilterList.add(filter);
+	}
+
+	private static void setValuesForWaypoints(List<Waypoint> waypointList,
+			Document document, XPath xpath) throws XPathExpressionException {
+
+		// loop trough all matching waypoints
+		for (Waypoint waypoint : waypointList) {
+			long waypointID = waypoint.getWaypointID();
+			NodeList waypointsInXml = (NodeList) xpath.compile(
+					"/osm/node[@id='" + waypointID + "']").evaluate(document,
+					XPathConstants.NODESET);
+
+			double lat = Double.parseDouble(waypointsInXml.item(0)
+					.getAttributes().getNamedItem("lat").getNodeValue());
+			double lon = Double.parseDouble(waypointsInXml.item(0)
+					.getAttributes().getNamedItem("lon").getNodeValue());
+
+			// set position (lon and lat in one value)
+			Angle latAngle = Angle.fromDegreesLatitude(waypoint.getLat());
+			Angle lonAngle = Angle.fromDegreesLatitude(waypoint.getLon());
+			Position pos = new Position(latAngle, lonAngle, 0);
+			waypoint.setCenter(pos);
+
+			// set latitude and longitude for waypoint
+			waypoint.setLat(lat);
+			waypoint.setLon(lon);
+
+		}
+	}
+
+	private static void setWaypointsForWays(List<Way> ways, Document document,
+			XPath xpath) throws XPathExpressionException {
+
+		// loop trough all ways
+		for (Way way : ways) {
+			long wayID = way.getWayID();
+
+			List<Waypoint> waypointsFromWay = new ArrayList<Waypoint>();
+			NodeList wayInXml = (NodeList) xpath.compile(
+					"/osm/way[@id='" + wayID + "']").evaluate(document,
+					XPathConstants.NODESET);
+
+			// loop trough all childnodes
+			for (int i = 0; i < wayInXml.getLength(); i++) {
+				NodeList wayChildNodeList = wayInXml.item(i).getChildNodes();
+				for (int j = 0; j < wayChildNodeList.getLength(); j++) {
+					String wayChildNodeName = wayChildNodeList.item(j)
+							.getNodeName();
+					String nodeName = "nd";
+					if (wayChildNodeName.equals(nodeName)) {
+						long waypointID = Long.parseLong(wayChildNodeList
+								.item(j).getAttributes().getNamedItem("ref")
+								.getNodeValue());
+
+						// create new waypoint with id
+						Waypoint waypoint = new Waypoint(waypointID);
+
+						// add waypoint to the waypointlist of the way
+						waypointsFromWay.add(waypoint);
+
+						// add waypoint to the matching waypointlist
+						MatchingWaypointList.add(waypoint);
+					}
+				}
+			}
+
+			// get start and end waypoint
+			Waypoint tempStartWaypoint = waypointsFromWay.get(0);
+			int lastTempWaypoint = waypointsFromWay.size() - 1;
+			Waypoint tempEndWaypoint = waypointsFromWay.get(lastTempWaypoint);
+
+			// set start and end for the way
+			way.setStart(tempStartWaypoint);
+			way.setEnd(tempEndWaypoint);
+
+			// set waypointlist for the way
+			way.setWaypointList(waypointsFromWay);
+		}
+	}
+
+	private static void setSelectedWays(Document document, XPath xpath,
+			List<String> selectWayList) throws XPathExpressionException {
+		NodeList waysInXml = (NodeList) xpath.compile("/osm/way/tag").evaluate(
+				document, XPathConstants.NODESET);
+
+		// loop trough ways in xml
+		for (int i = 0; i < waysInXml.getLength(); i++) {
+			String vNodeValue = waysInXml.item(i).getAttributes()
+					.getNamedItem("v").getNodeValue();
+			if (selectWayList.contains(vNodeValue)) {
+				long id = Long.parseLong(waysInXml.item(i).getParentNode()
+						.getAttributes().getNamedItem("id").getNodeValue());
+
+				// create new way
+				Way way = new Way(id);
+
+				// add way to
+				MatchingWayList.add(way);
+			} else {
+				throw new IllegalArgumentException(
+						"filter for street not matched with xml!");
+			}
+		}
 	}
 
 	private void checkCoordinates(double left, double bottom, double right,
@@ -168,4 +204,26 @@ public class BoxHandler implements IBoxHandler {
 					"bottom latitude must be between -180 and 180");
 		}
 	}
+
+	private Document makeConnection(URL url) {
+		Document document = null;
+		try {
+			URLConnection connection = url.openConnection();
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
+					.newInstance();
+			dbFactory.setNamespaceAware(true);
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			document = dBuilder.parse(connection.getInputStream());
+			document.getDocumentElement().normalize();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
+		} catch (SAXException e) {
+			e.printStackTrace();
+		}
+		return document;
+	}
+
 }

@@ -20,6 +20,10 @@ public class Waypoint extends SurfaceCircle {
 
 	}
 
+	public Waypoint(long waypointID) {
+		this.waypointID = waypointID;
+	}
+
 	public Waypoint(Position curPos, int i) {
 		super(curPos, i);
 	}

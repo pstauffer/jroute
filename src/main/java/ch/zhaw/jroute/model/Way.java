@@ -56,19 +56,19 @@ public class Way extends DirectedPath {
 	}
 
 	public void setStart(Waypoint start) {
-		if (pointList.isEmpty()) {
-			pointList.add(start.getReferencePosition());
-			pointList.add(start.getReferencePosition());
-		}
-		this.pointList.set(0, (Position) start.getCenter());
-		this.setPositions(pointList);
+		// if (pointList.isEmpty()) {
+		// pointList.add(start.getReferencePosition());
+		// pointList.add(start.getReferencePosition());
+		// }
+		// this.pointList.set(0, (Position) start.getCenter());
+		// this.setPositions(pointList);
 
 		this.start = start;
 	}
 
 	public void setEnd(Waypoint end) {
-		this.pointList.set(1, (Position) end.getCenter());
-		this.setPositions(pointList);
+		// this.pointList.set(1, (Position) end.getCenter());
+		// this.setPositions(pointList);
 
 		this.end = end;
 	}
