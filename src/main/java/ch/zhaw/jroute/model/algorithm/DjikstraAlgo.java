@@ -178,13 +178,13 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 		List<Way> copyOfAllWays = new ArrayList<Way>();
 		copyOfAllWays.addAll(allWays);
 
-		System.out.println(allWays.get(0).getEnd().getDistanceToStart());
-		System.out.println(copyOfAllWays.get(0).getEnd().getDistanceToStart());
+		// System.out.println(allWays.get(0).getEnd().getDistanceToStart());
+		// System.out.println(copyOfAllWays.get(0).getEnd().getDistanceToStart());
 
 		allWays.get(0).getEnd().setDistanceToStart(3.0);
 
-		System.out.println(allWays.get(0).getEnd().getDistanceToStart());
-		System.out.println(copyOfAllWays.get(0).getEnd().getDistanceToStart());
+		// System.out.println(allWays.get(0).getEnd().getDistanceToStart());
+		// System.out.println(copyOfAllWays.get(0).getEnd().getDistanceToStart());
 
 		// List<Waypoint> copyOfAllWaypoints = new ArrayList<Waypoint>();
 		// copyOfAllWays.get(0).getWaypointList().addAll(copyOfAllWaypoints);

@@ -37,7 +37,8 @@ public class BoxHandler implements IBoxHandler {
 		long startMethodTime = System.nanoTime();
 
 		// check for correct coordinates
-		checkCoordinates(left, bottom, right, top);
+		checkLatitudeCoordinates(bottom, top);
+		checkLongitudeCoordinates(left, right);
 
 		// create url
 		URL boxURL = new URL(openStreetMapBoxURL + left + "," + bottom + ","
@@ -51,7 +52,7 @@ public class BoxHandler implements IBoxHandler {
 
 		// stop timer for connection
 		long endApiCallTime = System.nanoTime();
-		long ApiCallTime = endApiCallTime - startApiCallTime;
+		long apiCallTime = endApiCallTime - startApiCallTime;
 
 		// create xpath instance
 		XPath xpath = XPathFactory.newInstance().newXPath();
@@ -115,14 +116,14 @@ public class BoxHandler implements IBoxHandler {
 
 		// stop timer for connection
 		long endMethodTime = System.nanoTime();
-		long MethodTime = endMethodTime - startMethodTime;
+		long methodTime = endMethodTime - startMethodTime;
 
 		// sysout for debugging
 		System.out.println("get all data from openstreetmap took: "
-				+ ApiCallTime + " ns");
-		System.out.println("running whole method took: " + MethodTime + " ns");
+				+ apiCallTime + " ns");
+		System.out.println("running whole method took: " + methodTime + " ns");
 		System.out.println("time for document processing : "
-				+ (MethodTime - ApiCallTime) + " ns");
+				+ (methodTime - apiCallTime) + " ns");
 		System.out.println("total ways matched: " + matchedWaySize);
 		System.out.println("total waypoints matched: " + matchedWaypointSize);
 		System.out.println("filter size: " + filterSize);
@@ -136,7 +137,6 @@ public class BoxHandler implements IBoxHandler {
 
 	private static void setValuesForWaypoints(List<Waypoint> waypointList,
 			Document document, XPath xpath) throws XPathExpressionException {
-		long startLoop = System.nanoTime();
 
 		// loop trough all matching waypoints
 		for (Waypoint waypoint : waypointList) {
@@ -161,8 +161,6 @@ public class BoxHandler implements IBoxHandler {
 			Position pos = new Position(latAngle, lonAngle, 0);
 			waypoint.setCenter(pos);
 		}
-		long endLoop = System.nanoTime();
-		System.out.println("loop time : " + (endLoop - startLoop) + " ns");
 	}
 
 	private static void setWaypointsForWays(List<Way> ways, Document document,
@@ -252,8 +250,7 @@ public class BoxHandler implements IBoxHandler {
 
 	}
 
-	private void checkCoordinates(double left, double bottom, double right,
-			double top) {
+	private void checkLongitudeCoordinates(double left, double right) {
 		if (left > 90 || left < -90) {
 			throw new IllegalArgumentException(
 					"left longitude must be between -90 and 90");
@@ -262,6 +259,14 @@ public class BoxHandler implements IBoxHandler {
 			throw new IllegalArgumentException(
 					"left longitude must be between -90 and 90");
 		}
+		if (left > right) {
+			throw new IllegalArgumentException(
+					"first parameter can't be bigger than second!!");
+		}
+
+	}
+
+	private void checkLatitudeCoordinates(double bottom, double top) {
 		if (top > 180 || top < -180) {
 			throw new IllegalArgumentException(
 					"top latitude must be between -180 and 180");
@@ -270,7 +275,7 @@ public class BoxHandler implements IBoxHandler {
 			throw new IllegalArgumentException(
 					"bottom latitude must be between -180 and 180");
 		}
-		if (left > right || bottom > top) {
+		if (bottom > top) {
 			throw new IllegalArgumentException(
 					"first parameter can't be bigger than second!!");
 		}
