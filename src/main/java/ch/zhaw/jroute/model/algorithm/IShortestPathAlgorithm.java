@@ -7,13 +7,13 @@ import ch.zhaw.jroute.model.Waypoint;
 
 public interface IShortestPathAlgorithm {
 	/**
-	 * Gibt den kürzesten Pfad zwischen start und end zurück
+	 * Gibt den kuerzesten Pfad zwischen start und end zurueck
 	 * 
 	 * @param start
 	 * @param end
 	 * @param allWays
 	 *            with distance between the waypoints
-	 * @return List<Way> Wege die am kürzesten von start nach end führen
+	 * @return List<Way> Wege die am kuerzesten von start nach end fuehren
 	 */
 	List<Way> getShortestPath(Waypoint start, Waypoint end, List<Way> allWays);
 }
