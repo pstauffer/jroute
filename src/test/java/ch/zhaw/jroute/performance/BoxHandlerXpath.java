@@ -1,4 +1,4 @@
-package ch.zhaw.jroute.routedata;
+package ch.zhaw.jroute.performance;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -20,8 +20,9 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import ch.zhaw.jroute.model.Way;
+import ch.zhaw.jroute.routedata.IBoxHandler;
 
-public class BoxHandlerXPathRegex implements IBoxHandler {
+public class BoxHandlerXpath implements IBoxHandler {
 	final String openStreetMapBoxURL = "http://api.openstreetmap.org/api/0.6/map?bbox=";
 
 	@Override
@@ -45,13 +46,24 @@ public class BoxHandlerXPathRegex implements IBoxHandler {
 			document.getDocumentElement().normalize();
 			XPath xpath = XPathFactory.newInstance().newXPath();
 
-			NodeList waysInXML = (NodeList) xpath.compile(
-					"/osm/way/tag[@k='highway'][@v='residential']").evaluate(
+			NodeList asdfdsf = (NodeList) xpath.compile("/osm/way").evaluate(
 					document, XPathConstants.NODESET);
-			for (int i = 0; i < waysInXML.getLength(); i++) {
-				long wayID = Long.parseLong(waysInXML.item(i).getParentNode()
-						.getAttributes().getNamedItem("id").getNodeValue());
-				allWays.add(new Way(wayID));
+			for (int i = 0; i < asdfdsf.getLength(); i++) {
+				NodeList blaa = asdfdsf.item(i).getChildNodes();
+
+				for (int j = 0; j < blaa.getLength(); j++) {
+					if (blaa.item(j).getNodeName() == "tag") {
+						String kl = blaa.item(j).getAttributes()
+								.getNamedItem("v").getNodeValue();
+						String shit = "residential";
+						if (kl.equals(shit)) {
+							long wayID = Long.parseLong(asdfdsf.item(i)
+									.getAttributes().getNamedItem("id")
+									.getNodeValue());
+							allWays.add(new Way(wayID));
+						}
+					}
+				}
 			}
 
 		} catch (MalformedURLException e) {

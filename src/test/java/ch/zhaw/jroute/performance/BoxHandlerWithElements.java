@@ -1,4 +1,4 @@
-package ch.zhaw.jroute.routedata;
+package ch.zhaw.jroute.performance;
 
 import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.Position;
@@ -22,6 +22,7 @@ import org.xml.sax.SAXException;
 
 import ch.zhaw.jroute.model.Way;
 import ch.zhaw.jroute.model.Waypoint;
+import ch.zhaw.jroute.routedata.IBoxHandler;
 
 public class BoxHandlerWithElements implements IBoxHandler {
 
