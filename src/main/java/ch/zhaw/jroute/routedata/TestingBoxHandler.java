@@ -7,9 +7,6 @@ import ch.zhaw.jroute.model.Way;
 import ch.zhaw.jroute.model.Waypoint;
 
 public class TestingBoxHandler {
-	static long startTime;
-	static long endTime;
-	static long tookTime;
 
 	public static void main(String[] args) {
 		BoxHandler box = new BoxHandler();

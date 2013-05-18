@@ -6,36 +6,37 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import ch.zhaw.jroute.model.Way;
 import ch.zhaw.jroute.model.WayStatusEnum;
 import ch.zhaw.jroute.model.Waypoint;
-import ch.zhaw.jroute.model.algorithm.DjikstraAlgo;
 
 public class DjikstraAlgoTest {
-	List<Way> allWays;
-	Waypoint A;
-	Waypoint B;
-	Waypoint C;
-	Waypoint D;
-	Waypoint E;
-	Waypoint F;
-	Waypoint G;
-	Waypoint H;
-	Waypoint I;
-	Waypoint J;
-	Way way1;
-	Way way2;
-	Way way3;
-	Way way4;
-	Way way5;
-	Way way6;
-	Way way7;
-	Way way8;
-	Way way9;
-	Way way10;
+	private List<Way> allWays;
+	private Waypoint A;
+	private Waypoint B;
+	private Waypoint C;
+	private Waypoint D;
+	private Waypoint E;
+	private Waypoint F;
+	private Waypoint G;
+	private Waypoint H;
+	private Waypoint I;
+	private Waypoint J;
+	private Way way1;
+	private Way way2;
+	private Way way3;
+	private Way way4;
+	private Way way5;
+	private Way way6;
+	private Way way7;
+	private Way way8;
+	private Way way9;
+	private Way way10;
 
+	@Before
 	public void createTestSzenario() {
 
 		allWays = new ArrayList<Way>();

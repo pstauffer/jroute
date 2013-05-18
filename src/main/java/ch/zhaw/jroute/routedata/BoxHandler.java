@@ -26,8 +26,8 @@ import ch.zhaw.jroute.model.Waypoint;
 
 public class BoxHandler implements IBoxHandler {
 	private final String openStreetMapBoxURL = "http://api.openstreetmap.org/api/0.6/map?bbox=";
-	private static List<Waypoint> MatchingWaypointList = new ArrayList<Waypoint>();
-	private static List<Way> MatchingWayList = new ArrayList<Way>();
+	private static List<Waypoint> matchingWaypointList = new ArrayList<Waypoint>();
+	private static List<Way> matchingWayList = new ArrayList<Way>();
 	private static List<String> streetFilterList = new ArrayList<String>();
 
 	@Override
@@ -50,15 +50,17 @@ public class BoxHandler implements IBoxHandler {
 		// stop timer for connection
 		long endTime = System.nanoTime();
 		long tookTime = endTime - startTime;
-		System.out.println("get all data took: " + tookTime + " ns");
+		System.out.println("get all data from openstreetmap took: " + tookTime
+				+ " ns");
 
 		// create xpath instance
 		XPath xpath = XPathFactory.newInstance().newXPath();
 
 		// set street filter
-		addStreetFilter("motorway");
-		// addStreetFilter("tertiary");
-		// addStreetFilter("residential");
+		// addStreetFilter("motorway");
+		addStreetFilter("tertiary");
+		addStreetFilter("residential");
+		// addStreetFilter("any");
 
 		try {
 
@@ -66,16 +68,19 @@ public class BoxHandler implements IBoxHandler {
 			setSelectedWays(document, xpath, streetFilterList);
 
 			// set all waypoints for the ways
-			setWaypointsForWays(MatchingWayList, document, xpath);
+			setWaypointsForWays(matchingWayList, document, xpath);
 
 			// get and set all waypoint values
-			setValuesForWaypoints(MatchingWaypointList, document, xpath);
+			setValuesForWaypoints(matchingWaypointList, document, xpath);
 
 		} catch (XPathExpressionException e) {
 			e.printStackTrace();
 		}
 
-		return MatchingWayList;
+		System.out.println("total ways: " + matchingWayList.size());
+		System.out.println("total waypoints: " + matchingWaypointList.size());
+
+		return matchingWayList;
 	}
 
 	private static void addStreetFilter(String filter) {
@@ -97,15 +102,15 @@ public class BoxHandler implements IBoxHandler {
 			double lon = Double.parseDouble(waypointsInXml.item(0)
 					.getAttributes().getNamedItem("lon").getNodeValue());
 
-			// set position (lon and lat in one value)
-			Angle latAngle = Angle.fromDegreesLatitude(waypoint.getLat());
-			Angle lonAngle = Angle.fromDegreesLatitude(waypoint.getLon());
-			Position pos = new Position(latAngle, lonAngle, 0);
-			waypoint.setCenter(pos);
-
 			// set latitude and longitude for waypoint
 			waypoint.setLat(lat);
 			waypoint.setLon(lon);
+
+			// set position (lon and lat in one value)
+			Angle latAngle = Angle.fromDegreesLatitude(lat);
+			Angle lonAngle = Angle.fromDegreesLatitude(lon);
+			Position pos = new Position(latAngle, lonAngle, 0);
+			waypoint.setCenter(pos);
 
 		}
 	}
@@ -141,7 +146,7 @@ public class BoxHandler implements IBoxHandler {
 						waypointsFromWay.add(waypoint);
 
 						// add waypoint to the matching waypointlist
-						MatchingWaypointList.add(waypoint);
+						matchingWaypointList.add(waypoint);
 					}
 				}
 			}
@@ -161,7 +166,12 @@ public class BoxHandler implements IBoxHandler {
 	}
 
 	private static void setSelectedWays(Document document, XPath xpath,
-			List<String> selectWayList) throws XPathExpressionException {
+			List<String> streetFilterList) throws XPathExpressionException {
+
+		if (streetFilterList.isEmpty()) {
+			throw new IllegalArgumentException("street filter is empty");
+		}
+
 		NodeList waysInXml = (NodeList) xpath.compile("/osm/way/tag").evaluate(
 				document, XPathConstants.NODESET);
 
@@ -169,20 +179,27 @@ public class BoxHandler implements IBoxHandler {
 		for (int i = 0; i < waysInXml.getLength(); i++) {
 			String vNodeValue = waysInXml.item(i).getAttributes()
 					.getNamedItem("v").getNodeValue();
-			if (selectWayList.contains(vNodeValue)) {
+
+			// if (streetFilterList.contains(vNodeValue)
+			// || streetFilterList.contains("any")) {
+			if (streetFilterList.contains(vNodeValue)) {
 				long id = Long.parseLong(waysInXml.item(i).getParentNode()
 						.getAttributes().getNamedItem("id").getNodeValue());
 
 				// create new way
 				Way way = new Way(id);
 
-				// add way to
-				MatchingWayList.add(way);
-			} else {
-				throw new IllegalArgumentException(
-						"filter for street not matched with xml!");
+				// add way to list
+				matchingWayList.add(way);
 			}
+
 		}
+
+		if (matchingWayList.isEmpty()) {
+			throw new IllegalArgumentException(
+					"street filter not matched with value in xml file");
+		}
+
 	}
 
 	private void checkCoordinates(double left, double bottom, double right,
