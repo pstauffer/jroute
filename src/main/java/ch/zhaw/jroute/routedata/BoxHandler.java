@@ -4,8 +4,8 @@ import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.Position;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +33,8 @@ public class BoxHandler implements IBoxHandler {
 	@Override
 	public List<Way> getAllWays(double left, double bottom, double right,
 			double top) throws IOException {
+		// start method time measuring
+		long startMethodTime = System.nanoTime();
 
 		// check for correct coordinates
 		checkCoordinates(left, bottom, right, top);
@@ -42,22 +44,20 @@ public class BoxHandler implements IBoxHandler {
 				+ right + "," + top);
 
 		// start timer for connection
-		long startTime = System.nanoTime();
+		long startApiCallTime = System.nanoTime();
 
 		// get document via connection
-		Document document = makeConnection(boxURL);
+		Document document = getDocumentOverNewConnection(boxURL);
 
 		// stop timer for connection
-		long endTime = System.nanoTime();
-		long tookTime = endTime - startTime;
-		System.out.println("get all data from openstreetmap took: " + tookTime
-				+ " ns");
+		long endApiCallTime = System.nanoTime();
+		long ApiCallTime = endApiCallTime - startApiCallTime;
 
 		// create xpath instance
 		XPath xpath = XPathFactory.newInstance().newXPath();
 
 		// set street filter
-		// addStreetFilter("motorway");
+		addStreetFilter("motorway");
 		addStreetFilter("tertiary");
 		addStreetFilter("residential");
 		// addStreetFilter("any");
@@ -65,22 +65,69 @@ public class BoxHandler implements IBoxHandler {
 		try {
 
 			// get all ways, which match with the filter
+			long setSelectedWaysStartTime = System.nanoTime();
 			setSelectedWays(document, xpath, streetFilterList);
+			long setSelectedWaysEndTime = System.nanoTime();
 
 			// set all waypoints for the ways
+			long setWaypointsForWaysStartTime = System.nanoTime();
 			setWaypointsForWays(matchingWayList, document, xpath);
+			long setWaypointsForWaysEndTime = System.nanoTime();
 
 			// get and set all waypoint values
+			long setValuesForWaypointsStartTime = System.nanoTime();
 			setValuesForWaypoints(matchingWaypointList, document, xpath);
+			long setValuesForWaypointsEndTime = System.nanoTime();
+
+			// performance tests
+			System.out.println("time setSelectedWaysTime : "
+					+ (setSelectedWaysEndTime - setSelectedWaysStartTime)
+					+ " ns");
+			System.out
+					.println("time setWaypointsForWaysTime : "
+							+ (setWaypointsForWaysEndTime - setWaypointsForWaysStartTime)
+							+ " ns");
+			System.out
+					.println("time setValuesForWaypointsTime : "
+							+ (setValuesForWaypointsEndTime - setValuesForWaypointsStartTime)
+							+ " ns");
 
 		} catch (XPathExpressionException e) {
 			e.printStackTrace();
 		}
 
-		System.out.println("total ways: " + matchingWayList.size());
-		System.out.println("total waypoints: " + matchingWaypointList.size());
+		// create wayList for return
+		List<Way> wayList = new ArrayList<Way>();
+		// insert all matched ways
+		wayList.addAll(matchingWayList);
 
-		return matchingWayList;
+		// counting ways and waypoints for debugging
+		int matchedWaySize = matchingWayList.size();
+		int matchedWaypointSize = matchingWaypointList.size();
+		int filterSize = streetFilterList.size();
+
+		// cleanup <- useful??
+		document = null;
+		xpath = null;
+		matchingWaypointList.clear();
+		matchingWayList.clear();
+		streetFilterList.clear();
+
+		// stop timer for connection
+		long endMethodTime = System.nanoTime();
+		long MethodTime = endMethodTime - startMethodTime;
+
+		// sysout for debugging
+		System.out.println("get all data from openstreetmap took: "
+				+ ApiCallTime + " ns");
+		System.out.println("running whole method took: " + MethodTime + " ns");
+		System.out.println("time for document processing : "
+				+ (MethodTime - ApiCallTime) + " ns");
+		System.out.println("total ways matched: " + matchedWaySize);
+		System.out.println("total waypoints matched: " + matchedWaypointSize);
+		System.out.println("filter size: " + filterSize);
+
+		return wayList;
 	}
 
 	private static void addStreetFilter(String filter) {
@@ -89,9 +136,11 @@ public class BoxHandler implements IBoxHandler {
 
 	private static void setValuesForWaypoints(List<Waypoint> waypointList,
 			Document document, XPath xpath) throws XPathExpressionException {
+		long startLoop = System.nanoTime();
 
 		// loop trough all matching waypoints
 		for (Waypoint waypoint : waypointList) {
+
 			long waypointID = waypoint.getWaypointID();
 			NodeList waypointsInXml = (NodeList) xpath.compile(
 					"/osm/node[@id='" + waypointID + "']").evaluate(document,
@@ -111,8 +160,9 @@ public class BoxHandler implements IBoxHandler {
 			Angle lonAngle = Angle.fromDegreesLatitude(lon);
 			Position pos = new Position(latAngle, lonAngle, 0);
 			waypoint.setCenter(pos);
-
 		}
+		long endLoop = System.nanoTime();
+		System.out.println("loop time : " + (endLoop - startLoop) + " ns");
 	}
 
 	private static void setWaypointsForWays(List<Way> ways, Document document,
@@ -122,6 +172,7 @@ public class BoxHandler implements IBoxHandler {
 		for (Way way : ways) {
 			long wayID = way.getWayID();
 
+			// create new waypointlist for every way
 			List<Waypoint> waypointsFromWay = new ArrayList<Waypoint>();
 			NodeList wayInXml = (NodeList) xpath.compile(
 					"/osm/way[@id='" + wayID + "']").evaluate(document,
@@ -177,11 +228,10 @@ public class BoxHandler implements IBoxHandler {
 
 		// loop trough ways in xml
 		for (int i = 0; i < waysInXml.getLength(); i++) {
+
 			String vNodeValue = waysInXml.item(i).getAttributes()
 					.getNamedItem("v").getNodeValue();
 
-			// if (streetFilterList.contains(vNodeValue)
-			// || streetFilterList.contains("any")) {
 			if (streetFilterList.contains(vNodeValue)) {
 				long id = Long.parseLong(waysInXml.item(i).getParentNode()
 						.getAttributes().getNamedItem("id").getNodeValue());
@@ -220,18 +270,29 @@ public class BoxHandler implements IBoxHandler {
 			throw new IllegalArgumentException(
 					"bottom latitude must be between -180 and 180");
 		}
+		if (left > right || bottom > top) {
+			throw new IllegalArgumentException(
+					"first parameter can't be bigger than second!!");
+		}
+
 	}
 
-	private Document makeConnection(URL url) {
+	private Document getDocumentOverNewConnection(URL url) {
 		Document document = null;
 		try {
-			URLConnection connection = url.openConnection();
+			// open connection
+			HttpURLConnection connection = (HttpURLConnection) url
+					.openConnection();
+
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
 					.newInstance();
 			dbFactory.setNamespaceAware(true);
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			document = dBuilder.parse(connection.getInputStream());
 			document.getDocumentElement().normalize();
+
+			// close connection
+			connection.disconnect();
 
 		} catch (IOException e) {
 			e.printStackTrace();
