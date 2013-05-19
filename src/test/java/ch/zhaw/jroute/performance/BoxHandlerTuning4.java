@@ -1,4 +1,4 @@
-package ch.zhaw.jroute.routedata;
+package ch.zhaw.jroute.performance;
 
 import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.Position;
@@ -18,12 +18,12 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import ch.zhaw.jroute.model.Way;
 import ch.zhaw.jroute.model.Waypoint;
+import ch.zhaw.jroute.routedata.IBoxHandler;
 
 /**
  * BoxHandler Class for API Calls to openstreetmap.org needed for getting all
@@ -33,7 +33,7 @@ import ch.zhaw.jroute.model.Waypoint;
  * 
  * @author pascal
  */
-public class BoxHandler implements IBoxHandler {
+public class BoxHandlerTuning4 implements IBoxHandler {
 	private final String openStreetMapBoxURL = "http://api.openstreetmap.org/api/0.6/map?bbox=";
 	private static List<Waypoint> matchingWaypointList = new ArrayList<Waypoint>();
 	private static List<Way> matchingWayList = new ArrayList<Way>();
@@ -168,15 +168,15 @@ public class BoxHandler implements IBoxHandler {
 		for (Waypoint waypoint : waypointList) {
 
 			long waypointID = waypoint.getWaypointID();
-			Node waypointInXml = (Node) xpath.compile(
-					"/osm/node[@id='" + waypointID + "']").evaluate(document,
-					XPathConstants.NODE);
+			String latWaypointInXml = (String) xpath.compile(
+					"/osm/node[@id='" + waypointID + "']/@lat").evaluate(
+					document, XPathConstants.STRING);
+			String lonWaypointInXml = (String) xpath.compile(
+					"/osm/node[@id='" + waypointID + "']/@lon").evaluate(
+					document, XPathConstants.STRING);
 
-			double lat = Double.parseDouble(waypointInXml.getAttributes()
-					.getNamedItem("lat").getNodeValue());
-
-			double lon = Double.parseDouble(waypointInXml.getAttributes()
-					.getNamedItem("lon").getNodeValue());
+			double lat = Double.parseDouble(latWaypointInXml);
+			double lon = Double.parseDouble(lonWaypointInXml);
 
 			// set latitude and longitude for waypoint
 			waypoint.setLat(lat);
@@ -209,23 +209,33 @@ public class BoxHandler implements IBoxHandler {
 			// create new waypointlist for every way
 			List<Waypoint> waypointsFromWay = new ArrayList<Waypoint>();
 			NodeList wayInXml = (NodeList) xpath.compile(
-					"/osm/way[@id='" + wayID + "']/nd/@ref").evaluate(document,
+					"/osm/way[@id='" + wayID + "']").evaluate(document,
 					XPathConstants.NODESET);
 
 			// loop trough all childnodes
-			for (int j = 0; j < wayInXml.getLength(); j++) {
-				long waypointID = Long.parseLong(wayInXml.item(j)
-						.getNodeValue());
+			for (int i = 0; i < wayInXml.getLength(); i++) {
+				NodeList wayChildNodeList = wayInXml.item(i).getChildNodes();
+				for (int j = 0; j < wayChildNodeList.getLength(); j++) {
+					String wayChildNodeName = wayChildNodeList.item(j)
+							.getNodeName();
+					String nodeName = "nd";
+					if (wayChildNodeName.equals(nodeName)) {
+						long waypointID = Long.parseLong(wayChildNodeList
+								.item(j).getAttributes().getNamedItem("ref")
+								.getNodeValue());
 
-				// create new waypoint with id
-				Waypoint waypoint = new Waypoint(waypointID);
+						// create new waypoint with id
+						Waypoint waypoint = new Waypoint(waypointID);
 
-				// add waypoint to the waypointlist of the way
-				waypointsFromWay.add(waypoint);
+						// add waypoint to the waypointlist of the way
+						waypointsFromWay.add(waypoint);
 
-				// add waypoint to the matching waypointlist
-				matchingWaypointList.add(waypoint);
+						// add waypoint to the matching waypointlist
+						matchingWaypointList.add(waypoint);
+					}
+				}
 			}
+
 			// get start and end waypoint
 			Waypoint tempStartWaypoint = waypointsFromWay.get(0);
 			int lastTempWaypoint = waypointsFromWay.size() - 1;
@@ -256,17 +266,19 @@ public class BoxHandler implements IBoxHandler {
 			throw new IllegalArgumentException("street filter is empty");
 		}
 
-		NodeList wayInXml = (NodeList) xpath.compile(
-				"/osm/way/tag[@k='highway']").evaluate(document,
-				XPathConstants.NODESET);
+		NodeList waysInXml = (NodeList) xpath.compile("/osm/way/tag").evaluate(
+				document, XPathConstants.NODESET);
 
-		for (int i = 0; i < wayInXml.getLength(); i++) {
-			String vNodeValue = wayInXml.item(i).getAttributes()
+		// loop trough ways in xml
+		for (int i = 0; i < waysInXml.getLength(); i++) {
+
+			String vNodeValue = waysInXml.item(i).getAttributes()
 					.getNamedItem("v").getNodeValue();
 
 			if (streetFilterList.contains(vNodeValue)) {
-				long id = Long.parseLong(wayInXml.item(i).getParentNode()
+				long id = Long.parseLong(waysInXml.item(i).getParentNode()
 						.getAttributes().getNamedItem("id").getNodeValue());
+
 				// create new way
 				Way way = new Way(id);
 
