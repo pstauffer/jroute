@@ -17,6 +17,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -34,6 +35,7 @@ import ch.zhaw.jroute.model.Waypoint;
  * @author pascal
  */
 public class BoxHandler implements IBoxHandler {
+	private static Logger logger = Logger.getLogger("org.apache.log4j");
 	private final String openStreetMapBoxURL = "http://api.openstreetmap.org/api/0.6/map?bbox=";
 	private static List<Waypoint> matchingWaypointList = new ArrayList<Waypoint>();
 	private static List<Way> matchingWayList = new ArrayList<Way>();
@@ -73,7 +75,6 @@ public class BoxHandler implements IBoxHandler {
 		addStreetFilter("motorway");
 		addStreetFilter("tertiary");
 		addStreetFilter("residential");
-		// addStreetFilter("any");
 
 		try {
 
@@ -93,20 +94,18 @@ public class BoxHandler implements IBoxHandler {
 			long setValuesForWaypointsEndTime = System.nanoTime();
 
 			// performance tests
-			System.out.println("time setSelectedWaysTime : "
+			logger.debug("time setSelectedWaysTime : "
 					+ (setSelectedWaysEndTime - setSelectedWaysStartTime)
 					+ " ns");
-			System.out
-					.println("time setWaypointsForWaysTime : "
-							+ (setWaypointsForWaysEndTime - setWaypointsForWaysStartTime)
-							+ " ns");
-			System.out
-					.println("time setValuesForWaypointsTime : "
-							+ (setValuesForWaypointsEndTime - setValuesForWaypointsStartTime)
-							+ " ns");
+			logger.debug("time setWaypointsForWaysTime : "
+					+ (setWaypointsForWaysEndTime - setWaypointsForWaysStartTime)
+					+ " ns");
+			logger.debug("time setValuesForWaypointsTime : "
+					+ (setValuesForWaypointsEndTime - setValuesForWaypointsStartTime)
+					+ " ns");
 
 		} catch (XPathExpressionException e) {
-			e.printStackTrace();
+			logger.fatal(e);
 		}
 
 		// create wayList for return
@@ -131,14 +130,14 @@ public class BoxHandler implements IBoxHandler {
 		long methodTime = endMethodTime - startMethodTime;
 
 		// sysout for debugging
-		System.out.println("get all data from openstreetmap took: "
-				+ apiCallTime + " ns");
-		System.out.println("running whole method took: " + methodTime + " ns");
-		System.out.println("time for document processing : "
+		logger.debug("get all data from openstreetmap took: " + apiCallTime
+				+ " ns");
+		logger.debug("running whole method took: " + methodTime + " ns");
+		logger.debug("time for document processing : "
 				+ (methodTime - apiCallTime) + " ns");
-		System.out.println("total ways matched: " + matchedWaySize);
-		System.out.println("total waypoints matched: " + matchedWaypointSize);
-		System.out.println("filter size: " + filterSize);
+		logger.debug("total ways matched: " + matchedWaySize);
+		logger.debug("total waypoints matched: " + matchedWaypointSize);
+		logger.debug("filter size: " + filterSize);
 
 		return wayList;
 	}
@@ -357,11 +356,11 @@ public class BoxHandler implements IBoxHandler {
 			connection.disconnect();
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.fatal(e);
 		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
+			logger.fatal(e);
 		} catch (SAXException e) {
-			e.printStackTrace();
+			logger.fatal(e);
 		}
 		return document;
 	}
