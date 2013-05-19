@@ -121,8 +121,8 @@ public class BoxHandler implements IBoxHandler {
 		// cleanup <- useful??
 		document = null;
 		xpath = null;
-		matchingWaypointList.clear();
-		matchingWayList.clear();
+		matchingWaypointList.clear(); // useful? objects already in use
+		matchingWayList.clear(); // useful? objects already in use
 		streetFilterList.clear();
 
 		// stop timer for connection
