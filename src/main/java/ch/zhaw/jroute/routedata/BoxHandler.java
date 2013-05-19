@@ -24,12 +24,23 @@ import org.xml.sax.SAXException;
 import ch.zhaw.jroute.model.Way;
 import ch.zhaw.jroute.model.Waypoint;
 
+/**
+ * BoxHandler Class for API Calls to openstreetmap.org needed for getting all
+ * ways and waypoints with all values
+ * 
+ * defined through Interface IBoxHandler
+ * 
+ * @author pascal
+ */
 public class BoxHandler implements IBoxHandler {
 	private final String openStreetMapBoxURL = "http://api.openstreetmap.org/api/0.6/map?bbox=";
 	private static List<Waypoint> matchingWaypointList = new ArrayList<Waypoint>();
 	private static List<Way> matchingWayList = new ArrayList<Way>();
 	private static List<String> streetFilterList = new ArrayList<String>();
 
+	/**
+	 * defined through Interface IBoxHandler
+	 */
 	@Override
 	public List<Way> getAllWays(double left, double bottom, double right,
 			double top) throws IOException {
@@ -67,7 +78,7 @@ public class BoxHandler implements IBoxHandler {
 
 			// get all ways, which match with the filter
 			long setSelectedWaysStartTime = System.nanoTime();
-			setSelectedWays(document, xpath, streetFilterList);
+			setSelectedWays(streetFilterList, document, xpath);
 			long setSelectedWaysEndTime = System.nanoTime();
 
 			// set all waypoints for the ways
@@ -131,10 +142,24 @@ public class BoxHandler implements IBoxHandler {
 		return wayList;
 	}
 
+	/**
+	 * adding an additional filter-value for the streets
+	 * 
+	 * @param filter
+	 */
 	private static void addStreetFilter(String filter) {
 		streetFilterList.add(filter);
 	}
 
+	/**
+	 * get and set the coordinate values for the matched waypoints also set the
+	 * position for a waypoint
+	 * 
+	 * @param waypointlist
+	 * @param document
+	 * @param xpath
+	 * @throws XPathExpressionException
+	 */
 	private static void setValuesForWaypoints(List<Waypoint> waypointList,
 			Document document, XPath xpath) throws XPathExpressionException {
 
@@ -163,11 +188,20 @@ public class BoxHandler implements IBoxHandler {
 		}
 	}
 
-	private static void setWaypointsForWays(List<Way> ways, Document document,
-			XPath xpath) throws XPathExpressionException {
+	/**
+	 * get all waypoints for matched ways and set a waypointlist for every way
+	 * set the start and end waypoint for a way
+	 * 
+	 * @param waylist
+	 * @param document
+	 * @param xpath
+	 * @throws XPathExpressionException
+	 */
+	private static void setWaypointsForWays(List<Way> wayList,
+			Document document, XPath xpath) throws XPathExpressionException {
 
 		// loop trough all ways
-		for (Way way : ways) {
+		for (Way way : wayList) {
 			long wayID = way.getWayID();
 
 			// create new waypointlist for every way
@@ -214,8 +248,17 @@ public class BoxHandler implements IBoxHandler {
 		}
 	}
 
-	private static void setSelectedWays(Document document, XPath xpath,
-			List<String> streetFilterList) throws XPathExpressionException {
+	/**
+	 * get all ways, which contains the filter in the filterlist
+	 * 
+	 * @param streetFilterList
+	 * @param document
+	 * @param xpath
+	 * @throws XPathExpressionException
+	 * @exception IllegalArgumentException
+	 */
+	private static void setSelectedWays(List<String> streetFilterList,
+			Document document, XPath xpath) throws XPathExpressionException {
 
 		if (streetFilterList.isEmpty()) {
 			throw new IllegalArgumentException("street filter is empty");
@@ -250,6 +293,13 @@ public class BoxHandler implements IBoxHandler {
 
 	}
 
+	/**
+	 * check, if the longitude coordinates are correct
+	 * 
+	 * @param left
+	 * @param right
+	 * @exception IllegalArgumentException
+	 */
 	private void checkLongitudeCoordinates(double left, double right) {
 		if (left > 90 || left < -90) {
 			throw new IllegalArgumentException(
@@ -266,6 +316,13 @@ public class BoxHandler implements IBoxHandler {
 
 	}
 
+	/**
+	 * check, if the latitude coordinates are correct
+	 * 
+	 * @param bottom
+	 * @param top
+	 * @exception IllegalArgumentException
+	 */
 	private void checkLatitudeCoordinates(double bottom, double top) {
 		if (top > 180 || top < -180) {
 			throw new IllegalArgumentException(
@@ -282,6 +339,16 @@ public class BoxHandler implements IBoxHandler {
 
 	}
 
+	/**
+	 * open connection to openstreetmap url, create new document and after that,
+	 * close the connection
+	 * 
+	 * @param url
+	 * @return document
+	 * @exception IOException
+	 * @exception ParserConfigurationException
+	 * @exception SAXException
+	 */
 	private Document getDocumentOverNewConnection(URL url) {
 		Document document = null;
 		try {

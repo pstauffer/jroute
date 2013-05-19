@@ -11,6 +11,14 @@ import ch.zhaw.jroute.model.Way;
 import ch.zhaw.jroute.model.WayStatusEnum;
 import ch.zhaw.jroute.model.Waypoint;
 
+/**
+ * DjikstraAlgo Class for run the djikstra algorithm and calculate the shortest
+ * way
+ * 
+ * defined through Interface IShortestPathAlgorithm
+ * 
+ * @author pascal
+ */
 public class DjikstraAlgo implements IShortestPathAlgorithm {
 	private Set<Waypoint> allPointsList;
 	private List<Waypoint> redWaypointList;
@@ -18,6 +26,9 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 	private List<Waypoint> shortestWaypointList;
 	private List<Way> shortestWayList;
 
+	/**
+	 * constructor for djikstra algorithm class
+	 */
 	public DjikstraAlgo() {
 		allPointsList = new HashSet<Waypoint>();
 		redWaypointList = new ArrayList<Waypoint>();
@@ -26,6 +37,12 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 		shortestWayList = new ArrayList<Way>();
 	}
 
+	/**
+	 * prepare all waypoints and ways for the djikstra algorithm
+	 * 
+	 * @param startWaypoint
+	 * @param allWaysList
+	 */
 	void preparation(Waypoint startWaypoint, List<Way> allWaysList) {
 
 		for (Way way : allWaysList) {
@@ -50,6 +67,12 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 
 	}
 
+	/**
+	 * calculate the whole graph for djikstra algorithm
+	 * 
+	 * @param startWaypoint
+	 * @param allWaysList
+	 */
 	void calculateGraph(Waypoint startWaypoint, List<Way> allWaysList) {
 		Waypoint nextWaypointForCalculating = startWaypoint;
 
@@ -117,6 +140,12 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 		}
 	}
 
+	/**
+	 * check, if the waypoint is reachable
+	 * 
+	 * @param waypoint
+	 * @return true or false
+	 */
 	boolean checkUnreachableWaypoint(Waypoint waypoint) {
 
 		if (waypoint.getDistanceToStart() == Integer.MAX_VALUE) {
@@ -126,6 +155,9 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 
 	}
 
+	/**
+	 * defined through the interface
+	 */
 	@Override
 	public List<Way> getShortestPath(Waypoint startWaypoint,
 			Waypoint endWaypoint, List<Way> allWays) {
@@ -174,6 +206,11 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 		return shortestWayList;
 	}
 
+	/**
+	 * TODO!
+	 * 
+	 * @param allWays
+	 */
 	public void createCopysFromWays(List<Way> allWays) {
 		List<Way> copyOfAllWays = new ArrayList<Way>();
 		copyOfAllWays.addAll(allWays);
@@ -190,6 +227,11 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 		// copyOfAllWays.get(0).getWaypointList().addAll(copyOfAllWaypoints);
 	}
 
+	/**
+	 * set the correct status for all ways in the list
+	 * 
+	 * @param allWays
+	 */
 	private void setWayStatus(List<Way> allWays) {
 
 		for (Way way : allWays) {
@@ -206,6 +248,14 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 
 	}
 
+	/**
+	 * search the way, which matches with the input waypoints
+	 * 
+	 * @param point1
+	 * @param point2
+	 * @param ways
+	 * @return
+	 */
 	private Way getWay(Waypoint point1, Waypoint point2, List<Way> ways) {
 		for (Way way : ways) {
 			if ((way.getStart().equals(point1) && way.getEnd().equals(point2))
@@ -217,6 +267,9 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 		return null;
 	}
 
+	/**
+	 * defines the comparator for the waypoint sort by distance
+	 */
 	private Comparator<Waypoint> sortByDistance = new Comparator<Waypoint>() {
 		public int compare(Waypoint point1, Waypoint point2) {
 			return (int) (point1.getDistanceToStart() - point2
@@ -224,11 +277,25 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 		}
 	};
 
+	/**
+	 * sort the red waypoints by distance and give the waypoint back with the
+	 * shortest distance
+	 * 
+	 * @param redWaypoints
+	 * @return
+	 */
 	private Waypoint getShortestDistanceRedWaypoint(List<Waypoint> redWaypoints) {
 		Collections.sort(redWaypoints, sortByDistance);
 		return redWaypoints.get(0);
 	}
 
+	/**
+	 * get all backward ways from a waypoint
+	 * 
+	 * @param waypoint
+	 * @param ways
+	 * @return List<Way
+	 */
 	private List<Way> getConnectedBackwardWays(Waypoint waypoint, List<Way> ways) {
 		List<Way> connectedBackwardWays = new ArrayList<Way>();
 		for (Way way : ways) {
@@ -239,6 +306,13 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 		return connectedBackwardWays;
 	}
 
+	/**
+	 * get all forwarding ways from a waypoint
+	 * 
+	 * @param waypoint
+	 * @param ways
+	 * @return List<Way>
+	 */
 	private List<Way> getConnectedForwardWays(Waypoint waypoint, List<Way> ways) {
 		List<Way> connectedForwardWays = new ArrayList<Way>();
 		for (Way way : ways) {

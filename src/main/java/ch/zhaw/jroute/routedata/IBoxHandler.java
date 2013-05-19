@@ -5,10 +5,16 @@ import java.util.List;
 
 import ch.zhaw.jroute.model.Way;
 
+/**
+ * BoxHandler Interface for API Calls to openstreetmap.org needed for getting
+ * all ways and waypoints with all values
+ * 
+ * @author pascal
+ */
 public interface IBoxHandler {
 
 	/**
-	 * Gibt alle Wege einer Box zurueck
+	 * give me all ways back from openstreetmap
 	 * 
 	 * @param left
 	 *            (is the longitude of the left side of the box)
@@ -18,7 +24,6 @@ public interface IBoxHandler {
 	 *            (is the longitude of the right side of the box)
 	 * @param top
 	 *            (is the latitude of the top side of the box)
-	 * 
 	 * @return List<Way> all Way included the Waypoints with longitude and
 	 *         latitude
 	 * @throws IOException
