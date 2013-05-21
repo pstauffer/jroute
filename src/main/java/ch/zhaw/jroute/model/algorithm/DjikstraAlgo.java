@@ -43,7 +43,7 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 	 * @param startWaypoint
 	 * @param allWaysList
 	 */
-	void preparation(Waypoint startWaypoint, List<Way> allWaysList) {
+	private void preparation(Waypoint startWaypoint, List<Way> allWaysList) {
 
 		for (Way way : allWaysList) {
 			Waypoint from = way.getStart();
@@ -73,7 +73,7 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 	 * @param startWaypoint
 	 * @param allWaysList
 	 */
-	void calculateGraph(Waypoint startWaypoint, List<Way> allWaysList) {
+	private void calculateGraph(Waypoint startWaypoint, List<Way> allWaysList) {
 		Waypoint nextWaypointForCalculating = startWaypoint;
 
 		// worst-case => dijkstra (points * points)
@@ -146,7 +146,7 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 	 * @param waypoint
 	 * @return true or false
 	 */
-	boolean checkUnreachableWaypoint(Waypoint waypoint) {
+	private boolean checkUnreachableWaypoint(Waypoint waypoint) {
 
 		if (waypoint.getDistanceToStart() == Integer.MAX_VALUE) {
 			return true;

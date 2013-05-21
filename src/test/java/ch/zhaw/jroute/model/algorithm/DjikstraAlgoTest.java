@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,6 +36,7 @@ public class DjikstraAlgoTest {
 	private Way way8;
 	private Way way9;
 	private Way way10;
+	private DjikstraAlgo algo;
 
 	@Before
 	public void createTestSzenario() {
@@ -76,6 +78,12 @@ public class DjikstraAlgoTest {
 
 	}
 
+	@Before
+	public void setUp() {
+		createTestSzenario();
+		algo = new DjikstraAlgo();
+	}
+
 	/**
 	 * check a route from point A to point G
 	 * 
@@ -84,12 +92,8 @@ public class DjikstraAlgoTest {
 	@Test
 	public void shortestPathPart1() {
 
-		createTestSzenario();
-
 		Waypoint startWaypoint = A;
 		Waypoint endWaypoint = G;
-
-		DjikstraAlgo algo = new DjikstraAlgo();
 
 		List<Way> shortestWay = algo.getShortestPath(startWaypoint,
 				endWaypoint, allWays);
@@ -107,12 +111,9 @@ public class DjikstraAlgoTest {
 
 	@Test
 	public void checkWays() {
-		createTestSzenario();
 
 		Waypoint startWaypoint = A;
 		Waypoint endWaypoint = H;
-
-		DjikstraAlgo algo = new DjikstraAlgo();
 
 		algo.getShortestPath(startWaypoint, endWaypoint, allWays);
 
@@ -131,13 +132,8 @@ public class DjikstraAlgoTest {
 
 	@Test
 	public void checkCompleteGraph() {
-		createTestSzenario();
-		Waypoint startWaypoint = A;
 
-		DjikstraAlgo algo = new DjikstraAlgo();
-
-		algo.preparation(startWaypoint, allWays);
-		algo.calculateGraph(startWaypoint, allWays);
+		algo.getShortestPath(A, G, allWays);
 
 		assertTrue(A.getDistanceToStart() == 0);
 		assertTrue(A.getWaypointBefore().equals(A));
@@ -172,45 +168,19 @@ public class DjikstraAlgoTest {
 
 	@Test
 	public void checkUnreachableEndWayointTrue() {
-		createTestSzenario();
-		Waypoint startWaypoint = A;
-		Waypoint endWaypoint = F;
+		try {
+			algo.getShortestPath(A, F, allWays);
+			Assert.fail();
+		} catch (IllegalArgumentException e) {
 
-		DjikstraAlgo algo = new DjikstraAlgo();
-
-		algo.preparation(startWaypoint, allWays);
-		algo.calculateGraph(startWaypoint, allWays);
-		boolean CheckWaypoint = algo.checkUnreachableWaypoint(endWaypoint);
-
-		assertTrue(CheckWaypoint);
-
-	}
-
-	@Test
-	public void checkUnreachableEndWayointFalse() {
-		createTestSzenario();
-		Waypoint startWaypoint = A;
-		Waypoint endWaypoint = B;
-
-		DjikstraAlgo algo = new DjikstraAlgo();
-
-		algo.preparation(startWaypoint, allWays);
-		algo.calculateGraph(startWaypoint, allWays);
-		boolean CheckWaypoint = algo.checkUnreachableWaypoint(endWaypoint);
-
-		assertTrue(!CheckWaypoint);
-
+		}
 	}
 
 	@Test
 	public void checkStatusResult() {
 
-		createTestSzenario();
-
 		Waypoint startWaypoint = A;
 		Waypoint endWaypoint = G;
-
-		DjikstraAlgo algo = new DjikstraAlgo();
 
 		algo.getShortestPath(startWaypoint, endWaypoint, allWays);
 
@@ -222,12 +192,8 @@ public class DjikstraAlgoTest {
 	@Test
 	public void checkStatusNoResult() {
 
-		createTestSzenario();
-
 		Waypoint startWaypoint = A;
 		Waypoint endWaypoint = G;
-
-		DjikstraAlgo algo = new DjikstraAlgo();
 
 		algo.getShortestPath(startWaypoint, endWaypoint, allWays);
 
@@ -239,12 +205,8 @@ public class DjikstraAlgoTest {
 	@Test
 	public void checkStatusUndefined() {
 
-		createTestSzenario();
-
 		Waypoint startWaypoint = A;
 		Waypoint endWaypoint = G;
-
-		DjikstraAlgo algo = new DjikstraAlgo();
 
 		algo.getShortestPath(startWaypoint, endWaypoint, allWays);
 
@@ -261,12 +223,8 @@ public class DjikstraAlgoTest {
 	@Test
 	public void shortestPathPart2() {
 
-		createTestSzenario();
-
 		Waypoint startWaypoint = A;
 		Waypoint endWaypoint = I;
-
-		DjikstraAlgo algo = new DjikstraAlgo();
 
 		List<Way> shortestWay = algo.getShortestPath(startWaypoint,
 				endWaypoint, allWays);
@@ -285,12 +243,8 @@ public class DjikstraAlgoTest {
 	@Test
 	public void shortestPathPart3() {
 
-		createTestSzenario();
-
 		Waypoint startWaypoint = A;
 		Waypoint endWaypoint = J;
-
-		DjikstraAlgo algo = new DjikstraAlgo();
 
 		List<Way> shortestWay = algo.getShortestPath(startWaypoint,
 				endWaypoint, allWays);
