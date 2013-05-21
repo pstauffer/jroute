@@ -40,7 +40,6 @@ public class WaypointBuilderTest {
 		assert (observer.getNotifierObj().getLon() == testLon);
 
 		observer.reset();
-		System.out.println("blaa");
 	}
 
 	@Test
