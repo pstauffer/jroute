@@ -162,7 +162,6 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 	public List<Way> getShortestPath(Waypoint startWaypoint,
 			Waypoint endWaypoint, List<Way> allWays) {
 
-		createCopysFromWays(allWays);
 		preparation(startWaypoint, allWays);
 		calculateGraph(startWaypoint, allWays);
 		setWayStatus(allWays);
@@ -204,27 +203,6 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 		Collections.reverse(shortestWayList);
 
 		return shortestWayList;
-	}
-
-	/**
-	 * TODO!
-	 * 
-	 * @param allWays
-	 */
-	public void createCopysFromWays(List<Way> allWays) {
-		List<Way> copyOfAllWays = new ArrayList<Way>();
-		copyOfAllWays.addAll(allWays);
-
-		// logger.debug(allWays.get(0).getEnd().getDistanceToStart());
-		// logger.debug(copyOfAllWays.get(0).getEnd().getDistanceToStart());
-
-		allWays.get(0).getEnd().setDistanceToStart(3.0);
-
-		// logger.debug(allWays.get(0).getEnd().getDistanceToStart());
-		// logger.debug(copyOfAllWays.get(0).getEnd().getDistanceToStart());
-
-		// List<Waypoint> copyOfAllWaypoints = new ArrayList<Waypoint>();
-		// copyOfAllWays.get(0).getWaypointList().addAll(copyOfAllWaypoints);
 	}
 
 	/**
