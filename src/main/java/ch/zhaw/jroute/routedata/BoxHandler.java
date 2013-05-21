@@ -4,14 +4,10 @@ import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.Position;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
@@ -21,7 +17,6 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 import ch.zhaw.jroute.model.Way;
 import ch.zhaw.jroute.model.Waypoint;
@@ -40,13 +35,12 @@ public class BoxHandler implements IBoxHandler {
 	private List<Waypoint> matchingWaypointList = new ArrayList<Waypoint>();
 	private List<Way> matchingWayList = new ArrayList<Way>();
 	private List<String> streetFilterList = new ArrayList<String>();
-	private IAPIConnector apiConnector;	
+	private IAPIConnector apiConnector;
 
-	public BoxHandler(IAPIConnector connector){
+	public BoxHandler(IAPIConnector connector) {
 		this.apiConnector = connector;
 	}
-	
-	
+
 	/**
 	 * defined through Interface IBoxHandler
 	 */
@@ -127,11 +121,9 @@ public class BoxHandler implements IBoxHandler {
 		int matchedWaypointSize = matchingWaypointList.size();
 		int filterSize = streetFilterList.size();
 
-		// cleanup <- useful??
-		document = null;
-		xpath = null;
-		matchingWaypointList.clear(); // useful? objects already in use
-		matchingWayList.clear(); // useful? objects already in use
+		// cleanup
+		matchingWaypointList.clear();
+		matchingWayList.clear();
 		streetFilterList.clear();
 
 		// stop timer for connection
