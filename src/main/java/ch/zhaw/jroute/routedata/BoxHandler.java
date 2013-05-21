@@ -40,7 +40,13 @@ public class BoxHandler implements IBoxHandler {
 	private List<Waypoint> matchingWaypointList = new ArrayList<Waypoint>();
 	private List<Way> matchingWayList = new ArrayList<Way>();
 	private List<String> streetFilterList = new ArrayList<String>();
+	private IAPIConnector apiConnector;	
 
+	public BoxHandler(IAPIConnector connector){
+		this.apiConnector = connector;
+	}
+	
+	
 	/**
 	 * defined through Interface IBoxHandler
 	 */
@@ -70,7 +76,7 @@ public class BoxHandler implements IBoxHandler {
 		long startApiCallTime = System.nanoTime();
 
 		// get document via connection
-		Document document = getDocumentOverNewConnection(boxURL);
+		Document document = apiConnector.getDocumentOverNewConnection(boxURL);
 
 		// stop timer for connection
 		long endApiCallTime = System.nanoTime();
@@ -328,43 +334,6 @@ public class BoxHandler implements IBoxHandler {
 					"first parameter can't be bigger than second!!");
 		}
 
-	}
-
-	/**
-	 * open connection to openstreetmap url, create new document and after that,
-	 * close the connection
-	 * 
-	 * @param url
-	 * @return document
-	 * @exception IOException
-	 * @exception ParserConfigurationException
-	 * @exception SAXException
-	 */
-	private Document getDocumentOverNewConnection(URL url) {
-		Document document = null;
-		try {
-			// open connection
-			HttpURLConnection connection = (HttpURLConnection) url
-					.openConnection();
-
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
-					.newInstance();
-			dbFactory.setNamespaceAware(true);
-			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			document = dBuilder.parse(connection.getInputStream());
-			document.getDocumentElement().normalize();
-
-			// close connection
-			connection.disconnect();
-
-		} catch (IOException e) {
-			logger.fatal(e);
-		} catch (ParserConfigurationException e) {
-			logger.fatal(e);
-		} catch (SAXException e) {
-			logger.fatal(e);
-		}
-		return document;
 	}
 
 }

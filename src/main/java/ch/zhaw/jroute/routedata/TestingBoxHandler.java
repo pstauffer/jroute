@@ -12,7 +12,10 @@ public class TestingBoxHandler {
 	private static Logger logger = Logger.getLogger("org.apache.log4j");
 
 	public static void main(String[] args) {
-		BoxHandler box = new BoxHandler();
+		
+		APIConnector connector = new APIConnector();
+		
+		BoxHandler box = new BoxHandler(connector);
 
 		try {
 

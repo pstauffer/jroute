@@ -9,6 +9,8 @@ import gov.nasa.worldwind.layers.MarkerLayer;
 import gov.nasa.worldwind.pick.PickedObject;
 import gov.nasa.worldwind.pick.PickedObjectList;
 import gov.nasa.worldwind.util.measure.LengthMeasurer;
+import gov.nasa.worldwind.util.measure.MeasureTool;
+import gov.nasa.worldwind.util.measure.MeasureToolController;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
@@ -30,6 +32,8 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 	private WayLayer wayLayer;
 	private WaypointLayer waypointLayer;
 	private LengthMeasurer lenghtMeasurer = new LengthMeasurer();
+	private MeasureTool measureTool = new MeasureTool(this.getWwd());
+	private MeasureToolController measureController = new MeasureToolController();
 
 	// Controllers
 	private IWaypointController waypointController;
@@ -58,6 +62,14 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 		// add side panel to the window
 		this.getContentPane().add(this.navigationPanel, BorderLayout.WEST);
 		
+	}
+	
+	private void addMeasureTool(){
+		measureTool.setMeasureShapeType(MeasureTool.SHAPE_SQUARE);
+		measureTool.setController(new MeasureToolController());
+		
+		measureTool.clear();
+        measureTool.setArmed(true);
 	}
 
 	/**

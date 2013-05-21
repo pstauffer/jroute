@@ -59,7 +59,8 @@ public class GUIController {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			mapDataController.getDataForMapSection();
+			//mapDataController.getDataForMapSection();
+			
 		}
 		
 	}
