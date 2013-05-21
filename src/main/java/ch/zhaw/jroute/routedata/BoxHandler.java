@@ -55,9 +55,9 @@ public class BoxHandler implements IBoxHandler {
 		checkLongitudeCoordinates(left, right);
 
 		// set street filter (manually)
-		addNewStreetFilter("motorway");
-		addNewStreetFilter("tertiary");
-		addNewStreetFilter("residential");
+		// addNewStreetFilter("motorway");
+		// addNewStreetFilter("tertiary");
+		// addNewStreetFilter("residential");
 
 		// use filter
 		String filterForURL = createFilterForURL();
@@ -151,6 +151,9 @@ public class BoxHandler implements IBoxHandler {
 			} else {
 				filterURL = filterURL + "|" + filter;
 			}
+		}
+		if (filterURL == null) {
+			filterURL = "*";
 		}
 		return filterURL;
 	}
