@@ -37,9 +37,9 @@ import ch.zhaw.jroute.model.Waypoint;
 public class BoxHandler implements IBoxHandler {
 	private static Logger logger = Logger.getLogger("org.apache.log4j");
 	private final String openStreetMapBoxURL = "http://open.mapquestapi.com/xapi/api/0.6/way[bbox=";
-	private static List<Waypoint> matchingWaypointList = new ArrayList<Waypoint>();
-	private static List<Way> matchingWayList = new ArrayList<Way>();
-	private static List<String> streetFilterList = new ArrayList<String>();
+	private List<Waypoint> matchingWaypointList = new ArrayList<Waypoint>();
+	private List<Way> matchingWayList = new ArrayList<Way>();
+	private List<String> streetFilterList = new ArrayList<String>();
 
 	/**
 	 * defined through Interface IBoxHandler
