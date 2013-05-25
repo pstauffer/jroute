@@ -310,4 +310,58 @@ public class BoxHandlerTest {
 		assertFalse(waypointLon3 == expectedLon3);
 	}
 
+	@Test
+	public void testStartWaypointFromWays() {
+		Waypoint waypointStart1 = way1.getStart();
+		Waypoint waypointStart2 = way2.getStart();
+		Waypoint waypointStart3 = way3.getStart();
+
+		Waypoint expectedStartWaypointWay1 = way1point1;
+		Waypoint expectedStartWaypointWay2 = way2point1;
+		Waypoint expectedStartWaypointWay3 = way3point1;
+
+		assertTrue(waypointStart1.equals(expectedStartWaypointWay1));
+		assertTrue(waypointStart2.equals(expectedStartWaypointWay2));
+		assertTrue(waypointStart3.equals(expectedStartWaypointWay3));
+	}
+
+	@Test
+	public void testStartWaypointFromWaysFalse() {
+		Waypoint waypointStart1 = way1.getStart();
+		Waypoint waypointStart2 = way2.getStart();
+
+		Waypoint expectedStartWaypointWay1 = way1point2;
+		Waypoint expectedStartWaypointWay2 = way3point3;
+
+		assertFalse(waypointStart1.equals(expectedStartWaypointWay1));
+		assertFalse(waypointStart2.equals(expectedStartWaypointWay2));
+	}
+
+	@Test
+	public void testEndWaypointFromWays() {
+		Waypoint waypointEnd1 = way1.getEnd();
+		Waypoint waypointEnd2 = way2.getEnd();
+		Waypoint waypointEnd3 = way3.getEnd();
+
+		Waypoint expectedEndWaypointWay1 = way1point4;
+		Waypoint expectedEndWaypointWay2 = way2point5;
+		Waypoint expectedEndWaypointWay3 = way3point3;
+
+		assertTrue(waypointEnd1.equals(expectedEndWaypointWay1));
+		assertTrue(waypointEnd2.equals(expectedEndWaypointWay2));
+		assertTrue(waypointEnd3.equals(expectedEndWaypointWay3));
+	}
+
+	@Test
+	public void testEndWaypointFromWaysFalse() {
+		Waypoint waypointEnd1 = way1.getEnd();
+		Waypoint waypointEnd3 = way3.getEnd();
+
+		Waypoint expectedEndWaypointWay1 = way2point3;
+		Waypoint expectedEndWaypointWay3 = way3point2;
+
+		assertFalse(waypointEnd1.equals(expectedEndWaypointWay1));
+		assertFalse(waypointEnd3.equals(expectedEndWaypointWay3));
+	}
+
 }
