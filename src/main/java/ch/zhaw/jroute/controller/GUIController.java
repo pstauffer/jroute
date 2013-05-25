@@ -1,9 +1,13 @@
 package ch.zhaw.jroute.controller;
 
+import gov.nasa.worldwind.geom.Position;
+import gov.nasa.worldwind.util.measure.MeasureTool;
+
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import ch.zhaw.jroute.model.IWayBuilder;
 import ch.zhaw.jroute.model.IWaypointBuilder;
@@ -45,6 +49,7 @@ public class GUIController {
 		view.addEndWaypointActionListener(new EndWaypointListener());
 		view.addCalculateRouteActionListener(new CreateCalcRouteListener());
 		view.addGetDataActionListener(new CreateGetDataListener());
+		view.addStartSelectAreaListener(new StartSelectDataAreaListener());
 		
 	}
 	
@@ -59,8 +64,41 @@ public class GUIController {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			//mapDataController.getDataForMapSection();
+		
+			MeasureTool tool = view.getDataArea();
+			List<Position> positions = (List<Position>) tool.getPositions();
 			
+			Position pos1 = positions.get(0);
+			Position pos2 = positions.get(0);
+			
+			
+			for(Position pos : positions){
+				//waypointController.createNewNode(pos);
+				
+				double lat = pos.getLatitude().degrees;
+				double lon = pos.getLongitude().degrees;
+				
+				if(lat< pos1.getLatitude().degrees && lon< pos1.getLongitude().degrees){
+					pos1 = pos;
+				}
+				
+				if(lat> pos2.getLatitude().degrees && lon> pos2.getLongitude().degrees){
+					pos2 = pos;
+				}
+			}
+			
+			mapDataController.getDataForMapSection(pos1.getLongitude().degrees,pos1.getLatitude().degrees,pos2.getLongitude().degrees,pos2.getLatitude().degrees);
+			
+		}
+		
+	}
+	
+	private class StartSelectDataAreaListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			//mapDataController.getDataForMapSection();
+			view.addMeasureTool();
 		}
 		
 	}

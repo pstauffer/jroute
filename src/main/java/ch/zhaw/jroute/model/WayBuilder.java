@@ -41,7 +41,9 @@ public class WayBuilder extends Observable implements IWayBuilder {
 		}
 		
 		existingWay.setPositions(newPositions);
-		
+		existingWay.setWayID(id);
+		allWays.put(id,existingWay);
+		id++;
 		this.setChanged();
 		this.notifyObservers(existingWay);
 	}

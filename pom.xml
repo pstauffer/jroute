@@ -27,7 +27,7 @@
       </instrumentation>
      </configuration>
    </plugin>
-		</plugins>
+</plugins>
   </build>
 
   <name>jroute</name>

@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import ch.zhaw.jroute.model.IWayBuilder;
 import ch.zhaw.jroute.model.IWaypointBuilder;
 import ch.zhaw.jroute.model.Way;
@@ -19,6 +21,7 @@ public class MapDataController {
 	private IBoxHandler boxHandler;
 	private IWaypointBuilder waypointBuilder;
 	private IWayBuilder wayBuilder;
+	private static Logger logger = Logger.getLogger("org.apache.log4j");
 	
 	public MapDataController(IBoxHandler boxHandler,IWaypointBuilder waypointBuilder, IWayBuilder wayBuilder){
 		
@@ -27,12 +30,12 @@ public class MapDataController {
 		this.wayBuilder = wayBuilder;
 	}	
 	
-	public void getDataForMapSection(){
-		
-		double left = waypointBuilder.getStartWaypoint().getCenter().getLongitude().degrees;
-		double right = waypointBuilder.getEndWaypoint().getCenter().getLongitude().degrees;
-		double bottom = waypointBuilder.getStartWaypoint().getCenter().getLatitude().degrees + 0.0000005;
-		double top = waypointBuilder.getEndWaypoint().getCenter().getLatitude().degrees - 0.0000005;
+	public void getDataForMapSection(double lon1, double lat1, double lon2, double lat2){
+			
+			double left = lon1;
+			double bottom = lat1;
+			double right = lon2;
+			double top =  lat2;
 		
 		List<Way> wayData = null;
 		try {
@@ -53,6 +56,13 @@ public class MapDataController {
 			
 			//wayBuilder.createNewWay(way.getWaypointList().get(0));
 			//wayBuilder.finishWay(way.getWaypointList().get(way.getWaypointList().size()-1), 0);
+			
+			if(way.getStart()==null){
+				logger.debug("no start set");
+			}
+			if(way.getEnd()==null){
+				logger.debug("no end set");
+			}
 			
 			waypointBuilder.createWaypointFromPosition((Position) way.getStart().getCenter());
 			waypointBuilder.createWaypointFromPosition((Position) way.getEnd().getCenter());

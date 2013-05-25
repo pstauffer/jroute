@@ -13,9 +13,10 @@ public class ControlPanel extends JPanel{
 	
 	private JButton startAlgorithmButton;
 	private JButton getMapDataButton;
+	private JButton selectDataAreaButton;
 	
 	public ControlPanel(){
-		super(new GridLayout());
+		super(new GridLayout(2,2));
 		
 		this.createPanel();
 	}
@@ -30,8 +31,10 @@ public class ControlPanel extends JPanel{
 	public void createButtons(){
 		startAlgorithmButton = new JButton("Calculate Route");
 		getMapDataButton = new JButton("Get Data");
+		selectDataAreaButton = new JButton("Select Area");
 		this.add(startAlgorithmButton);
 		this.add(getMapDataButton);
+		this.add(selectDataAreaButton);
 	}
 
 	public JButton getStartAlgorithmButton() {
@@ -40,5 +43,9 @@ public class ControlPanel extends JPanel{
 	
 	public JButton getMapDataButton(){
 		return getMapDataButton;
+	}
+	
+	public JButton getSelectAreaButton(){
+		return selectDataAreaButton;
 	}
 }

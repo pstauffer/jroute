@@ -64,8 +64,8 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 		
 	}
 	
-	private void addMeasureTool(){
-		measureTool.setMeasureShapeType(MeasureTool.SHAPE_SQUARE);
+	public void addMeasureTool(){
+		measureTool.setMeasureShapeType(MeasureTool.SHAPE_QUAD);
 		measureTool.setController(new MeasureToolController());
 		
 		measureTool.clear();
@@ -138,6 +138,12 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 		this.navigationPanel.getControlPanel().getMapDataButton()
 				.addActionListener(listener);
 	}
+	
+	public void addStartSelectAreaListener(ActionListener listener){
+		//this.navigationPanel.getControlPanel().getMapDataButton()
+		//		.addActionListener(listener);
+		this.navigationPanel.getControlPanel().getSelectAreaButton().addActionListener(listener);
+	}
 
 	public Waypoint getWaypointAtPosition() {
 		PickedObjectList list = this.getWwd().getObjectsAtCurrentPosition();
@@ -169,6 +175,10 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 
 	public WayLayer getWayLayer() {
 		return wayLayer;
+	}
+	
+	public MeasureTool getDataArea(){
+		return measureTool;
 	}
 
 }

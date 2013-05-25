@@ -27,6 +27,7 @@ import gov.nasa.worldwind.render.GlobeAnnotation;
 import gov.nasa.worldwind.render.Material;
 import gov.nasa.worldwind.render.Renderable;
 import gov.nasa.worldwind.render.ShapeAttributes;
+import gov.nasa.worldwind.util.measure.LengthMeasurer;
 
 public class WayLayer extends RenderableLayer implements Observer {
 
@@ -34,6 +35,7 @@ public class WayLayer extends RenderableLayer implements Observer {
 	private AnnotationLayer wayAnnotationLayer;
 	private AnnotationAttributes annotationStyle;
 	private WorldWindow worldWindow;
+	private LengthMeasurer lenghtMeasurer = new LengthMeasurer();
 
 	public WayLayer(WorldWindow worldWindow, AnnotationLayer wayAnnotationLayer) {
 		super();
@@ -41,6 +43,7 @@ public class WayLayer extends RenderableLayer implements Observer {
 
 		this.worldWindow = worldWindow;
 		this.wayAnnotationLayer = wayAnnotationLayer;
+		
 	}
 
 	private ShapeAttributes getShapeStyle(Color color) {
@@ -103,12 +106,14 @@ public class WayLayer extends RenderableLayer implements Observer {
 		else if (arg1 instanceof Way) {
 
 			currentWay = (Way) arg1;
+			currentWay.setDistance(calculateDistance(currentWay.getStart().getReferencePosition(),currentWay.getEnd().getReferencePosition()));
 			currentWay.setAttributes(getShapeStyle(Color.BLACK));
 			currentWay.setFollowTerrain(true);
 			currentWay.setVisible(true);
 			currentWay.setAltitudeMode(WorldWind.CLAMP_TO_GROUND);
 			currentWay.setPathType(AVKey.LINEAR);
 			this.addRenderable(currentWay);
+			addAnnotation(currentWay);
 			// this.wwd.redraw();
 
 		//Updates the current way with a new position
@@ -164,5 +169,15 @@ public class WayLayer extends RenderableLayer implements Observer {
 				.getElevation(newLatitude, newLongitude);
 
 		return new Position(newLatitude, newLongitude, height);
+	}
+	
+	public double calculateDistance(Position start, Position end) {
+		ArrayList<Position> tempPos = new ArrayList<Position>();
+
+		tempPos.add(start);
+		tempPos.add(end);
+
+		lenghtMeasurer.setPositions(tempPos);
+		return lenghtMeasurer.getLength(worldWindow.getModel().getGlobe());
 	}
 }

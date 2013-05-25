@@ -38,7 +38,7 @@ public class WaypointController implements IWaypointController {
 	}
 	
 	public void createNewNode(Position position){
-		waypointBuilder.createWaypointFromPosition(view.getWwd().getCurrentPosition());
+		waypointBuilder.createWaypointFromPosition(position);
 	}
 	
 	public void addWaypointInputListener(){
