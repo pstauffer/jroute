@@ -49,7 +49,7 @@ public class WaypointLayer extends RenderableLayer implements Observer{
 		}
 		System.out.println(i);
 		i++;
-		addAnnotation(waypoint);
+		//addAnnotation(waypoint);
 		this.addRenderable(waypoint);
 		
 

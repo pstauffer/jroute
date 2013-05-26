@@ -10,10 +10,10 @@ public class Way extends DirectedPath {
 	private Waypoint start;
 	private Waypoint end;
 	private long wayID;
-	private List<Waypoint> waypointList;
+	private List<Waypoint> waypointList = new ArrayList<Waypoint>();
+	private List<Waypoint> splitPointList = new ArrayList<Waypoint>();
 	private double distance;
 	private String name;
-	private List<Position> pointList = new ArrayList<Position>();
 	private WayStatusEnum status;
 
 	public Way() {
@@ -97,6 +97,18 @@ public class Way extends DirectedPath {
 
 	public void setStatus(WayStatusEnum status) {
 		this.status = status;
+	}
+
+	public List<Waypoint> getSplitPointList() {
+		return splitPointList;
+	}
+
+	public void setSplitPointList(List<Waypoint> splitPointList) {
+		this.splitPointList = splitPointList;
+	}
+	
+	public void addSplitPoint(Waypoint waypoint){
+		this.splitPointList.add(waypoint);
 	}
 
 }

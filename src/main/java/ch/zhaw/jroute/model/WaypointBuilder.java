@@ -39,6 +39,28 @@ public class WaypointBuilder extends Observable implements IWaypointBuilder {
 		this.notifyObservers(newWaypoint);
 
 	}
+	
+	@Override
+	public void createWaypointFromExistingWaypoint(Waypoint waypoint) {
+
+		char c = (char) this.currentLetter;
+		String text = String.valueOf(c);
+		waypoint.setRadius(50);
+		waypoint.setName(Integer.toString(id));
+
+		//waypoint.setWaypointID(id);
+
+		waypoint.setStatus(WaypointStatusEnum.undefined);
+
+		waypointList.put((long) id, waypoint);
+
+		currentLetter++;
+		id++;
+
+		this.setChanged();
+		this.notifyObservers(waypoint);
+		
+	}
 
 	@Override
 	public void registerObserver(Observer obs) {

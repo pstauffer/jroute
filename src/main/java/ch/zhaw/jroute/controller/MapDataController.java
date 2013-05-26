@@ -64,8 +64,8 @@ public class MapDataController {
 				logger.debug("no end set");
 			}
 			
-			waypointBuilder.createWaypointFromPosition((Position) way.getStart().getCenter());
-			waypointBuilder.createWaypointFromPosition((Position) way.getEnd().getCenter());
+			waypointBuilder.createWaypointFromExistingWaypoint(way.getStart());
+			waypointBuilder.createWaypointFromExistingWaypoint(way.getEnd());
 			
 			wayBuilder.addExistingWay(way);
 		}

@@ -15,6 +15,7 @@ public class Waypoint extends SurfaceCircle {
 	private Waypoint before;
 	private double distanceToStart;
 	private WaypointStatusEnum status;
+	private List<Way> addedWays = new ArrayList<Way>();
 
 	public Waypoint() {
 
@@ -106,4 +107,15 @@ public class Waypoint extends SurfaceCircle {
 		this.status = status;
 	}
 
+	public List<Way> getAddedWays() {
+		return addedWays;
+	}
+
+	public void setAddedWays(List<Way> addedWays) {
+		this.addedWays = addedWays;
+	}
+	
+	public void addWay(Way way){
+		this.addedWays.add(way);
+	}
 }

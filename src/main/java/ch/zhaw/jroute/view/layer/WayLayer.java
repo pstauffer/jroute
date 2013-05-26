@@ -113,7 +113,7 @@ public class WayLayer extends RenderableLayer implements Observer {
 			currentWay.setAltitudeMode(WorldWind.CLAMP_TO_GROUND);
 			currentWay.setPathType(AVKey.LINEAR);
 			this.addRenderable(currentWay);
-			addAnnotation(currentWay);
+			//addAnnotation(currentWay);
 			// this.wwd.redraw();
 
 		//Updates the current way with a new position
@@ -153,7 +153,9 @@ public class WayLayer extends RenderableLayer implements Observer {
 				.round((newWay.getDistance() / 1000) * 100) / 100;
 		Position middle = calcMiddle(newWay.getStart().getReferencePosition(),
 				newWay.getEnd().getReferencePosition());
-		GlobeAnnotation anno = new GlobeAnnotation(Double.toString(meters),
+		//GlobeAnnotation anno = new GlobeAnnotation(Double.toString(meters),
+		//		middle, this.annotationStyle);
+		GlobeAnnotation anno = new GlobeAnnotation(newWay.getName(),
 				middle, this.annotationStyle);
 		anno.setAltitudeMode(WorldWind.CLAMP_TO_GROUND);
 		wayAnnotationLayer.addAnnotation(anno);

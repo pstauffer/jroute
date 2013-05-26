@@ -10,6 +10,8 @@ public interface IWaypointBuilder {
 	public void registerObserver(Observer obs);
 
 	public void createWaypointFromPosition(Position waypointPosition);
+	
+	public void createWaypointFromExistingWaypoint(Waypoint waypoint);
 
 	public void setStartWaypoint(WaypointStatusEnum status, Waypoint waypoint);
 
