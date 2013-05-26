@@ -82,9 +82,10 @@ public class WayLayer extends RenderableLayer implements Observer {
 		//This handles if the layer is updated with the results of the dijkstra
 		if (arg1 instanceof List<?>) {
 			List<Way> resultList = (List<Way>) arg1;
+			Iterable<Renderable> allRenderables = this.getRenderables();
 			for (Way resultWay : resultList) {
 				if (resultWay.getStatus() == WayStatusEnum.result) {
-					for (Renderable temp : this.getRenderables()) {
+					for (Renderable temp : allRenderables) {
 						Way existingWay = (Way) temp;
 
 						if (resultWay.getWayID() == existingWay.getWayID()) {

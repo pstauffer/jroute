@@ -51,6 +51,7 @@ public class BoxHandler implements IBoxHandler {
 	private IAPIConnector apiConnector;
 	private HashMap<Long,Waypoint> allWaypoints;
 	private HashMap<Way,Waypoint> multipleUsedWaypoints;
+	private HashMap<Long,Way> allWays;
 	private List<Way> effectiveWayList;
 
 	public BoxHandler(IAPIConnector connector) {
@@ -65,6 +66,7 @@ public class BoxHandler implements IBoxHandler {
 			double top) throws IOException {
 		allWaypoints = new HashMap<Long,Waypoint>();
 		multipleUsedWaypoints = new HashMap<Way,Waypoint>();
+		allWays = new HashMap<Long,Way>();
 		
 		// start method time measuring
 		long startMethodTime = System.nanoTime();
@@ -274,11 +276,12 @@ public class BoxHandler implements IBoxHandler {
 			
 			int start = 0;
 			int end = 0;
+			long generatedKey = 0;
 			
 			for(Waypoint waypoint : way.getSplitPointList()){
 				end = way.getWaypointList().indexOf(waypoint);
 				
-				if(end>start){
+				if(end<start){
 					int temp = end;
 					end = start;
 					start = end;
@@ -288,6 +291,14 @@ public class BoxHandler implements IBoxHandler {
 				
 				Way newWay = new Way();
 				newWay.setStatus(WayStatusEnum.undefined);
+				
+				generatedKey = way.getWayID()+1;
+				
+				while(allWays.containsKey(generatedKey)){
+					generatedKey++;
+				}
+				
+				newWay.setWayID(generatedKey);
 				newWay.setName(String.valueOf(way.getWayID())+"Part"+start+"-"+end);
 				Waypoint startPoint = newWaypoints.get(0);
 				Waypoint endPoint = waypoint;
@@ -296,6 +307,7 @@ public class BoxHandler implements IBoxHandler {
 				newWay.setEnd(endPoint);
 				newWay.setWaypointList(newWaypoints);
 				effectiveWayList.add(newWay);
+				allWays.put(newWay.getWayID(), newWay);
 				
 				start = end;
 			}
@@ -306,6 +318,12 @@ public class BoxHandler implements IBoxHandler {
 				Way newWay = new Way();
 				newWay.setStatus(WayStatusEnum.undefined);
 				newWay.setName(String.valueOf(way.getWayID())+"Part"+start+"-"+end);
+				
+				while(allWays.containsKey(generatedKey)){
+					generatedKey++;
+				}
+				
+				newWay.setWayID(generatedKey);
 				start = 0;
 				end = newWaypoints.size()-1;
 				Waypoint startPoint = newWaypoints.get(start);
@@ -315,6 +333,7 @@ public class BoxHandler implements IBoxHandler {
 				newWay.setEnd(endPoint);
 				newWay.setWaypointList(newWaypoints);
 				effectiveWayList.add(newWay);
+				allWays.put(newWay.getWayID(), newWay);
 			}
 		}
 	}
@@ -449,6 +468,7 @@ public class BoxHandler implements IBoxHandler {
 
 			// add way to list
 			matchingWayList.add(way);
+			allWays.put(way.getWayID(), way);
 		}
 
 		if (matchingWayList.isEmpty()) {
