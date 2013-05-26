@@ -130,12 +130,22 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 	}
 	
 	public void addCalculateRouteActionListener(ActionListener listener) {
-		this.navigationPanel.getControlPanel().getStartAlgorithmButton()
+		this.navigationPanel.getAlgoControlPanel().getRunAlgoButton()
 				.addActionListener(listener);
 	}
 	
 	public void addGetDataActionListener(ActionListener listener){
 		this.navigationPanel.getControlPanel().getMapDataButton()
+				.addActionListener(listener);
+	}
+	
+	public void addStopCreatingWaypointListener(ActionListener listener){
+		this.navigationPanel.getWaypointPanel().getStopCreatingWaypointButton()
+				.addActionListener(listener);
+	}
+	
+	public void addStopCreatingWayListener(ActionListener listener){
+		this.navigationPanel.getWayPanel().getStopCreatingWayButton()
 				.addActionListener(listener);
 	}
 	

@@ -2,6 +2,7 @@ package ch.zhaw.jroute.view.panel;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 
 import gov.nasa.worldwind.WorldWindow;
 
@@ -16,7 +17,8 @@ public class SideNavigationPanel extends JPanel{
 	
 	private WaypointOverviewPanel waypointPanel;
 	private WayOverviewPanel wayPanel;
-	private ControlPanel controlPanel;
+	private MapDataControlPanel controlPanel;
+	private AlgorithmControlPanel algoControlPanel;
 	
 	/**
 	 * 
@@ -25,16 +27,18 @@ public class SideNavigationPanel extends JPanel{
 	public SideNavigationPanel(WorldWindow worldWindWindow){
 		
 		//Add a new borderlayout to the the Frame
-		super(new BorderLayout());
+		super(new GridLayout(4,1));
 		this.setPreferredSize(new Dimension(200,400));
 		
 		this.waypointPanel = new WaypointOverviewPanel();
 		this.wayPanel = new WayOverviewPanel();
-		this.controlPanel = new ControlPanel();
+		this.controlPanel = new MapDataControlPanel();
+		this.algoControlPanel = new AlgorithmControlPanel();
 		
-		this.add(waypointPanel,BorderLayout.NORTH);
-		this.add(controlPanel,BorderLayout.CENTER);
-		this.add(wayPanel,BorderLayout.SOUTH);
+		this.add(waypointPanel);
+		this.add(controlPanel);
+		this.add(wayPanel);
+		this.add(algoControlPanel);
 	}
 	
 	public WaypointOverviewPanel getWaypointPanel() {
@@ -45,10 +49,12 @@ public class SideNavigationPanel extends JPanel{
 		return wayPanel;
 	}
 	
-	public ControlPanel getControlPanel(){
+	public MapDataControlPanel getControlPanel(){
 		return controlPanel;
 	}
-	
-	
+
+	public AlgorithmControlPanel getAlgoControlPanel() {
+		return algoControlPanel;
+	}
 
 }

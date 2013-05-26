@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -270,13 +271,18 @@ public class BoxHandler implements IBoxHandler {
 		
 		for(Way way : splittedWay)
 		{
+			/*if(way.getWayID() == 8095407){
+				System.out.println();
+			}*/
 			effectiveWayList.remove(way);
 			
 			int start = 0;
 			int end = 0;
 			long generatedKey = 0;
 			
-			for(Waypoint waypoint : way.getSplitPointList()){
+			List<Waypoint> splitWaypointList = sortWaypoints(way.getWaypointList(),way.getSplitPointList());
+			
+			for(Waypoint waypoint : splitWaypointList){
 				end = way.getWaypointList().indexOf(waypoint);
 				
 				if(end<start){
@@ -346,6 +352,17 @@ public class BoxHandler implements IBoxHandler {
 		}
 		
 		return resultList;
+		
+	}
+	
+	private List<Waypoint> sortWaypoints(List<Waypoint> allWaypoint, List<Waypoint> splitWaypoint){
+		TreeMap<Integer, Waypoint> tm = new TreeMap<Integer, Waypoint>();
+		for(Waypoint waypoint : splitWaypoint){
+			int index = allWaypoint.indexOf(waypoint);
+			tm.put(index, waypoint);
+		}
+		List<Waypoint> returnList = new ArrayList<Waypoint>(tm.values());
+		return returnList;
 		
 	}
 

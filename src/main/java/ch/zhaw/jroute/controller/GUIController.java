@@ -50,6 +50,8 @@ public class GUIController {
 		view.addCalculateRouteActionListener(new CreateCalcRouteListener());
 		view.addGetDataActionListener(new CreateGetDataListener());
 		view.addStartSelectAreaListener(new StartSelectDataAreaListener());
+		view.addStopCreatingWayListener(new StopCreatingWayListener());
+		view.addStopCreatingWaypointListener(new StopCreatingWaypointListener());
 		
 	}
 	
@@ -127,6 +129,26 @@ public class GUIController {
 			}
 		}
 	}
+	
+	private class StopCreatingWaypointListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent ae) {
+			((Component) view.getWwd()).setCursor(Cursor
+					.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+			if (armedStartWaypoint) {
+				waypointController.removeStartWaypointInputListener();
+				armedStartWaypoint = false;
+			}
+			if (armedEndWaypoint) {
+				waypointController.removeEndWaypointInputListener();
+				armedEndWaypoint = false;
+			}
+			if (armedWaypoint) {
+				waypointController.removeWaypointInputListener();
+				armedWaypoint = false;
+			}
+		}
+	}
 
 	private class StartWaypointListener implements ActionListener {
 
@@ -197,6 +219,18 @@ public class GUIController {
 			if (!armedWay) {
 				wayController.addWayInputListener();
 				armedWay = true;
+			}
+		}
+	}
+	
+	private class StopCreatingWayListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent ae) {
+			((Component) view.getWwd()).setCursor(Cursor
+					.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+			if (armedWay) {
+				wayController.removeWayInputListener();
+				armedWay = false;
 			}
 		}
 	}

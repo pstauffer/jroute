@@ -108,6 +108,11 @@ public class WayLayer extends RenderableLayer implements Observer {
 
 			currentWay = (Way) arg1;
 			currentWay.setDistance(calculateDistance(currentWay.getStart().getReferencePosition(),currentWay.getEnd().getReferencePosition()));
+			
+			if(currentWay.getDistance()==0){
+				return;
+			}
+			
 			currentWay.setAttributes(getShapeStyle(Color.BLACK));
 			currentWay.setFollowTerrain(true);
 			currentWay.setVisible(true);
@@ -156,7 +161,7 @@ public class WayLayer extends RenderableLayer implements Observer {
 				newWay.getEnd().getReferencePosition());
 		//GlobeAnnotation anno = new GlobeAnnotation(Double.toString(meters),
 		//		middle, this.annotationStyle);
-		GlobeAnnotation anno = new GlobeAnnotation(newWay.getName(),
+		GlobeAnnotation anno = new GlobeAnnotation(String.valueOf(newWay.getDistance()),
 				middle, this.annotationStyle);
 		anno.setAltitudeMode(WorldWind.CLAMP_TO_GROUND);
 		wayAnnotationLayer.addAnnotation(anno);

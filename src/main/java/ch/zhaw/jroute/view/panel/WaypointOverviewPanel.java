@@ -20,12 +20,13 @@ public class WaypointOverviewPanel extends JPanel{
 	private JButton createWaypointButton;
 	private JButton startWaypointButton;
 	private JButton endWaypointButton;
-	
+	private JButton stopCreatingWaypointButton;
+
 	public WaypointOverviewPanel(){
-		super(new GridLayout(0,2));
+		super(new GridLayout(2,2));
 		
 		//Create the actual panel
-		this.createPanel();
+		createPanel();
 	}
 	
 	public void createPanel(){
@@ -33,20 +34,17 @@ public class WaypointOverviewPanel extends JPanel{
 		this.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(9, 9, 9, 9), new TitledBorder("Waypoint")));
 		
 		//add the buttons the panel
-		this.createButtons();
+		createButtons();
 	}
 	
 	public void createButtons(){
-		this.createWaypointButton = new JButton("Create");
-		JButton placeholderButton = new JButton();
-		placeholderButton.setVisible(false);
+		createWaypointButton = new JButton("Create");
+		stopCreatingWaypointButton = new JButton("Stop");
+		startWaypointButton = new JButton("Start");
+		endWaypointButton = new JButton("End");
 		
-		//placeholderButton.setPreferredSize(new Dimension(0,0));
-		
-		this.startWaypointButton = new JButton("Start");
-		this.endWaypointButton = new JButton("End");
 		this.add(createWaypointButton);
-		this.add(placeholderButton);
+		this.add(stopCreatingWaypointButton);
 		this.add(startWaypointButton);
 		this.add(endWaypointButton);
 		
@@ -62,5 +60,9 @@ public class WaypointOverviewPanel extends JPanel{
 
 	public JButton getEndWaypointButton() {
 		return endWaypointButton;
+	}
+	
+	public JButton getStopCreatingWaypointButton() {
+		return stopCreatingWaypointButton;
 	}
 }

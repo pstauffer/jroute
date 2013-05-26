@@ -1,6 +1,5 @@
 package ch.zhaw.jroute.view.panel;
 
-import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
@@ -16,6 +15,7 @@ import javax.swing.border.TitledBorder;
 public class WayOverviewPanel extends JPanel{
 	
 	private JButton createWayButton;
+	private JButton stopCreatingWayButton;
 	
 	/**
 	 * 
@@ -23,22 +23,29 @@ public class WayOverviewPanel extends JPanel{
 	public WayOverviewPanel(){
 		super(new GridLayout());
 		
-		this.createPanel();
+		createPanel();
 	}
 	
 	public void createPanel(){
 		
 		//Create border around panel
 		this.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(9, 9, 9, 9), new TitledBorder("Way")));
-		this.createButtons();
+		createButtons();
 	}
 	
 	public void createButtons(){
-		this.createWayButton = new JButton("Create");
-		this.add(createWayButton);
+		createWayButton = new JButton("Create");
+		stopCreatingWayButton = new JButton("Stop");
+		
+		add(createWayButton);
+		add(stopCreatingWayButton);
 	}
 	
 	public JButton getCreateConnectorButton() {
 		return createWayButton;
+	}
+
+	public JButton getStopCreatingWayButton() {
+		return stopCreatingWayButton;
 	}
 }
