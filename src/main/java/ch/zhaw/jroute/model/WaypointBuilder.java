@@ -45,7 +45,7 @@ public class WaypointBuilder extends Observable implements IWaypointBuilder {
 
 		char c = (char) this.currentLetter;
 		String text = String.valueOf(c);
-		waypoint.setRadius(50);
+		waypoint.setRadius(10);
 		waypoint.setName(Integer.toString(id));
 
 		//waypoint.setWaypointID(id);

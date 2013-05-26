@@ -50,7 +50,6 @@ public class BoxHandler implements IBoxHandler {
 	private List<String> streetFilterList = new ArrayList<String>();
 	private IAPIConnector apiConnector;
 	private HashMap<Long,Waypoint> allWaypoints;
-	private HashMap<Way,Waypoint> multipleUsedWaypoints;
 	private HashMap<Long,Way> allWays;
 	private List<Way> effectiveWayList;
 
@@ -65,7 +64,6 @@ public class BoxHandler implements IBoxHandler {
 	public List<Way> getAllWays(double left, double bottom, double right,
 			double top) throws IOException {
 		allWaypoints = new HashMap<Long,Waypoint>();
-		multipleUsedWaypoints = new HashMap<Way,Waypoint>();
 		allWays = new HashMap<Long,Way>();
 		
 		// start method time measuring
@@ -284,7 +282,7 @@ public class BoxHandler implements IBoxHandler {
 				if(end<start){
 					int temp = end;
 					end = start;
-					start = end;
+					start = temp;
 				}
 				
 				List<Waypoint> newWaypoints = getWaypointSubset(start,end,way.getWaypointList());
@@ -413,29 +411,6 @@ public class BoxHandler implements IBoxHandler {
 			// set waypointlist for the way
 			way.setWaypointList(waypointsFromWay);
 		}
-
-		/*for(Way way : this.multipleUsedWaypoints.keySet()){
-			Waypoint waypoint = this.multipleUsedWaypoints.get(way);
-			
-			if(way.getStart()==waypoint || way.getEnd() == waypoint){
-				
-			}else{
-				wayList.remove(way);
-				for (int i = 0; i<way.getWaypointList().size()-1;i++){
-					Way newWay = new Way();
-					newWay.setStatus(WayStatusEnum.undefined);
-					
-					Waypoint start = way.getWaypointList().get(i);
-					Waypoint end = way.getWaypointList().get(i+1);
-					
-					newWay.setStart(start);
-					newWay.setEnd(end);
-					newWay.addWaypoint(start);
-					newWay.addWaypoint(end);
-					effectiveWayList.add(newWay);
-				}
-			}
-		}*/
 		
 		effectiveWayList.addAll(wayList);
 		
