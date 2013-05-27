@@ -95,8 +95,14 @@ public class DjikstraAlgoTest {
 		Waypoint startWaypoint = A;
 		Waypoint endWaypoint = G;
 
-		List<Way> shortestWay = algo.getShortestPath(startWaypoint,
-				endWaypoint, allWays);
+		List<Way> shortestWay = null;
+		try {
+			shortestWay = algo.getShortestPath(startWaypoint,
+					endWaypoint, allWays);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		float WayID0 = shortestWay.get(0).getWayID();
 		float WayID1 = shortestWay.get(1).getWayID();
@@ -115,7 +121,12 @@ public class DjikstraAlgoTest {
 		Waypoint startWaypoint = A;
 		Waypoint endWaypoint = H;
 
-		algo.getShortestPath(startWaypoint, endWaypoint, allWays);
+		try {
+			algo.getShortestPath(startWaypoint, endWaypoint, allWays);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		assertTrue(way1.getStatus() == WayStatusEnum.noResult);
 		assertTrue(way2.getStatus() == WayStatusEnum.noResult);
@@ -133,7 +144,12 @@ public class DjikstraAlgoTest {
 	@Test
 	public void checkCompleteGraph() {
 
-		algo.getShortestPath(A, G, allWays);
+		try {
+			algo.getShortestPath(A, G, allWays);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		assertTrue(A.getDistanceToStart() == 0);
 		assertTrue(A.getWaypointBefore().equals(A));
@@ -171,7 +187,7 @@ public class DjikstraAlgoTest {
 		try {
 			algo.getShortestPath(A, F, allWays);
 			Assert.fail();
-		} catch (IllegalArgumentException e) {
+		} catch (Exception e) {
 
 		}
 	}
@@ -182,7 +198,12 @@ public class DjikstraAlgoTest {
 		Waypoint startWaypoint = A;
 		Waypoint endWaypoint = G;
 
-		algo.getShortestPath(startWaypoint, endWaypoint, allWays);
+		try {
+			algo.getShortestPath(startWaypoint, endWaypoint, allWays);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		WayStatusEnum WayStatus5 = allWays.get(0).getStatus();
 		WayStatusEnum ExpectedWayStatus5 = WayStatusEnum.result;
@@ -195,7 +216,12 @@ public class DjikstraAlgoTest {
 		Waypoint startWaypoint = A;
 		Waypoint endWaypoint = G;
 
-		algo.getShortestPath(startWaypoint, endWaypoint, allWays);
+		try {
+			algo.getShortestPath(startWaypoint, endWaypoint, allWays);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		WayStatusEnum WayStatus5 = allWays.get(1).getStatus();
 		WayStatusEnum ExpectedWayStatus5 = WayStatusEnum.noResult;
@@ -208,7 +234,12 @@ public class DjikstraAlgoTest {
 		Waypoint startWaypoint = A;
 		Waypoint endWaypoint = G;
 
-		algo.getShortestPath(startWaypoint, endWaypoint, allWays);
+		try {
+			algo.getShortestPath(startWaypoint, endWaypoint, allWays);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		WayStatusEnum WayStatus5 = allWays.get(5).getStatus();
 		WayStatusEnum ExpectedWayStatus5 = WayStatusEnum.undefined;
@@ -226,8 +257,14 @@ public class DjikstraAlgoTest {
 		Waypoint startWaypoint = A;
 		Waypoint endWaypoint = I;
 
-		List<Way> shortestWay = algo.getShortestPath(startWaypoint,
-				endWaypoint, allWays);
+		List<Way> shortestWay = null;
+		try {
+			shortestWay = algo.getShortestPath(startWaypoint,
+					endWaypoint, allWays);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		float WayID0 = shortestWay.get(0).getWayID();
 		float WayID8 = shortestWay.get(1).getWayID();
@@ -246,8 +283,14 @@ public class DjikstraAlgoTest {
 		Waypoint startWaypoint = A;
 		Waypoint endWaypoint = J;
 
-		List<Way> shortestWay = algo.getShortestPath(startWaypoint,
-				endWaypoint, allWays);
+		List<Way> shortestWay = null;
+		try {
+			shortestWay = algo.getShortestPath(startWaypoint,
+					endWaypoint, allWays);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		float WayID0 = shortestWay.get(0).getWayID();
 		float WayID7 = shortestWay.get(1).getWayID();

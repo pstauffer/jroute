@@ -49,10 +49,11 @@ public class BoxHandler implements IBoxHandler {
 
 	/**
 	 * defined through Interface IBoxHandler
+	 * @throws Exception 
 	 */
 	@Override
 	public List<Way> getAllWays(double left, double bottom, double right,
-			double top) throws IOException {
+			double top) throws Exception {
 
 		// initialize the worker lists
 		streetFilterList = new ArrayList<String>();
@@ -452,11 +453,10 @@ public class BoxHandler implements IBoxHandler {
 	 * @param document
 	 * @param xpath
 	 * @return
-	 * @throws XPathExpressionException
-	 * @exception IllegalArgumentException
+	 * @throws Exception 
 	 */
 	private List<Way> getSelectedWays(Document document, XPath xpath)
-			throws XPathExpressionException {
+			throws Exception {
 		List<Way> matchingWayList = new ArrayList<Way>();
 
 		NodeList wayInXml = (NodeList) xpath.compile("/osm/way/@id").evaluate(
@@ -475,7 +475,7 @@ public class BoxHandler implements IBoxHandler {
 		}
 
 		if (matchingWayList.isEmpty()) {
-			throw new IllegalArgumentException("no way found in xml file");
+			throw new Exception("no way found in xml file");
 		}
 
 		return matchingWayList;
@@ -487,19 +487,19 @@ public class BoxHandler implements IBoxHandler {
 	 * 
 	 * @param left
 	 * @param right
-	 * @exception IllegalArgumentException
+	 * @throws Exception 
 	 */
-	private void checkLongitudeCoordinates(double left, double right) {
+	private void checkLongitudeCoordinates(double left, double right) throws Exception {
 		if (left > 90 || left < -90) {
-			throw new IllegalArgumentException(
+			throw new Exception(
 					"left longitude must be between -90 and 90");
 		}
 		if (right > 90 || right < -90) {
-			throw new IllegalArgumentException(
+			throw new Exception(
 					"left longitude must be between -90 and 90");
 		}
 		if (left > right) {
-			throw new IllegalArgumentException(
+			throw new Exception(
 					"first parameter can't be bigger than second!!");
 		}
 
@@ -510,19 +510,19 @@ public class BoxHandler implements IBoxHandler {
 	 * 
 	 * @param bottom
 	 * @param top
-	 * @exception IllegalArgumentException
+	 * @throws Exception 
 	 */
-	private void checkLatitudeCoordinates(double bottom, double top) {
+	private void checkLatitudeCoordinates(double bottom, double top) throws Exception {
 		if (top > 180 || top < -180) {
-			throw new IllegalArgumentException(
+			throw new Exception(
 					"top latitude must be between -180 and 180");
 		}
 		if (bottom > 180 || bottom < -180) {
-			throw new IllegalArgumentException(
+			throw new Exception(
 					"bottom latitude must be between -180 and 180");
 		}
 		if (bottom > top) {
-			throw new IllegalArgumentException(
+			throw new Exception(
 					"first parameter can't be bigger than second!!");
 		}
 

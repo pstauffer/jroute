@@ -16,23 +16,21 @@ public class TestingBoxHandler {
 		BoxHandler box = new BoxHandler(connector);
 
 		try {
-
 			List<Way> ways = box.getAllWays(-85.13076, 34.90578, -85.11613,
 					34.91437);
-
-			// for (Way way : ways) {
-			// logger.debug("--------");
-			// logger.debug(" Way ID: " + way.getWayID());
-			// logger.debug("--------");
-			// for (Waypoint waypoints : way.getWaypointList()) {
-			// logger.debug(waypoints.getWaypointID() + " - "
-			// + waypoints.getLat() + " - " + waypoints.getLon());
-			// }
-			// }
-
-		} catch (IOException e) {
+		} catch (Exception e) {
 			logger.fatal(e);
 		}
+
+		// for (Way way : ways) {
+		// logger.debug("--------");
+		// logger.debug(" Way ID: " + way.getWayID());
+		// logger.debug("--------");
+		// for (Waypoint waypoints : way.getWaypointList()) {
+		// logger.debug(waypoints.getWaypointID() + " - "
+		// + waypoints.getLat() + " - " + waypoints.getLon());
+		// }
+		// }
 
 	}
 }

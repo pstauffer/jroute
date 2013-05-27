@@ -30,19 +30,14 @@ public class MapDataController {
 		this.wayBuilder = wayBuilder;
 	}	
 	
-	public void getDataForMapSection(double lon1, double lat1, double lon2, double lat2){
+	public void getDataForMapSection(double lon1, double lat1, double lon2, double lat2) throws Exception{
 			
 			double left = lon1;
 			double bottom = lat1;
 			double right = lon2;
 			double top =  lat2;
 		
-		List<Way> wayData = null;
-		try {
-			wayData = this.boxHandler.getAllWays(left, bottom, right, top);
-		} catch (IOException e) {
-			//TODO: Handle Exception
-		}
+		List<Way> wayData = this.boxHandler.getAllWays(left, bottom, right, top);
 		
 		for(Way way : wayData){
 			

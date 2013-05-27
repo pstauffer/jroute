@@ -26,8 +26,8 @@ public interface IBoxHandler {
 	 *            (is the latitude of the top side of the box)
 	 * @return List<Way> all Way included the Waypoints with longitude and
 	 *         latitude
-	 * @throws IOException
+	 * @throws Exception 
 	 */
 	List<Way> getAllWays(double left, double bottom, double right, double top)
-			throws IOException;
+			throws Exception;
 }

@@ -21,6 +21,7 @@ public interface IShortestPathAlgorithm {
 	 * @param allWays
 	 *            with distance between the waypoints
 	 * @return List<Way>
+	 * @throws Exception 
 	 */
-	List<Way> getShortestPath(Waypoint start, Waypoint end, List<Way> allWays);
+	List<Way> getShortestPath(Waypoint start, Waypoint end, List<Way> allWays) throws Exception;
 }

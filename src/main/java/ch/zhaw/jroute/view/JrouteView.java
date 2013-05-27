@@ -16,6 +16,8 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import ch.zhaw.jroute.controller.IWaypointController;
 import ch.zhaw.jroute.model.Waypoint;
 import ch.zhaw.jroute.view.layer.OSMMapnikLayer;
@@ -194,6 +196,10 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 
 	public MeasureTool getDataArea() {
 		return measureTool;
+	}
+	
+	public void showException(String message){
+		JOptionPane.showMessageDialog(this,message,"Error", JOptionPane.ERROR_MESSAGE);
 	}
 
 }

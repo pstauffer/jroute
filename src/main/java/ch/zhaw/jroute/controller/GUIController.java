@@ -36,7 +36,7 @@ public class GUIController {
 		// Controller
 		waypointController = new WaypointController(view, waypointBuilder);
 		wayController = new WayController(view, wayBuilder);
-		algoController = new AlgorithmController(wayBuilder,waypointBuilder);
+		algoController = new AlgorithmController(view, wayBuilder,waypointBuilder);
 		mapDataController = new MapDataController(boxHandler,waypointBuilder, wayBuilder);
 
 		view.addWaypointActionListener(new CreateWaypointListener());
@@ -75,7 +75,11 @@ public class GUIController {
 	private class CreateCalcRouteListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent ae) {
-			algoController.StartAlgorithm();
+			try{
+				algoController.StartAlgorithm();
+			}catch(Exception e){
+				view.showException(e.getMessage());
+			}
 		}
 	}
 	
@@ -106,7 +110,11 @@ public class GUIController {
 				}
 			}
 			
-			mapDataController.getDataForMapSection(pos1.getLongitude().degrees,pos1.getLatitude().degrees,pos2.getLongitude().degrees,pos2.getLatitude().degrees);
+			try {
+				mapDataController.getDataForMapSection(pos1.getLongitude().degrees,pos1.getLatitude().degrees,pos2.getLongitude().degrees,pos2.getLatitude().degrees);
+			} catch (Exception ex) {
+				view.showException(ex.getMessage());
+			}
 			tool.setArmed(false);
 			tool.clear();
 		}

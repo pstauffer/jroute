@@ -1,5 +1,5 @@
 package ch.zhaw.jroute.controller;
 
 public interface IAlgorithmController {
-	public void StartAlgorithm();
+	public void StartAlgorithm() throws Exception;
 }

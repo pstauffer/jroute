@@ -19,11 +19,12 @@ public class APIConnector implements IAPIConnector {
 	 * 
 	 * @param url
 	 * @return document
+	 * @throws Exception 
 	 * @exception IOException
 	 * @exception ParserConfigurationException
 	 * @exception SAXException
 	 */
-	public Document getDocumentOverNewConnection(URL url) {
+	public Document getDocumentOverNewConnection(URL url) throws Exception {
 		Document document = null;
 		try {
 			// open connection
@@ -41,11 +42,11 @@ public class APIConnector implements IAPIConnector {
 			connection.disconnect();
 
 		} catch (IOException e) {
-			//logger.fatal(e);
+			throw new Exception(e);
 		} catch (ParserConfigurationException e) {
-			//logger.fatal(e);
+			throw new Exception(e);
 		} catch (SAXException e) {
-			//logger.fatal(e);
+			throw new Exception(e);
 		}
 		return document;
 	}
