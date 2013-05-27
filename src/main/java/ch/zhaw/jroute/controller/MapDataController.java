@@ -46,17 +46,6 @@ public class MapDataController {
 		
 		for(Way way : wayData){
 			
-			/*for(Waypoint waypoint : way.getWaypointList()){
-				Angle lat = Angle.fromDegreesLatitude(waypoint.getLat());
-				Angle lon = Angle.fromDegreesLatitude(waypoint.getLon());
-				
-				Position pos = new Position(lat,lon,0);
-				waypointBuilder.createWaypointFromPosition(pos);
-			}*/
-			
-			//wayBuilder.createNewWay(way.getWaypointList().get(0));
-			//wayBuilder.finishWay(way.getWaypointList().get(way.getWaypointList().size()-1), 0);
-			
 			if(way.getStart()==null){
 				logger.debug("no start set");
 			}

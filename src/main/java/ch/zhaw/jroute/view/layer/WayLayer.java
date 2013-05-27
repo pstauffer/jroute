@@ -36,6 +36,7 @@ public class WayLayer extends RenderableLayer implements Observer {
 	private AnnotationAttributes annotationStyle;
 	private WorldWindow worldWindow;
 	private LengthMeasurer lenghtMeasurer = new LengthMeasurer();
+	private List<Way> shortestPathList = new ArrayList<Way>();
 
 	public WayLayer(WorldWindow worldWindow, AnnotationLayer wayAnnotationLayer) {
 		super();
@@ -96,6 +97,7 @@ public class WayLayer extends RenderableLayer implements Observer {
 							resultWay.setVisible(true);
 							resultWay.setAltitudeMode(WorldWind.CLAMP_TO_GROUND);
 							resultWay.setPathType(AVKey.LINEAR);
+							shortestPathList.add(resultWay);
 							this.addRenderable(resultWay);
 						}
 					}
@@ -107,12 +109,12 @@ public class WayLayer extends RenderableLayer implements Observer {
 		else if (arg1 instanceof Way) {
 
 			currentWay = (Way) arg1;
-			currentWay.setDistance(calculateDistance(currentWay.getStart().getReferencePosition(),currentWay.getEnd().getReferencePosition()));
 			
-			if(currentWay.getDistance()==0){
-				return;
+			if(currentWay.getStart()==null || currentWay.getEnd()==null){
+				
+			}else{
+				currentWay.setDistance(calculateDistance(currentWay.getStart().getReferencePosition(),currentWay.getEnd().getReferencePosition()));
 			}
-			
 			currentWay.setAttributes(getShapeStyle(Color.BLACK));
 			currentWay.setFollowTerrain(true);
 			currentWay.setVisible(true);
@@ -152,6 +154,23 @@ public class WayLayer extends RenderableLayer implements Observer {
 		}
 
 		return way;
+	}
+	
+	public void cleanUpAlgoPath(){
+		if(!shortestPathList.isEmpty()){
+			for(Way way: shortestPathList){
+				this.removeRenderable(way);
+				way.setStatus(WayStatusEnum.undefined);
+				way = handleExistingWay(way);
+				way.setFollowTerrain(true);
+				way.setVisible(true);
+				way.setAltitudeMode(WorldWind.CLAMP_TO_GROUND);
+				way.setPathType(AVKey.LINEAR);
+				this.addRenderable(way);
+			}
+			
+			shortestPathList.clear();
+		}
 	}
 
 	private void addAnnotation(Way newWay) {

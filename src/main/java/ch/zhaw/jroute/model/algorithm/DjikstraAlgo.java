@@ -36,6 +36,14 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 		shortestWaypointList = new ArrayList<Waypoint>();
 		shortestWayList = new ArrayList<Way>();
 	}
+	
+	public void cleanUp(){
+		allPointsList.clear();
+		redWaypointList.clear();
+		greenWaypointList.clear();
+		shortestWaypointList.clear();
+		shortestWayList.clear();
+	}
 
 	/**
 	 * prepare all waypoints and ways for the djikstra algorithm
@@ -161,7 +169,7 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 	@Override
 	public List<Way> getShortestPath(Waypoint startWaypoint,
 			Waypoint endWaypoint, List<Way> allWays) {
-
+		cleanUp();
 		preparation(startWaypoint, allWays);
 		calculateGraph(startWaypoint, allWays);
 		setWayStatus(allWays);

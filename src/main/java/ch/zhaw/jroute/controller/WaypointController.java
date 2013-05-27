@@ -113,6 +113,7 @@ public class WaypointController implements IWaypointController {
 			if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
 				Waypoint existingWp = view.getWaypointAtPosition();
 				if(existingWp!=null){
+					view.getWayLayer().cleanUpAlgoPath();
 					setStartWaypoint(existingWp);
 				}else{
 					return;
@@ -129,6 +130,7 @@ public class WaypointController implements IWaypointController {
 			if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
 				Waypoint existingWp = view.getWaypointAtPosition();
 				if(existingWp!=null){
+					view.getWayLayer().cleanUpAlgoPath();
 					setEndWaypoint(existingWp);
 				}else{
 					return;

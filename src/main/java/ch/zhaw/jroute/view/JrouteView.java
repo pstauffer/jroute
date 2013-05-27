@@ -61,15 +61,15 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 
 		// add side panel to the window
 		this.getContentPane().add(this.navigationPanel, BorderLayout.WEST);
-		
+
 	}
-	
-	public void addMeasureTool(){
+
+	public void addMeasureTool() {
 		measureTool.setMeasureShapeType(MeasureTool.SHAPE_QUAD);
 		measureTool.setController(new MeasureToolController());
-		
+
 		measureTool.clear();
-        measureTool.setArmed(true);
+		measureTool.setArmed(true);
 	}
 
 	/**
@@ -128,31 +128,35 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 		this.navigationPanel.getWaypointPanel().getEndWaypointButton()
 				.addActionListener(listener);
 	}
-	
+
 	public void addCalculateRouteActionListener(ActionListener listener) {
 		this.navigationPanel.getAlgoControlPanel().getRunAlgoButton()
 				.addActionListener(listener);
 	}
-	
-	public void addGetDataActionListener(ActionListener listener){
+
+	public void addGetDataActionListener(ActionListener listener) {
 		this.navigationPanel.getControlPanel().getMapDataButton()
 				.addActionListener(listener);
 	}
-	
-	public void addStopCreatingWaypointListener(ActionListener listener){
+
+	public void addStopCreatingWaypointListener(ActionListener listener) {
 		this.navigationPanel.getWaypointPanel().getStopCreatingWaypointButton()
 				.addActionListener(listener);
 	}
-	
-	public void addStopCreatingWayListener(ActionListener listener){
+
+	public void addStopCreatingWayListener(ActionListener listener) {
 		this.navigationPanel.getWayPanel().getStopCreatingWayButton()
 				.addActionListener(listener);
 	}
-	
-	public void addStartSelectAreaListener(ActionListener listener){
-		//this.navigationPanel.getControlPanel().getMapDataButton()
-		//		.addActionListener(listener);
-		this.navigationPanel.getControlPanel().getSelectAreaButton().addActionListener(listener);
+
+	public void addStartSelectAreaListener(ActionListener listener) {
+		this.navigationPanel.getControlPanel().getSelectAreaButton()
+				.addActionListener(listener);
+	}
+
+	public void addClearRouteDataListener(ActionListener listener) {
+		this.navigationPanel.getAlgoControlPanel().getCleanAlgoButton()
+				.addActionListener(listener);
 	}
 
 	public Waypoint getWaypointAtPosition() {
@@ -178,7 +182,7 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 		lenghtMeasurer.setPositions(tempPos);
 		return lenghtMeasurer.getLength(this.getWwd().getModel().getGlobe());
 	}
-
+	
 	public WaypointLayer getWaypointLayer() {
 		return waypointLayer;
 	}
@@ -186,8 +190,8 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 	public WayLayer getWayLayer() {
 		return wayLayer;
 	}
-	
-	public MeasureTool getDataArea(){
+
+	public MeasureTool getDataArea() {
 		return measureTool;
 	}
 

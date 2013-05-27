@@ -52,6 +52,15 @@ public class GUIController {
 		view.addStartSelectAreaListener(new StartSelectDataAreaListener());
 		view.addStopCreatingWayListener(new StopCreatingWayListener());
 		view.addStopCreatingWaypointListener(new StopCreatingWaypointListener());
+		view.addClearRouteDataListener(new ClearAlgorithmDataListener());
+	}
+	
+	private class ClearAlgorithmDataListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			view.getWayLayer().cleanUpAlgoPath();
+		}
 		
 	}
 	
@@ -90,7 +99,7 @@ public class GUIController {
 			}
 			
 			mapDataController.getDataForMapSection(pos1.getLongitude().degrees,pos1.getLatitude().degrees,pos2.getLongitude().degrees,pos2.getLatitude().degrees);
-			
+			tool.dispose();
 		}
 		
 	}
