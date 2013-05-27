@@ -1,5 +1,6 @@
 package ch.zhaw.jroute.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,8 +24,15 @@ public class AlgorithmController implements IAlgorithmController {
 	}
 
 	@Override
-	public void StartAlgorithm() throws Exception {
+	public void StartAlgorithm() throws IOException {
 		List<Way> wayList = new ArrayList<Way>(wayBuilder.getAllWays().values());
+		
+		if(waypointBuilder.getStartWaypoint()==null){
+			throw new IOException("Please set start of the route");
+		}
+		if(waypointBuilder.getEndWaypoint()==null){
+			throw new IOException("Please set end of the route");
+		}
 		
 		List<Way> resultList = this.algorithm.getShortestPath(waypointBuilder.getStartWaypoint(), waypointBuilder.getEndWaypoint(),wayList );
 		

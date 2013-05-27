@@ -30,7 +30,7 @@ public class MapDataController {
 		this.wayBuilder = wayBuilder;
 	}	
 	
-	public void getDataForMapSection(double lon1, double lat1, double lon2, double lat2) throws Exception{
+	public void getDataForMapSection(double lon1, double lat1, double lon2, double lat2) throws IOException{
 			
 			double left = lon1;
 			double bottom = lat1;

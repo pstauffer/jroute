@@ -165,18 +165,17 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 
 	/**
 	 * defined through the interface
-	 * @throws Exception 
 	 */
 	@Override
 	public List<Way> getShortestPath(Waypoint startWaypoint,
-			Waypoint endWaypoint, List<Way> allWays) throws Exception {
+			Waypoint endWaypoint, List<Way> allWays) {
 		cleanUp();
 		preparation(startWaypoint, allWays);
 		calculateGraph(startWaypoint, allWays);
 		setWayStatus(allWays);
 
 		if (checkUnreachableWaypoint(endWaypoint)) {
-			throw new Exception("EndWaypoint is not reachable: "
+			throw new IllegalArgumentException("EndWaypoint is not reachable: "
 					+ endWaypoint);
 		}
 

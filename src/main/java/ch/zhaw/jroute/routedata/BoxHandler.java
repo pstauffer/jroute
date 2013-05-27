@@ -4,6 +4,7 @@ import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.Position;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,11 +50,11 @@ public class BoxHandler implements IBoxHandler {
 
 	/**
 	 * defined through Interface IBoxHandler
-	 * @throws Exception 
+	 * @throws IOException  
 	 */
 	@Override
 	public List<Way> getAllWays(double left, double bottom, double right,
-			double top) throws Exception {
+			double top) throws IOException{
 
 		// initialize the worker lists
 		streetFilterList = new ArrayList<String>();
@@ -76,13 +77,20 @@ public class BoxHandler implements IBoxHandler {
 		String filterForURL = createFilterForURL();
 
 		// create url
-		URL boxURL = new URL(openStreetMapBoxURL + left + "," + bottom + ","
-				+ right + "," + top + "][highway=" + filterForURL + "]");
+		URL boxURL;
+		try {
+			boxURL = new URL(openStreetMapBoxURL + left + "," + bottom + ","
+					+ right + "," + top + "][highway=" + filterForURL + "]");
+		} catch (MalformedURLException ex) {
+			logger.fatal(ex);
+			throw new RuntimeException(ex);
+		}
 
 		// start timer for connection
 		long startApiCallTime = System.nanoTime();
 
 		// get document via connection
+
 		Document document = apiConnector.getDocumentOverNewConnection(boxURL);
 
 		// stop timer for connection
@@ -98,6 +106,7 @@ public class BoxHandler implements IBoxHandler {
 
 			// get all ways, which match with the filter
 			long setSelectedWaysStartTime = System.nanoTime();
+			
 			matchingWayList = getSelectedWays(document, xpath);
 			long setSelectedWaysEndTime = System.nanoTime();
 
@@ -456,11 +465,17 @@ public class BoxHandler implements IBoxHandler {
 	 * @throws Exception 
 	 */
 	private List<Way> getSelectedWays(Document document, XPath xpath)
-			throws Exception {
+			throws IOException {
 		List<Way> matchingWayList = new ArrayList<Way>();
 
-		NodeList wayInXml = (NodeList) xpath.compile("/osm/way/@id").evaluate(
-				document, XPathConstants.NODESET);
+		NodeList wayInXml = null;
+		try {
+			wayInXml = (NodeList) xpath.compile("/osm/way/@id").evaluate(
+					document, XPathConstants.NODESET);
+		} catch (XPathExpressionException e) {
+			logger.error(e);
+			throw new RuntimeException(e);
+		}
 
 		for (int i = 0; i < wayInXml.getLength(); i++) {
 			long id = Long.parseLong(wayInXml.item(i).getNodeValue());
@@ -475,7 +490,7 @@ public class BoxHandler implements IBoxHandler {
 		}
 
 		if (matchingWayList.isEmpty()) {
-			throw new Exception("no way found in xml file");
+			throw new IOException("no ways found in xml file");
 		}
 
 		return matchingWayList;
@@ -487,19 +502,19 @@ public class BoxHandler implements IBoxHandler {
 	 * 
 	 * @param left
 	 * @param right
-	 * @throws Exception 
+	 * @throws IllegalArgumentException 
 	 */
-	private void checkLongitudeCoordinates(double left, double right) throws Exception {
+	private void checkLongitudeCoordinates(double left, double right) {
 		if (left > 90 || left < -90) {
-			throw new Exception(
+			throw new IllegalArgumentException(
 					"left longitude must be between -90 and 90");
 		}
 		if (right > 90 || right < -90) {
-			throw new Exception(
-					"left longitude must be between -90 and 90");
+			throw new IllegalArgumentException(
+					"right longitude must be between -90 and 90");
 		}
 		if (left > right) {
-			throw new Exception(
+			throw new IllegalArgumentException(
 					"first parameter can't be bigger than second!!");
 		}
 
@@ -510,19 +525,19 @@ public class BoxHandler implements IBoxHandler {
 	 * 
 	 * @param bottom
 	 * @param top
-	 * @throws Exception 
+	 * @throws IllegalArgumentException 
 	 */
-	private void checkLatitudeCoordinates(double bottom, double top) throws Exception {
+	private void checkLatitudeCoordinates(double bottom, double top)  {
 		if (top > 180 || top < -180) {
-			throw new Exception(
+			throw new IllegalArgumentException(
 					"top latitude must be between -180 and 180");
 		}
 		if (bottom > 180 || bottom < -180) {
-			throw new Exception(
+			throw new IllegalArgumentException(
 					"bottom latitude must be between -180 and 180");
 		}
 		if (bottom > top) {
-			throw new Exception(
+			throw new IllegalArgumentException(
 					"first parameter can't be bigger than second!!");
 		}
 

@@ -33,22 +33,19 @@ public class WaypointLayer extends RenderableLayer implements Observer{
 	}
 	
 	public void update(Observable o, Object arg) {
-		
 		Waypoint waypoint = (Waypoint)arg;
 		waypoint.setAttributes(getShapeStyle(Color.GRAY));
-		
+		int i = 0;
 		
 		for(Renderable temp : this.getRenderables()){
 			Waypoint existingWp = (Waypoint)temp;
-			
 			if(existingWp.getWaypointID() == waypoint.getWaypointID()){
 				this.removeRenderable(existingWp);
 				//Some crazy stuff happens
 				waypoint = handleExistingWaypoint(waypoint);
 			}
 		}
-		System.out.println(i);
-		i++;
+		
 		//addAnnotation(waypoint);
 		this.addRenderable(waypoint);
 		

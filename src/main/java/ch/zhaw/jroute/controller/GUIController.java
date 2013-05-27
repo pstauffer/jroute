@@ -7,6 +7,7 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.List;
 
 import ch.zhaw.jroute.model.IWayBuilder;
@@ -77,7 +78,9 @@ public class GUIController {
 		public void actionPerformed(ActionEvent ae) {
 			try{
 				algoController.StartAlgorithm();
-			}catch(Exception e){
+			}catch(IllegalArgumentException e){
+				view.showException(e.getMessage());
+			}catch(IOException e){
 				view.showException(e.getMessage());
 			}
 		}
@@ -90,6 +93,10 @@ public class GUIController {
 		
 			MeasureTool tool = view.getDataArea();
 			List<Position> positions = (List<Position>) tool.getPositions();
+			
+			if(positions.isEmpty()){
+				return;
+			}
 			
 			Position pos1 = positions.get(0);
 			Position pos2 = positions.get(0);
@@ -112,9 +119,13 @@ public class GUIController {
 			
 			try {
 				mapDataController.getDataForMapSection(pos1.getLongitude().degrees,pos1.getLatitude().degrees,pos2.getLongitude().degrees,pos2.getLatitude().degrees);
-			} catch (Exception ex) {
+			} catch (IOException ex) {
+				//TODO: custom message at the moment because API has no exception messages
+				view.showException("Data import failed, please retry");
+			} catch(IllegalArgumentException ex){
 				view.showException(ex.getMessage());
 			}
+			
 			tool.setArmed(false);
 			tool.clear();
 		}
