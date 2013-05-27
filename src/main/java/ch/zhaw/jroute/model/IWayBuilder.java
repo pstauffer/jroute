@@ -20,6 +20,8 @@ public interface IWayBuilder {
 	public Map<Integer, Way> getAllWays();
 	
 	public void showShortestPath(List<Way> resultList);
+	
+	public void removeAllWays();
 }
 
 

@@ -172,6 +172,12 @@ public class WayLayer extends RenderableLayer implements Observer {
 			shortestPathList.clear();
 		}
 	}
+	
+	public void cleanLayer(){
+		this.removeAllRenderables();
+		shortestPathList.clear();
+		currentWay = null;
+	}
 
 	private void addAnnotation(Way newWay) {
 		double meters = (double) Math

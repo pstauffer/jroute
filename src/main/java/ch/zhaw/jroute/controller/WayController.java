@@ -97,4 +97,9 @@ public class WayController implements IWayController{
 		}
 		
 	}
+
+	@Override
+	public void cleanAllWays() {
+		wayBuilder.removeAllWays();
+	}
 }

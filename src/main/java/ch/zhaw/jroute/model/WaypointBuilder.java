@@ -120,4 +120,13 @@ public class WaypointBuilder extends Observable implements IWaypointBuilder {
 		return endWaypoint;
 	}
 
+	@Override
+	public void removeAllWaypoints() {
+		waypointList.clear();
+		currentLetter = 65; // A
+		id = 0;
+		startWaypoint = null;
+		endWaypoint = null;
+	}
+
 }

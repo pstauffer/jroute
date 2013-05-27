@@ -1,3 +1,5 @@
+import gov.nasa.worldwind.Configuration;
+import gov.nasa.worldwind.avlist.AVKey;
 import ch.zhaw.jroute.controller.GUIController;
 import ch.zhaw.jroute.model.WayBuilder;
 import ch.zhaw.jroute.model.WaypointBuilder;
@@ -13,10 +15,14 @@ public class JrouteRunner {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		// Set inital point on the map
+        Configuration.setValue(AVKey.INITIAL_LATITUDE, 47.2612);
+        Configuration.setValue(AVKey.INITIAL_LONGITUDE, 8.5950);
+        Configuration.setValue(AVKey.INITIAL_ALTITUDE, 22000000);
 		// View
 		JrouteView view = (JrouteView) ApplicationTemplate.start("Jroute",
 				JrouteView.class);
-
+		
 		// Model
 		WaypointBuilder waypointBuilder = new WaypointBuilder();
 		WayBuilder wayBuilder = new WayBuilder();

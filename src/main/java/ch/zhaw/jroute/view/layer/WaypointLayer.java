@@ -55,6 +55,10 @@ public class WaypointLayer extends RenderableLayer implements Observer{
 
 	}
 	
+	public void cleanLayer(){
+		this.removeAllRenderables();
+	}
+	
 	private void addAnnotation(Waypoint waypoint){
         GlobeAnnotation anno = new GlobeAnnotation(waypoint.getName(),waypoint.getReferencePosition(), this.annotationStyle);
         anno.setAltitudeMode(WorldWind.CLAMP_TO_GROUND);

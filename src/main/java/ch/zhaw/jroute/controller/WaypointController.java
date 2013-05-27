@@ -140,6 +140,11 @@ public class WaypointController implements IWaypointController {
 			}
 		}
 	}
+
+	@Override
+	public void cleanWaypoints() {
+		waypointBuilder.removeAllWaypoints();
+	}
 	
 	
 }

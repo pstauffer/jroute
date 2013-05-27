@@ -51,10 +51,6 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 		// hide not usefull layers and add open streetmap layer
 		this.addExtraLayer();
 
-		// Set inital point on the map
-		this.getWwd().setValue(AVKey.INITIAL_LATITUDE, 49.06);
-		this.getWwd().setValue(AVKey.INITIAL_LONGITUDE, -122.77);
-		this.getWwd().setValue(AVKey.INITIAL_ALTITUDE, 22000);
 
 		// create side panel
 		this.navigationPanel = new SideNavigationPanel(this.getWwd());
@@ -156,6 +152,11 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 
 	public void addClearRouteDataListener(ActionListener listener) {
 		this.navigationPanel.getAlgoControlPanel().getCleanAlgoButton()
+				.addActionListener(listener);
+	}
+	
+	public void addClearDataListener(ActionListener listener) {
+		this.navigationPanel.getControlPanel().getCleanMapDataButton()
 				.addActionListener(listener);
 	}
 

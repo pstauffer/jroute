@@ -22,4 +22,6 @@ public interface IWaypointBuilder {
 	public Waypoint getStartWaypoint();
 
 	public Waypoint getEndWaypoint();
+	
+	public void removeAllWaypoints();
 }

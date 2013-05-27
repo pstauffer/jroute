@@ -89,4 +89,11 @@ public class WayBuilder extends Observable implements IWayBuilder {
 		this.setChanged();
 		this.notifyObservers(resultList);	
 	}
+
+	@Override
+	public void removeAllWays() {
+		allWays.clear();
+		activeWay = null;
+		id = 0;
+	}
 }

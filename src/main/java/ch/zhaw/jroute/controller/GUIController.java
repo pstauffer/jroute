@@ -17,9 +17,7 @@ import ch.zhaw.jroute.view.JrouteView;
 public class GUIController {
 
 	private JrouteView view;
-	private IWaypointBuilder waypointBuilder;
-	private IWayBuilder wayBuilder;
-
+	
 	private WaypointController waypointController;
 	private WayController wayController;
 	private AlgorithmController algoController;
@@ -34,14 +32,12 @@ public class GUIController {
 			IWayBuilder wayBuilder, IBoxHandler boxHandler) {
 
 		this.view = view;
-		this.wayBuilder = wayBuilder;
-		this.waypointBuilder = waypointBuilder;
 
 		// Controller
-		this.waypointController = new WaypointController(view, waypointBuilder);
-		this.wayController = new WayController(view, wayBuilder);
-		this.algoController = new AlgorithmController(wayBuilder,waypointBuilder);
-		this.mapDataController = new MapDataController(boxHandler,waypointBuilder, wayBuilder);
+		waypointController = new WaypointController(view, waypointBuilder);
+		wayController = new WayController(view, wayBuilder);
+		algoController = new AlgorithmController(wayBuilder,waypointBuilder);
+		mapDataController = new MapDataController(boxHandler,waypointBuilder, wayBuilder);
 
 		view.addWaypointActionListener(new CreateWaypointListener());
 		view.addWayActionListener(new CreateWayListener());
@@ -53,10 +49,22 @@ public class GUIController {
 		view.addStopCreatingWayListener(new StopCreatingWayListener());
 		view.addStopCreatingWaypointListener(new StopCreatingWaypointListener());
 		view.addClearRouteDataListener(new ClearAlgorithmDataListener());
+		view.addClearDataListener(new ClearDataListener());
+	}
+	
+	private class ClearDataListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			view.getWaypointLayer().cleanLayer();
+			view.getWayLayer().cleanLayer();
+			
+			waypointController.cleanWaypoints();
+			wayController.cleanAllWays();
+		}
+		
 	}
 	
 	private class ClearAlgorithmDataListener implements ActionListener{
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			view.getWayLayer().cleanUpAlgoPath();
@@ -99,7 +107,8 @@ public class GUIController {
 			}
 			
 			mapDataController.getDataForMapSection(pos1.getLongitude().degrees,pos1.getLatitude().degrees,pos2.getLongitude().degrees,pos2.getLatitude().degrees);
-			tool.dispose();
+			tool.setArmed(false);
+			tool.clear();
 		}
 		
 	}

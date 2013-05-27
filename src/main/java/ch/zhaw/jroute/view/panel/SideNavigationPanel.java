@@ -36,8 +36,8 @@ public class SideNavigationPanel extends JPanel{
 		this.algoControlPanel = new AlgorithmControlPanel();
 		
 		this.add(waypointPanel);
-		this.add(controlPanel);
 		this.add(wayPanel);
+		this.add(controlPanel);
 		this.add(algoControlPanel);
 	}
 	

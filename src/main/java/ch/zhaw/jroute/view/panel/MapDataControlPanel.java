@@ -24,7 +24,7 @@ public class MapDataControlPanel extends JPanel{
 	private void createPanel(){
 		
 		//Create border around panel
-		this.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(9, 9, 9, 9), new TitledBorder("Control")));
+		this.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(9, 9, 9, 9), new TitledBorder("Data control")));
 		this.createButtons();
 	}
 	
