@@ -1,12 +1,13 @@
 package ch.zhaw.jroute.model;
 
 import gov.nasa.worldwind.geom.Position;
-import gov.nasa.worldwindx.examples.util.DirectedPath;
+import gov.nasa.worldwind.render.Path;
+import gov.nasa.worldwind.render.SurfacePolyline;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Way extends DirectedPath {
+public class Way extends Path {
 	private Waypoint start;
 	private Waypoint end;
 	private long wayID;

@@ -49,7 +49,6 @@ public class WaypointBuilder extends Observable implements IWaypointBuilder {
 		waypoint.setName(Integer.toString(id));
 
 		//waypoint.setWaypointID(id);
-
 		waypoint.setStatus(WaypointStatusEnum.undefined);
 
 		waypointList.put((long) id, waypoint);

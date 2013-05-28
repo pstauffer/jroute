@@ -95,6 +95,7 @@ public class WayLayer extends RenderableLayer implements Observer {
 							resultWay = handleExistingWay(resultWay);
 							resultWay.setFollowTerrain(true);
 							resultWay.setVisible(true);
+							resultWay.setValue("SURFACE_PATH_DEPTH_OFFSET",0.50);
 							resultWay.setAltitudeMode(WorldWind.CLAMP_TO_GROUND);
 							resultWay.setPathType(AVKey.LINEAR);
 							shortestPathList.add(resultWay);
@@ -118,6 +119,7 @@ public class WayLayer extends RenderableLayer implements Observer {
 			currentWay.setAttributes(getShapeStyle(Color.BLACK));
 			currentWay.setFollowTerrain(true);
 			currentWay.setVisible(true);
+			currentWay.setValue("SURFACE_PATH_DEPTH_OFFSET",0.50);
 			currentWay.setAltitudeMode(WorldWind.CLAMP_TO_GROUND);
 			currentWay.setPathType(AVKey.LINEAR);
 			this.addRenderable(currentWay);
@@ -162,9 +164,10 @@ public class WayLayer extends RenderableLayer implements Observer {
 				this.removeRenderable(way);
 				way.setStatus(WayStatusEnum.undefined);
 				way = handleExistingWay(way);
-				way.setFollowTerrain(true);
+				way.setFollowTerrain(false);
 				way.setVisible(true);
 				way.setAltitudeMode(WorldWind.CLAMP_TO_GROUND);
+				way.setValue("SURFACE_PATH_DEPTH_OFFSET",0.0);
 				way.setPathType(AVKey.LINEAR);
 				this.addRenderable(way);
 			}
