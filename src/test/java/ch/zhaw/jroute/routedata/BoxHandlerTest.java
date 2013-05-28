@@ -13,7 +13,7 @@ import org.junit.Test;
 import ch.zhaw.jroute.model.Way;
 import ch.zhaw.jroute.model.Waypoint;
 
-public class BoxHandlerTestSmall {
+public class BoxHandlerTest {
 	private static Logger logger = Logger.getLogger("org.apache.log4j");
 	BoxHandler testObject;
 	List<Way> allWaysFromXML;

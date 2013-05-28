@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,6 +16,7 @@ import ch.zhaw.jroute.model.WayStatusEnum;
 import ch.zhaw.jroute.model.Waypoint;
 
 public class DjikstraAlgoTest {
+	private static Logger logger = Logger.getLogger("org.apache.log4j");
 	private List<Way> allWays;
 	private Waypoint A;
 	private Waypoint B;
@@ -40,6 +42,7 @@ public class DjikstraAlgoTest {
 
 	@Before
 	public void createTestSzenario() {
+		logger.setLevel(org.apache.log4j.Level.INFO);
 
 		allWays = new ArrayList<Way>();
 
@@ -97,10 +100,9 @@ public class DjikstraAlgoTest {
 
 		List<Way> shortestWay = null;
 		try {
-			shortestWay = algo.getShortestPath(startWaypoint,
-					endWaypoint, allWays);
+			shortestWay = algo.getShortestPath(startWaypoint, endWaypoint,
+					allWays);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -259,8 +261,8 @@ public class DjikstraAlgoTest {
 
 		List<Way> shortestWay = null;
 		try {
-			shortestWay = algo.getShortestPath(startWaypoint,
-					endWaypoint, allWays);
+			shortestWay = algo.getShortestPath(startWaypoint, endWaypoint,
+					allWays);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -285,8 +287,8 @@ public class DjikstraAlgoTest {
 
 		List<Way> shortestWay = null;
 		try {
-			shortestWay = algo.getShortestPath(startWaypoint,
-					endWaypoint, allWays);
+			shortestWay = algo.getShortestPath(startWaypoint, endWaypoint,
+					allWays);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
