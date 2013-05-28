@@ -10,7 +10,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-public class APIConnectorMock implements IAPIConnector {
+public class APIConnectorMockBig implements IAPIConnector {
 
 	@Override
 	public Document getDocumentOverNewConnection(URL url) {
@@ -21,7 +21,7 @@ public class APIConnectorMock implements IAPIConnector {
 		try {
 			dBuilder = dbFactory.newDocumentBuilder();
 			document = dBuilder
-					.parse("src/test/java/ch/zhaw/jroute/routedata/BoxHandlerMock.xml");
+					.parse("src/test/java/ch/zhaw/jroute/routedata/BoxHandlerMockBig.xml");
 			document.getDocumentElement().normalize();
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();

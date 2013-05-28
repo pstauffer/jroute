@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import ch.zhaw.jroute.model.Way;
 import ch.zhaw.jroute.model.WayStatusEnum;
 import ch.zhaw.jroute.model.Waypoint;
@@ -25,6 +27,7 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 	private Set<Waypoint> greenWaypointList;
 	private List<Waypoint> shortestWaypointList;
 	private List<Way> shortestWayList;
+	private static Logger logger = Logger.getLogger("org.apache.log4j");
 
 	/**
 	 * constructor for djikstra algorithm class
@@ -36,8 +39,8 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 		shortestWaypointList = new ArrayList<Waypoint>();
 		shortestWayList = new ArrayList<Way>();
 	}
-	
-	public void cleanUp(){
+
+	public void cleanUp() {
 		allPointsList.clear();
 		redWaypointList.clear();
 		greenWaypointList.clear();
@@ -169,9 +172,19 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 	@Override
 	public List<Way> getShortestPath(Waypoint startWaypoint,
 			Waypoint endWaypoint, List<Way> allWays) {
+
+		long startShortestPathMethodTime = System.nanoTime();
+
 		cleanUp();
+
+		long startPreparationTime = System.nanoTime();
 		preparation(startWaypoint, allWays);
+		long endPreparationTime = System.nanoTime();
+
+		long startCalculateTime = System.nanoTime();
 		calculateGraph(startWaypoint, allWays);
+		long endCalculateTime = System.nanoTime();
+
 		setWayStatus(allWays);
 
 		if (checkUnreachableWaypoint(endWaypoint)) {
@@ -209,6 +222,17 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 
 		Collections.reverse(shortestWaypointList);
 		Collections.reverse(shortestWayList);
+
+		long endShortestPathMethodTime = System.nanoTime();
+
+		// sysout for debugging
+		logger.debug("whole shortestPath Method Time: "
+				+ (endShortestPathMethodTime - startShortestPathMethodTime)
+				+ " ns");
+		logger.debug("time for preperation: "
+				+ (endPreparationTime - startPreparationTime));
+		logger.debug("time for calculate: "
+				+ (endCalculateTime - startCalculateTime));
 
 		return shortestWayList;
 	}
