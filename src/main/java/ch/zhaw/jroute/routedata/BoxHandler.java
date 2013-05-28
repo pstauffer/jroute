@@ -3,6 +3,7 @@ package ch.zhaw.jroute.routedata;
 import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.Position;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -11,19 +12,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import ch.zhaw.jroute.model.Way;
 import ch.zhaw.jroute.model.WayStatusEnum;
 import ch.zhaw.jroute.model.Waypoint;
+
+import com.ximpleware.AutoPilot;
+import com.ximpleware.EOFException;
+import com.ximpleware.EncodingException;
+import com.ximpleware.EntityException;
+import com.ximpleware.NavException;
+import com.ximpleware.ParseException;
+import com.ximpleware.PilotException;
+import com.ximpleware.VTDGen;
+import com.ximpleware.VTDNav;
 
 /**
  * BoxHandler Class for API Calls to openstreetmap.org needed for getting all
@@ -50,12 +61,15 @@ public class BoxHandler implements IBoxHandler {
 
 	/**
 	 * defined through Interface IBoxHandler
-	 * @throws IOException  
+	 * 
+	 * @throws IOException
 	 */
 	@Override
 	public List<Way> getAllWays(double left, double bottom, double right,
-			double top) throws IOException{
+			double top) throws IOException {
 
+		double powerSek = Math.pow(10.0, 9.0);
+		
 		// initialize the worker lists
 		streetFilterList = new ArrayList<String>();
 		allWaypoints = new HashMap<Long, Waypoint>();
@@ -90,60 +104,64 @@ public class BoxHandler implements IBoxHandler {
 		long startApiCallTime = System.nanoTime();
 
 		// get document via connection
-
 		Document document = apiConnector.getDocumentOverNewConnection(boxURL);
+		
+		TransformerFactory transformerFactory = TransformerFactory
+				.newInstance();
+		Transformer transformer = null;
+		try {
+			transformer = transformerFactory.newTransformer();
+		} catch (TransformerConfigurationException e) {
+			logger.fatal(e);
+			throw new RuntimeException(e);
+		}
 
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+		DOMSource source = new DOMSource(document);
+		StreamResult result = new StreamResult(bos);
+
+		try {
+			transformer.transform(source, result);
+		} catch (TransformerException e) {
+			logger.fatal(e);
+			throw new RuntimeException(e);
+		}
+
+		byte[] array = bos.toByteArray();
+		
 		// stop timer for connection
 		long endApiCallTime = System.nanoTime();
 		long apiCallTime = endApiCallTime - startApiCallTime;
-
-		// create xpath instance
-		XPath xpath = XPathFactory.newInstance().newXPath();
+		
+		long setWaypointsForWaysStartTime = System.nanoTime();
+		HashMap<Long, Waypoint> allWaypoints = this
+				.getAllWaypointFromDocument(array);
+		long setWaypointsForWaysEndTime = System.nanoTime();
+		
 		List<Way> matchingWayList = null;
-		List<Waypoint> matchingWaypointList = null;
+		
+		// get all ways, which match with the filter
+		long setSelectedWaysStartTime = System.nanoTime();
+		matchingWayList = getSelectedWays(array, allWaypoints);
+		long setSelectedWaysEndTime = System.nanoTime();
+		logger.debug("time setWaypointsForWaysTime : "
+				+ ((setWaypointsForWaysEndTime - setWaypointsForWaysStartTime)/powerSek)
+				+ " s");
+		logger.debug("time setSelectedWaysTime : "
+				+ ((setSelectedWaysEndTime - setSelectedWaysStartTime)/powerSek) + " s");
 
-		try {
-
-			// get all ways, which match with the filter
-			long setSelectedWaysStartTime = System.nanoTime();
-			
-			matchingWayList = getSelectedWays(document, xpath);
-			long setSelectedWaysEndTime = System.nanoTime();
-
-			// set all waypoints for the ways
-			long setWaypointsForWaysStartTime = System.nanoTime();
-			matchingWaypointList = setWaypointsForWays(matchingWayList,
-					document, xpath);
-			long setWaypointsForWaysEndTime = System.nanoTime();
-
-			// get and set all waypoint values
-			long setValuesForWaypointsStartTime = System.nanoTime();
-			matchingWaypointList = setValuesForWaypoints(matchingWaypointList,
-					document, xpath);
-			long setValuesForWaypointsEndTime = System.nanoTime();
-
-			// performance tests
-			logger.debug("time setSelectedWaysTime : "
-					+ (setSelectedWaysEndTime - setSelectedWaysStartTime)
-					+ " ns");
-			logger.debug("time setWaypointsForWaysTime : "
-					+ (setWaypointsForWaysEndTime - setWaypointsForWaysStartTime)
-					+ " ns");
-			logger.debug("time setValuesForWaypointsTime : "
-					+ (setValuesForWaypointsEndTime - setValuesForWaypointsStartTime)
-					+ " ns");
-
-		} catch (XPathExpressionException e) {
-			logger.fatal(e);
-		}
-
+		long setHandleCrossRoadsStartTime = System.nanoTime();
 		// handler for crossroads
 		handleCrossRoads(matchingWayList);
-
+		long setHandleCrossRoadsEndTime = System.nanoTime();
+		
+		logger.debug("time setHandleCrossRoadsTime : "
+				+ ((setHandleCrossRoadsEndTime-setHandleCrossRoadsStartTime)/powerSek) + " s");
+		
 		// counting ways and waypoints for debugging
 		int matchedWaySize = matchingWayList.size();
 		int effecticeWaySize = effectiveWayList.size();
-		int matchedWaypointSize = matchingWaypointList.size();
 		int filterSize = streetFilterList.size();
 
 		// stop timer for connection
@@ -151,14 +169,14 @@ public class BoxHandler implements IBoxHandler {
 		long methodTime = endMethodTime - startMethodTime;
 
 		// sysout for debugging
-		logger.debug("get all data from openstreetmap took: " + apiCallTime
-				+ " ns");
-		logger.debug("running whole method took: " + methodTime + " ns");
+		logger.debug("get all data from openstreetmap took: " + apiCallTime/powerSek
+				+ " s");
+		logger.debug("running whole method took: " + methodTime/powerSek + " s");
 		logger.debug("time for document processing : "
-				+ (methodTime - apiCallTime) + " ns");
+				+ (methodTime - apiCallTime)/powerSek + " s");
 		logger.debug("total ways matched: " + matchedWaySize);
 		logger.debug("total effective ways: " + effecticeWaySize);
-		logger.debug("total waypoints matched: " + matchedWaypointSize);
+		logger.debug("total waypoints matched: " + allWaypoints.size());
 		logger.debug("filter size: " + filterSize);
 
 		List<Way> resultWayList = new ArrayList<Way>();
@@ -166,11 +184,77 @@ public class BoxHandler implements IBoxHandler {
 
 		// cleanup
 		cleanUpForGui();
-		matchingWaypointList.clear();
 		matchingWayList.clear();
 
 		// return wayList;
 		return resultWayList;
+	}
+
+	private HashMap<Long, Waypoint> getAllWaypointFromDocument(byte[] array) {
+
+		allWaypoints = new HashMap<Long, Waypoint>();
+
+		VTDGen vg = new VTDGen();
+		vg.setDoc(array);
+		try {
+			vg.parse(false);
+		} catch (EncodingException e) {
+			logger.fatal(e);
+		} catch (EOFException e) {
+			logger.fatal(e);
+			throw new RuntimeException(e);
+		} catch (EntityException e) {
+			logger.fatal(e);
+			throw new RuntimeException(e);
+		} catch (ParseException e) {
+			logger.fatal(e);
+			throw new RuntimeException(e);
+		}
+
+		VTDNav vn = vg.getNav();
+
+		AutoPilot ap = new AutoPilot(vn);
+
+		ap.selectElement("node");
+
+		try {
+			while (ap.iterate()) {
+
+				int latPos = vn.getAttrVal("lat");
+				int lonPos = vn.getAttrVal("lon");
+				int idPos = vn.getAttrVal("id");
+
+				double lat = Double.parseDouble(vn.toString(latPos));
+
+				double lon = Double.parseDouble(vn.toString(lonPos));
+
+				long id = Long.parseLong(vn.toString(idPos));
+
+				Waypoint waypoint = new Waypoint();
+
+				waypoint.setWaypointID(id);
+
+				// set latitude and longitude for waypoint
+				waypoint.setLat(lat);
+				waypoint.setLon(lon);
+
+				// set position (lon and lat in one value)
+				Angle latAngle = Angle.fromDegreesLatitude(lat);
+				Angle lonAngle = Angle.fromDegreesLatitude(lon);
+				Position pos = new Position(latAngle, lonAngle, 0);
+				waypoint.setCenter(pos);
+
+				allWaypoints.put(id, waypoint);
+			}
+		} catch (PilotException e) {
+			logger.fatal(e);
+			throw new RuntimeException(e);
+		} catch (NavException e) {
+			logger.fatal(e);
+			throw new RuntimeException(e);
+		}
+
+		return allWaypoints;
 	}
 
 	/**
@@ -213,47 +297,6 @@ public class BoxHandler implements IBoxHandler {
 	}
 
 	/**
-	 * get and set the coordinate values for the matched waypoints also set the
-	 * position for a waypoint
-	 * 
-	 * @param waypointlist
-	 * @param document
-	 * @param xpath
-	 * @return
-	 * @throws XPathExpressionException
-	 */
-	private List<Waypoint> setValuesForWaypoints(List<Waypoint> waypointList,
-			Document document, XPath xpath) throws XPathExpressionException {
-
-		// loop trough all matching waypoints
-		for (Waypoint waypoint : waypointList) {
-
-			long waypointID = waypoint.getWaypointID();
-			Node waypointInXml = (Node) xpath.compile(
-					"/osm/node[@id='" + waypointID + "']").evaluate(document,
-					XPathConstants.NODE);
-
-			double lat = Double.parseDouble(waypointInXml.getAttributes()
-					.getNamedItem("lat").getNodeValue());
-
-			double lon = Double.parseDouble(waypointInXml.getAttributes()
-					.getNamedItem("lon").getNodeValue());
-
-			// set latitude and longitude for waypoint
-			waypoint.setLat(lat);
-			waypoint.setLon(lon);
-
-			// set position (lon and lat in one value)
-			Angle latAngle = Angle.fromDegreesLatitude(lat);
-			Angle lonAngle = Angle.fromDegreesLatitude(lon);
-			Position pos = new Position(latAngle, lonAngle, 0);
-			waypoint.setCenter(pos);
-		}
-
-		return waypointList;
-	}
-
-	/**
 	 * handle the crossroads...
 	 * 
 	 * @param wayList
@@ -268,7 +311,7 @@ public class BoxHandler implements IBoxHandler {
 					if (way.getStart() == waypoint || way.getEnd() == waypoint) {
 					} else {
 						way.addSplitPoint(waypoint);
-						if(!splittedWay.contains(way)){
+						if (!splittedWay.contains(way)) {
 							splittedWay.add(way);
 						}
 					}
@@ -392,108 +435,89 @@ public class BoxHandler implements IBoxHandler {
 	}
 
 	/**
-	 * get all waypoints for ways and set a waypointlist for every way set the
-	 * start and end waypoint for a way
-	 * 
-	 * @param waylist
-	 * @param document
-	 * @param xpath
-	 * @return
-	 * @throws XPathExpressionException
-	 */
-	private List<Waypoint> setWaypointsForWays(List<Way> wayList,
-			Document document, XPath xpath) throws XPathExpressionException {
-
-		List<Waypoint> matchingWaypointList = new ArrayList<Waypoint>();
-		effectiveWayList = new ArrayList<Way>();
-
-		// loop trough all ways
-		for (Way way : wayList) {
-			long wayID = way.getWayID();
-
-			// create new waypointlist for every way
-			List<Waypoint> waypointsFromWay = new ArrayList<Waypoint>();
-			NodeList wayInXml = (NodeList) xpath.compile(
-					"/osm/way[@id='" + wayID + "']/nd/@ref").evaluate(document,
-					XPathConstants.NODESET);
-
-			// loop trough all childnodes
-			for (int j = 0; j < wayInXml.getLength(); j++) {
-				long waypointID = Long.parseLong(wayInXml.item(j)
-						.getNodeValue());
-
-				Waypoint waypoint = null;
-
-				if (allWaypoints.containsKey(waypointID)) {
-					waypoint = allWaypoints.get(waypointID);
-				} else {
-					waypoint = new Waypoint(waypointID);
-				}
-
-				waypoint.addWay(way);
-
-				// add waypoint to the waypointlist of the way
-				waypointsFromWay.add(waypoint);
-
-				// add waypoint to the matching waypointlist
-				matchingWaypointList.add(waypoint);
-				allWaypoints.put(waypointID, waypoint);
-			}
-
-			// get start and end waypoint
-			Waypoint tempStartWaypoint = waypointsFromWay.get(0);
-			int lastTempWaypoint = waypointsFromWay.size() - 1;
-			Waypoint tempEndWaypoint = waypointsFromWay.get(lastTempWaypoint);
-
-			// set start and end for the way
-			way.setStart(tempStartWaypoint);
-			way.setEnd(tempEndWaypoint);
-
-			// set waypointlist for the way
-			way.setWaypointList(waypointsFromWay);
-		}
-
-		effectiveWayList.addAll(wayList);
-
-		return matchingWaypointList;
-	}
-
-	/**
 	 * get all ways
 	 * 
+	 * @param allWaypoints
+	 * 
 	 * @param document
 	 * @param xpath
 	 * @return
-	 * @throws Exception 
+	 * @throws Exception
 	 */
-	private List<Way> getSelectedWays(Document document, XPath xpath)
-			throws IOException {
+	private List<Way> getSelectedWays(byte[] array,
+			HashMap<Long, Waypoint> allWaypoints) throws IOException {
 		List<Way> matchingWayList = new ArrayList<Way>();
+		effectiveWayList = new ArrayList<Way>();
 
-		NodeList wayInXml = null;
+		VTDGen vg = new VTDGen();
+		vg.setDoc(array);
 		try {
-			wayInXml = (NodeList) xpath.compile("/osm/way/@id").evaluate(
-					document, XPathConstants.NODESET);
-		} catch (XPathExpressionException e) {
-			logger.error(e);
+			vg.parse(false);
+		} catch (EncodingException e) {
+			logger.fatal(e);
+			throw new RuntimeException(e);
+		} catch (EOFException e) {
+			logger.fatal(e);
+			throw new RuntimeException(e);
+		} catch (EntityException e) {
+			logger.fatal(e);
+			throw new RuntimeException(e);
+		} catch (ParseException e) {
+			logger.fatal(e);
 			throw new RuntimeException(e);
 		}
 
-		for (int i = 0; i < wayInXml.getLength(); i++) {
-			long id = Long.parseLong(wayInXml.item(i).getNodeValue());
+		VTDNav vn = vg.getNav();
 
-			// create new way
-			Way way = new Way(id);
-			way.setStatus(WayStatusEnum.undefined);
+		AutoPilot ap = new AutoPilot(vn);
+		ap.selectElement("way");
 
-			// add way to list
-			matchingWayList.add(way);
-			allWays.put(way.getWayID(), way);
+		try {
+			while (ap.iterate()) {
+				int idPos = vn.getAttrVal("id");
+
+				long wayId = Long.parseLong(vn.toString(idPos));
+
+				Way way = new Way(wayId);
+				way.setStatus(WayStatusEnum.undefined);
+
+				vn.toElement(VTDNav.FIRST_CHILD, "nd");
+				int wpIdPos = vn.getAttrVal("ref");
+				long wpId = Long.parseLong(vn.toString(wpIdPos));
+				allWaypoints.get(wpId).addWay(way);
+				way.addWaypoint(allWaypoints.get(wpId));
+				do {
+					wpIdPos = vn.getAttrVal("ref");
+					wpId = Long.parseLong(vn.toString(wpIdPos));
+					way.addWaypoint(allWaypoints.get(wpId));
+					allWaypoints.get(wpId).addWay(way);
+				} while (vn.toElement(VTDNav.NEXT_SIBLING, "nd"));
+
+				// get start and end waypoint
+				Waypoint tempStartWaypoint = way.getWaypointList().get(0);
+				int lastTempWaypoint = way.getWaypointList().size() - 1;
+				Waypoint tempEndWaypoint = way.getWaypointList().get(
+						lastTempWaypoint);
+
+				// set start and end for the way
+				way.setStart(tempStartWaypoint);
+				way.setEnd(tempEndWaypoint);
+
+				allWays.put(way.getWayID(), way);
+				matchingWayList.add(way);
+			}
+		} catch (PilotException e) {
+			logger.fatal(e);
+			throw new RuntimeException(e);
+		} catch (NumberFormatException e) {
+			logger.fatal(e);
+			throw new RuntimeException(e);
+		} catch (NavException e) {
+			logger.fatal(e);
+			throw new RuntimeException(e);
 		}
 
-		if (matchingWayList.isEmpty()) {
-			throw new IOException("no ways found in xml file");
-		}
+		effectiveWayList.addAll(matchingWayList);
 
 		return matchingWayList;
 
@@ -504,7 +528,7 @@ public class BoxHandler implements IBoxHandler {
 	 * 
 	 * @param left
 	 * @param right
-	 * @throws IllegalArgumentException 
+	 * @throws IllegalArgumentException
 	 */
 	private void checkLongitudeCoordinates(double left, double right) {
 		if (left > 90 || left < -90) {
@@ -527,9 +551,9 @@ public class BoxHandler implements IBoxHandler {
 	 * 
 	 * @param bottom
 	 * @param top
-	 * @throws IllegalArgumentException 
+	 * @throws IllegalArgumentException
 	 */
-	private void checkLatitudeCoordinates(double bottom, double top)  {
+	private void checkLatitudeCoordinates(double bottom, double top) {
 		if (top > 180 || top < -180) {
 			throw new IllegalArgumentException(
 					"top latitude must be between -180 and 180");

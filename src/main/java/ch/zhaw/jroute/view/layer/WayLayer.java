@@ -37,6 +37,7 @@ public class WayLayer extends RenderableLayer implements Observer {
 	private WorldWindow worldWindow;
 	private LengthMeasurer lenghtMeasurer = new LengthMeasurer();
 	private List<Way> shortestPathList = new ArrayList<Way>();
+	private boolean showWays = false;
 
 	public WayLayer(WorldWindow worldWindow, AnnotationLayer wayAnnotationLayer) {
 		super();
@@ -82,50 +83,65 @@ public class WayLayer extends RenderableLayer implements Observer {
 		
 		//This handles if the layer is updated with the results of the dijkstra
 		if (arg1 instanceof List<?>) {
-			List<Way> resultList = (List<Way>) arg1;
-			Iterable<Renderable> allRenderables = this.getRenderables();
-			for (Way resultWay : resultList) {
-				if (resultWay.getStatus() == WayStatusEnum.result) {
-					for (Renderable temp : allRenderables) {
-						Way existingWay = (Way) temp;
-
-						if (resultWay.getWayID() == existingWay.getWayID()) {
-							this.removeRenderable(existingWay);
-
-							resultWay = handleExistingWay(resultWay);
-							resultWay.setFollowTerrain(true);
-							resultWay.setVisible(true);
-							resultWay.setValue("SURFACE_PATH_DEPTH_OFFSET",0.50);
-							resultWay.setAltitudeMode(WorldWind.CLAMP_TO_GROUND);
-							resultWay.setPathType(AVKey.LINEAR);
-							shortestPathList.add(resultWay);
-							this.addRenderable(resultWay);
+			if(showWays){
+				List<Way> resultList = (List<Way>) arg1;
+				Iterable<Renderable> allRenderables = this.getRenderables();
+				for (Way resultWay : resultList) {
+					if (resultWay.getStatus() == WayStatusEnum.result) {
+						for (Renderable temp : allRenderables) {
+							Way existingWay = (Way) temp;
+	
+							if (resultWay.getWayID() == existingWay.getWayID()) {
+								this.removeRenderable(existingWay);
+	
+								resultWay = handleExistingWay(resultWay);
+								resultWay.setFollowTerrain(true);
+								resultWay.setVisible(true);
+								resultWay.setValue("SURFACE_PATH_DEPTH_OFFSET",0.50);
+								resultWay.setAltitudeMode(WorldWind.CLAMP_TO_GROUND);
+								resultWay.setPathType(AVKey.LINEAR);
+								shortestPathList.add(resultWay);
+								this.addRenderable(resultWay);
+							}
 						}
 					}
 				}
+			}else{
+				List<Way> resultList = (List<Way>) arg1;
+				Iterable<Renderable> allRenderables = this.getRenderables();
+				for (Way resultWay : resultList) {
+					resultWay.setAttributes(getShapeStyle(Color.GREEN));
+					resultWay.setFollowTerrain(true);
+					resultWay.setVisible(true);
+					resultWay.setValue("SURFACE_PATH_DEPTH_OFFSET",0.50);
+					resultWay.setAltitudeMode(WorldWind.CLAMP_TO_GROUND);
+					resultWay.setPathType(AVKey.LINEAR);
+					shortestPathList.add(resultWay);
+					this.addRenderable(resultWay);
+				}
 			}
 		}
-		
 		//Adds a new Way to the Map
 		else if (arg1 instanceof Way) {
-
-			currentWay = (Way) arg1;
 			
-			if(currentWay.getStart()==null || currentWay.getEnd()==null){
+			if(showWays){
+				currentWay = (Way) arg1;
 				
-			}else{
-				currentWay.setDistance(calculateDistance(currentWay.getStart().getReferencePosition(),currentWay.getEnd().getReferencePosition()));
+				if(currentWay.getStart()==null || currentWay.getEnd()==null){
+					
+				}else{
+					currentWay.setDistance(calculateDistance(currentWay.getStart().getReferencePosition(),currentWay.getEnd().getReferencePosition()));
+				}
+				currentWay.setAttributes(getShapeStyle(Color.BLACK));
+				currentWay.setFollowTerrain(true);
+				currentWay.setVisible(true);
+				currentWay.setValue("SURFACE_PATH_DEPTH_OFFSET",0.50);
+				currentWay.setAltitudeMode(WorldWind.CLAMP_TO_GROUND);
+				currentWay.setPathType(AVKey.LINEAR);
+				this.addRenderable(currentWay);
+				//addAnnotation(currentWay);
+				// this.wwd.redraw();
 			}
-			currentWay.setAttributes(getShapeStyle(Color.BLACK));
-			currentWay.setFollowTerrain(true);
-			currentWay.setVisible(true);
-			currentWay.setValue("SURFACE_PATH_DEPTH_OFFSET",0.50);
-			currentWay.setAltitudeMode(WorldWind.CLAMP_TO_GROUND);
-			currentWay.setPathType(AVKey.LINEAR);
-			this.addRenderable(currentWay);
-			//addAnnotation(currentWay);
-			// this.wwd.redraw();
-
 		//Updates the current way with a new position
 		} else if (arg1 instanceof Position) {
 			List<Position> newPositions = new ArrayList<Position>();
@@ -164,14 +180,14 @@ public class WayLayer extends RenderableLayer implements Observer {
 				this.removeRenderable(way);
 				way.setStatus(WayStatusEnum.undefined);
 				way = handleExistingWay(way);
-				way.setFollowTerrain(false);
+				way.setFollowTerrain(true);
 				way.setVisible(true);
 				way.setAltitudeMode(WorldWind.CLAMP_TO_GROUND);
-				way.setValue("SURFACE_PATH_DEPTH_OFFSET",0.0);
+				way.setValue("SURFACE_PATH_DEPTH_OFFSET",0.5);
 				way.setPathType(AVKey.LINEAR);
 				this.addRenderable(way);
 			}
-			
+			worldWindow.redraw();
 			shortestPathList.clear();
 		}
 	}

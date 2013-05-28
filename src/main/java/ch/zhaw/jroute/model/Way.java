@@ -111,5 +111,4 @@ public class Way extends Path {
 	public void addSplitPoint(Waypoint waypoint){
 		this.splitPointList.add(waypoint);
 	}
-
 }
