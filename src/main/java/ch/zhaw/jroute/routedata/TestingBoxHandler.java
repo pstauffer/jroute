@@ -13,9 +13,9 @@ public class TestingBoxHandler {
 	public static void main(String[] args) {
 
 		APIConnector connector = new APIConnector();
-		// BoxHandler box = new BoxHandler(connector);
+		BoxHandler box = new BoxHandler(connector);
 		// BoxHandlerWaypoints box = new BoxHandlerWaypoints(connector);
-		BoxHandlerNew box = new BoxHandlerNew(connector);
+		// BoxHandlerNew box = new BoxHandlerNew(connector);
 
 		try {
 			List<Way> ways = box.getAllWays(-85.43076, 34.90578, -85.00613,
