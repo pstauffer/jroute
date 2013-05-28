@@ -267,8 +267,10 @@ public class BoxHandler implements IBoxHandler {
 				for (Way way : waypoint.getAddedWays()) {
 					if (way.getStart() == waypoint || way.getEnd() == waypoint) {
 					} else {
-						splittedWay.add(way);
 						way.addSplitPoint(waypoint);
+						if(!splittedWay.contains(way)){
+							splittedWay.add(way);
+						}
 					}
 				}
 			}
