@@ -1,6 +1,7 @@
 package ch.zhaw.jroute.routedata;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -13,9 +14,9 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 public class APIConnector implements IAPIConnector {
-	
+
 	private static Logger logger = Logger.getLogger("org.apache.log4j");
-	
+
 	/**
 	 * open connection to openstreetmap url, create new document and after that,
 	 * close the connection
@@ -29,44 +30,50 @@ public class APIConnector implements IAPIConnector {
 	public Document getDocumentOverNewConnection(URL url) throws IOException {
 		Document document = null;
 		HttpURLConnection connection = null;
+		InputStream connectionStream = null;
+		DocumentBuilder dBuilder = null;
 
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
-					.newInstance();
-			dbFactory.setNamespaceAware(true);
-			DocumentBuilder dBuilder = null;
-			
-			try {
-				dBuilder = dbFactory.newDocumentBuilder();
-			} catch (ParserConfigurationException e) {
-				logger.fatal("Error during creation of xml parser", e);
-				throw new RuntimeException(e);
-			}
-			
-			// open connection
-			try {
-				connection = (HttpURLConnection) url
-						.openConnection();
-			} catch (IOException e) {
-				logger.fatal("Error during data import from API", e);
-				throw e;
-			}
-			
-			
-			try {
-				document = dBuilder.parse(connection.getInputStream());
-			} catch (SAXException e) {
-				logger.fatal("Error during the xml parse process", e);
-				throw new RuntimeException(e);
-			} catch (IOException e) {
-				logger.fatal("Error during parsing the imported Data", e);
-				throw e;
-			}finally{
-				connection.disconnect();
-			}
-			
-			document.getDocumentElement().normalize();
+		// open http connection
+		try {
+			connection = (HttpURLConnection) url.openConnection();
+		} catch (IOException e) {
+			logger.fatal("Error during http connection start", e);
+			throw e;
+		}
 
-		
+		// download file over http connection
+		try {
+			connectionStream = connection.getInputStream();
+		} catch (IOException e) {
+			logger.fatal("Error during download over api connection", e);
+			connection.disconnect();
+			throw e;
+		}
+
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		dbFactory.setNamespaceAware(true);
+
+		// create document builder
+		try {
+			dBuilder = dbFactory.newDocumentBuilder();
+		} catch (ParserConfigurationException e) {
+			logger.fatal("Error during creation of xml parser", e);
+			throw new RuntimeException(e);
+		}
+
+		// parse downloaded xml file
+		try {
+			document = dBuilder.parse(connectionStream);
+		} catch (SAXException e) {
+			logger.fatal("Error during the xml parse process", e);
+			throw new RuntimeException(e);
+		}
+
+		document.getDocumentElement().normalize();
+
+		// close connection
+		connection.disconnect();
+
 		return document;
 	}
 

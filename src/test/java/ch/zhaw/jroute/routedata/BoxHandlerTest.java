@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,6 +14,7 @@ import ch.zhaw.jroute.model.Way;
 import ch.zhaw.jroute.model.Waypoint;
 
 public class BoxHandlerTest {
+	private static Logger logger = Logger.getLogger("org.apache.log4j");
 	BoxHandler testObject;
 	List<Way> allWaysFromXML;
 	Way way27776903;
@@ -27,6 +29,7 @@ public class BoxHandlerTest {
 
 	@Before
 	public void setUp() throws Exception {
+		logger.setLevel(org.apache.log4j.Level.INFO);
 		IAPIConnector apiConnector = new APIConnectorMock();
 		testObject = new BoxHandler(apiConnector);
 		allWaysFromXML = testObject.getAllWays(0, 0, 0, 0);
@@ -40,6 +43,18 @@ public class BoxHandlerTest {
 		way77618446 = allWaysFromXML.get(6);
 		way77618447 = allWaysFromXML.get(7);
 		way77618448 = allWaysFromXML.get(8);
+
+		// System.out.println("size: " + allWaysFromXML.size());
+
+		// for (Way way : allWaysFromXML) {
+		// System.out.println("start --------");
+		// System.out.println("way: " + way.getWayID());
+		// System.out.println("--------");
+		// for (Waypoint point : way.getWaypointList()) {
+		// System.out.println("waypoint :" + point.getWaypointID());
+		// }
+		// System.out.println("end --------");
+		// }
 
 	}
 
