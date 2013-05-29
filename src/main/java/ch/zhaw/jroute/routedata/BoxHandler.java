@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 import javax.xml.transform.Transformer;
@@ -46,14 +47,12 @@ import com.ximpleware.VTDNav;
  */
 public class BoxHandler implements IBoxHandler {
 	private static Logger logger = Logger.getLogger("org.apache.log4j");
-	// private final String openStreetMapBoxURL =
-	// "http://open.mapquestapi.com/xapi/api/0.6/way[bbox=";
 	private final String openStreetMapBoxURL = "http://www.overpass-api.de/api/xapi?way[bbox=";
 	private IAPIConnector apiConnector;
 	private List<String> streetFilterList;
 	private List<Way> effectiveWayList;
-	private HashMap<Long, Waypoint> allWaypoints;
-	private HashMap<Long, Way> allWays;
+	private Map<Long, Waypoint> allWaypoints;
+	private Map<Long, Way> allWays;
 
 	public BoxHandler(IAPIConnector connector) {
 		this.apiConnector = connector;
@@ -69,7 +68,7 @@ public class BoxHandler implements IBoxHandler {
 			double top) throws IOException {
 
 		double powerSek = Math.pow(10.0, 9.0);
-		
+
 		// initialize the worker lists
 		streetFilterList = new ArrayList<String>();
 		allWaypoints = new HashMap<Long, Waypoint>();
@@ -105,7 +104,7 @@ public class BoxHandler implements IBoxHandler {
 
 		// get document via connection
 		Document document = apiConnector.getDocumentOverNewConnection(boxURL);
-		
+
 		TransformerFactory transformerFactory = TransformerFactory
 				.newInstance();
 		Transformer transformer = null;
@@ -129,36 +128,38 @@ public class BoxHandler implements IBoxHandler {
 		}
 
 		byte[] array = bos.toByteArray();
-		
+
 		// stop timer for connection
 		long endApiCallTime = System.nanoTime();
 		long apiCallTime = endApiCallTime - startApiCallTime;
-		
+
 		long setWaypointsForWaysStartTime = System.nanoTime();
-		HashMap<Long, Waypoint> allWaypoints = this
+		Map<Long, Waypoint> allWaypoints = this
 				.getAllWaypointFromDocument(array);
 		long setWaypointsForWaysEndTime = System.nanoTime();
-		
+
 		List<Way> matchingWayList = null;
-		
+
 		// get all ways, which match with the filter
 		long setSelectedWaysStartTime = System.nanoTime();
 		matchingWayList = getSelectedWays(array, allWaypoints);
 		long setSelectedWaysEndTime = System.nanoTime();
 		logger.debug("time setWaypointsForWaysTime : "
-				+ ((setWaypointsForWaysEndTime - setWaypointsForWaysStartTime)/powerSek)
+				+ ((setWaypointsForWaysEndTime - setWaypointsForWaysStartTime) / powerSek)
 				+ " s");
 		logger.debug("time setSelectedWaysTime : "
-				+ ((setSelectedWaysEndTime - setSelectedWaysStartTime)/powerSek) + " s");
+				+ ((setSelectedWaysEndTime - setSelectedWaysStartTime) / powerSek)
+				+ " s");
 
 		long setHandleCrossRoadsStartTime = System.nanoTime();
 		// handler for crossroads
 		handleCrossRoads(matchingWayList);
 		long setHandleCrossRoadsEndTime = System.nanoTime();
-		
+
 		logger.debug("time setHandleCrossRoadsTime : "
-				+ ((setHandleCrossRoadsEndTime-setHandleCrossRoadsStartTime)/powerSek) + " s");
-		
+				+ ((setHandleCrossRoadsEndTime - setHandleCrossRoadsStartTime) / powerSek)
+				+ " s");
+
 		// counting ways and waypoints for debugging
 		int matchedWaySize = matchingWayList.size();
 		int effecticeWaySize = effectiveWayList.size();
@@ -169,11 +170,12 @@ public class BoxHandler implements IBoxHandler {
 		long methodTime = endMethodTime - startMethodTime;
 
 		// sysout for debugging
-		logger.debug("get all data from openstreetmap took: " + apiCallTime/powerSek
+		logger.debug("get all data from openstreetmap took: " + apiCallTime
+				/ powerSek + " s");
+		logger.debug("running whole method took: " + methodTime / powerSek
 				+ " s");
-		logger.debug("running whole method took: " + methodTime/powerSek + " s");
 		logger.debug("time for document processing : "
-				+ (methodTime - apiCallTime)/powerSek + " s");
+				+ (methodTime - apiCallTime) / powerSek + " s");
 		logger.debug("total ways matched: " + matchedWaySize);
 		logger.debug("total effective ways: " + effecticeWaySize);
 		logger.debug("total waypoints matched: " + allWaypoints.size());
@@ -190,7 +192,7 @@ public class BoxHandler implements IBoxHandler {
 		return resultWayList;
 	}
 
-	private HashMap<Long, Waypoint> getAllWaypointFromDocument(byte[] array) {
+	private Map<Long, Waypoint> getAllWaypointFromDocument(byte[] array) {
 
 		allWaypoints = new HashMap<Long, Waypoint>();
 
@@ -445,7 +447,7 @@ public class BoxHandler implements IBoxHandler {
 	 * @throws Exception
 	 */
 	private List<Way> getSelectedWays(byte[] array,
-			HashMap<Long, Waypoint> allWaypoints) throws IOException {
+			Map<Long, Waypoint> allWaypoints) throws IOException {
 		List<Way> matchingWayList = new ArrayList<Way>();
 		effectiveWayList = new ArrayList<Way>();
 

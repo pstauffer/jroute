@@ -5,3 +5,4 @@
 *.jar
 *.ear
 *.DS_Store
+target/classes/jroute.properties
