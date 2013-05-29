@@ -1,5 +1,6 @@
 package ch.zhaw.jroute.routedata;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -14,12 +15,10 @@ public class TestingBoxHandler {
 
 		APIConnector connector = new APIConnector();
 		BoxHandler box = new BoxHandler(connector);
-		// BoxHandlerWaypoints box = new BoxHandlerWaypoints(connector);
-		// BoxHandlerNew box = new BoxHandlerNew(connector);
 
 		try {
 			List<Way> ways = box.getAllWays(-85.43076, 34.90578, -85.00613,
-					34.91437,null);
+					34.91437, new ArrayList<String>());
 
 			for (Way way : ways) {
 				logger.debug("--------");

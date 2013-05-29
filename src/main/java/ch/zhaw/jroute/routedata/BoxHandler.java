@@ -49,7 +49,6 @@ import com.ximpleware.VTDNav;
 public class BoxHandler implements IBoxHandler {
 	private static Logger logger = Logger.getLogger("org.apache.log4j");
 	private IAPIConnector apiConnector;
-	private List<String> streetFilterList;
 	private List<Way> effectiveWayList;
 	private Map<Long, Waypoint> allWaypoints;
 	private Map<Long, Way> allWays;
@@ -67,7 +66,7 @@ public class BoxHandler implements IBoxHandler {
 	 */
 	@Override
 	public List<Way> getAllWays(double left, double bottom, double right,
-			double top,List<String> filterList) throws IOException {
+			double top, List<String> filterList) throws IOException {
 		openStreetMapBoxURL = configHandler.getConfig("OPENSTREETMAPBOXURL");
 
 		double base = 10.0;
@@ -75,7 +74,6 @@ public class BoxHandler implements IBoxHandler {
 		double powerSek = Math.pow(base, potenz);
 
 		// initialize the worker lists
-		streetFilterList = new ArrayList<String>();
 		allWaypoints = new HashMap<Long, Waypoint>();
 		allWays = new HashMap<Long, Way>();
 
@@ -85,18 +83,9 @@ public class BoxHandler implements IBoxHandler {
 		// check for correct coordinates
 		checkLatitudeCoordinates(bottom, top);
 		checkLongitudeCoordinates(left, right);
-		
-		for(String filter : filterList){
-			addNewStreetFilter(filter);
-		}
 
-		// set street filter (manually)
-		// addNewStreetFilter("motorway");
-		// addNewStreetFilter("tertiary");
-		// addNewStreetFilter("residential");
-
-		// use filter
-		String filterForURL = createFilterForURL();
+		// create and set filter
+		String filterForURL = createFilterForURL(filterList);
 
 		// create url
 		URL boxURL;
@@ -172,7 +161,6 @@ public class BoxHandler implements IBoxHandler {
 		// counting ways and waypoints for debugging
 		int matchedWaySize = matchingWayList.size();
 		int effecticeWaySize = effectiveWayList.size();
-		int filterSize = streetFilterList.size();
 
 		// stop timer for connection
 		long endMethodTime = System.nanoTime();
@@ -188,7 +176,7 @@ public class BoxHandler implements IBoxHandler {
 		logger.debug("total ways matched: " + matchedWaySize);
 		logger.debug("total effective ways: " + effecticeWaySize);
 		logger.debug("total waypoints matched: " + allWaypoints.size());
-		logger.debug("filter size: " + filterSize);
+		logger.debug("filter size: " + filterList.size());
 
 		List<Way> resultWayList = new ArrayList<Way>();
 		resultWayList.addAll(effectiveWayList);
@@ -272,7 +260,6 @@ public class BoxHandler implements IBoxHandler {
 	 * clean up the lists for the gui for more queries
 	 */
 	private void cleanUpForGui() {
-		streetFilterList.clear();
 		effectiveWayList.clear();
 		allWaypoints.clear();
 		allWays.clear();
@@ -281,30 +268,27 @@ public class BoxHandler implements IBoxHandler {
 	/**
 	 * create the url for the api-call with the correct filterlist
 	 * 
+	 * @param filterList
+	 * 
 	 * @return String
 	 */
-	private String createFilterForURL() {
+	private String createFilterForURL(List<String> filterList) {
 		String filterURL = null;
-		for (String filter : streetFilterList) {
+
+		if (filterList.isEmpty()) {
+			filterURL = "*";
+			return filterURL;
+		}
+
+		for (String filter : filterList) {
 			if (filterURL == null) {
 				filterURL = filter;
 			} else {
 				filterURL = filterURL + "|" + filter;
 			}
 		}
-		if (filterURL == null) {
-			filterURL = "*";
-		}
-		return filterURL;
-	}
 
-	/**
-	 * adding an additional filter-value for the streets
-	 * 
-	 * @param filter
-	 */
-	private void addNewStreetFilter(String filter) {
-		streetFilterList.add(filter);
+		return filterURL;
 	}
 
 	/**
