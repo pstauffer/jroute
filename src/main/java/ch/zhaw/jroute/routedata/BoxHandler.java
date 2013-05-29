@@ -422,9 +422,7 @@ public class BoxHandler implements IBoxHandler {
 			int index = allWaypoint.indexOf(waypoint);
 			tm.put(index, waypoint);
 		}
-		List<Waypoint> returnList = new ArrayList<Waypoint>(tm.values());
-		return returnList;
-
+		return new ArrayList<Waypoint>(tm.values());
 	}
 
 	/**
@@ -523,14 +521,13 @@ public class BoxHandler implements IBoxHandler {
 
 		double lon = Double.parseDouble(configHandler
 				.getConfig("LIMITLONGITUDE"));
+		String message = "longitude must be between -" + lon + " and " + lon;
 
 		if (left > lon || left < -lon) {
-			throw new IllegalArgumentException(
-					"left longitude must be between -" + lon + " and " + lon);
+			throw new IllegalArgumentException("left " + message);
 		}
 		if (right > lon || right < -lon) {
-			throw new IllegalArgumentException(
-					"right longitude must be between -" + lon + " and " + lon);
+			throw new IllegalArgumentException("right " + message);
 		}
 		if (left > right) {
 			throw new IllegalArgumentException(
@@ -550,14 +547,13 @@ public class BoxHandler implements IBoxHandler {
 
 		double lat = Double.parseDouble(configHandler
 				.getConfig("LIMITLATITUDE"));
+		String message = "latitude must be between -" + lat + " and " + lat;
 
 		if (top > lat || top < -lat) {
-			throw new IllegalArgumentException("top latitude must be between -"
-					+ lat + " and " + lat);
+			throw new IllegalArgumentException("top " + message);
 		}
 		if (bottom > lat || bottom < -lat) {
-			throw new IllegalArgumentException(
-					"bottom latitude must be between -" + lat + " and " + lat);
+			throw new IllegalArgumentException("bottom " + message);
 		}
 		if (bottom > top) {
 			throw new IllegalArgumentException(
