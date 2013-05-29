@@ -10,3 +10,4 @@ target/classes/jroute.properties
 target
 .project
 .classpath
+.settings/
