@@ -482,13 +482,9 @@ public class BoxHandler implements IBoxHandler {
 				way.setStatus(WayStatusEnum.undefined);
 
 				vn.toElement(VTDNav.FIRST_CHILD, "nd");
-				int wpIdPos = vn.getAttrVal("ref");
-				long wpId = Long.parseLong(vn.toString(wpIdPos));
-				allWaypoints.get(wpId).addWay(way);
-				way.addWaypoint(allWaypoints.get(wpId));
 				do {
-					wpIdPos = vn.getAttrVal("ref");
-					wpId = Long.parseLong(vn.toString(wpIdPos));
+					int wpIdPos = vn.getAttrVal("ref");
+					long wpId = Long.parseLong(vn.toString(wpIdPos));
 					way.addWaypoint(allWaypoints.get(wpId));
 					allWaypoints.get(wpId).addWay(way);
 				} while (vn.toElement(VTDNav.NEXT_SIBLING, "nd"));
