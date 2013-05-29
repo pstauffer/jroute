@@ -83,13 +83,13 @@
     <dependency>
       <groupId>ch.jroute</groupId>
       <artifactId>worldwind</artifactId>
-      <version>0.6</version>
+      <version>1.0</version>
     </dependency>
 
     <dependency>
       <groupId>ch.jroute</groupId>
       <artifactId>worldwindx</artifactId>
-      <version>0.6</version>
+      <version>1.0</version>
     </dependency>
 
     <dependency>
