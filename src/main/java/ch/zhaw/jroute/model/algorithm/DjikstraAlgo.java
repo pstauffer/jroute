@@ -277,13 +277,25 @@ public class DjikstraAlgo implements IShortestPathAlgorithm {
 		return null;
 	}
 
-	/**
-	 * defines the comparator for the waypoint sort by distance
-	 */
+	// /**
+	// * defines the comparator for the waypoint sort by distance
+	// */
+	// private Comparator<Waypoint> sortByDistance = new Comparator<Waypoint>()
+	// {
+	// public int compare(Waypoint point1, Waypoint point2) {
+	// return (int) (point1.getDistanceToStart() - point2
+	// .getDistanceToStart());
+	// }
+	// };
+
+	/** * defines the comparator for the waypoint sort by distance */
 	private Comparator<Waypoint> sortByDistance = new Comparator<Waypoint>() {
 		public int compare(Waypoint point1, Waypoint point2) {
-			return (int) (point1.getDistanceToStart() - point2
-					.getDistanceToStart());
+			if (point1.getDistanceToStart() < point2.getDistanceToStart())
+				return -1;
+			if (point1.getDistanceToStart() > point2.getDistanceToStart())
+				return 1;
+			return 0;
 		}
 	};
 

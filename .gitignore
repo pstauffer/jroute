@@ -6,3 +6,6 @@
 *.ear
 *.DS_Store
 target/classes/jroute.properties
+.project
+.classpath
+target
