@@ -31,12 +31,26 @@ public class BoxHandlerTest {
 		testObject = new BoxHandler(apiConnector);
 		allWaysFromXML = testObject.getAllWays(0, 0, 0, 0);
 
-		way27776903 = allWaysFromXML.get(0);
-		way77618443 = allWaysFromXML.get(1);
-		way77618444 = allWaysFromXML.get(2);
-		way77618445 = allWaysFromXML.get(3);
-		way77618456 = allWaysFromXML.get(4);
-		way77618457 = allWaysFromXML.get(5);
+		for (Way way : allWaysFromXML) {
+			if (way.getWayID() == 27776903) {
+				way27776903 = way;
+			}
+			if (way.getWayID() == 77618443) {
+				way77618443 = way;
+			}
+			if (way.getWayID() == 77618444) {
+				way77618444 = way;
+			}
+			if (way.getWayID() == 77618445) {
+				way77618445 = way;
+			}
+			if (way.getWayID() == 77618456) {
+				way77618456 = way;
+			}
+			if (way.getWayID() == 77618457) {
+				way77618457 = way;
+			}
+		}
 
 	}
 
@@ -53,6 +67,7 @@ public class BoxHandlerTest {
 			count = count + way.getWaypointList().size();
 		}
 
+		System.out.println(count);
 		assertTrue(count == 15);
 	}
 
@@ -132,6 +147,7 @@ public class BoxHandlerTest {
 
 		List<Waypoint> wayList = way77618456.getWaypointList();
 
+		System.out.println(wayList.size());
 		assertTrue(wayList.get(0).getWaypointID() == 913315315);
 		assertTrue(wayList.get(1).getWaypointID() == 913315305);
 		assertTrue(wayList.get(2).getWaypointID() == 913315348);

@@ -30,13 +30,12 @@ public class BoxHandlerTestBig {
 	}
 
 	@Test
-	public void countWaypionts() {
+	public void countWaypoints() {
 		int count = 0;
 
 		for (Way way : allWaysFromXML) {
 			count = count + way.getWaypointList().size();
 		}
-
 		assertTrue(count == 3044);
 	}
 
