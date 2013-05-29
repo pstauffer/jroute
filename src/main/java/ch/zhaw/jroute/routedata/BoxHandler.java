@@ -23,6 +23,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 
+import ch.zhaw.jroute.config.ConfigHandler;
 import ch.zhaw.jroute.model.Way;
 import ch.zhaw.jroute.model.WayStatusEnum;
 import ch.zhaw.jroute.model.Waypoint;
@@ -47,12 +48,13 @@ import com.ximpleware.VTDNav;
  */
 public class BoxHandler implements IBoxHandler {
 	private static Logger logger = Logger.getLogger("org.apache.log4j");
-	private static final String openStreetMapBoxURL = "http://www.overpass-api.de/api/xapi?way[bbox=";
 	private IAPIConnector apiConnector;
 	private List<String> streetFilterList;
 	private List<Way> effectiveWayList;
 	private Map<Long, Waypoint> allWaypoints;
 	private Map<Long, Way> allWays;
+	private static ConfigHandler configHandler = new ConfigHandler();
+	private static String openStreetMapBoxURL;
 
 	public BoxHandler(IAPIConnector connector) {
 		this.apiConnector = connector;
@@ -66,6 +68,7 @@ public class BoxHandler implements IBoxHandler {
 	@Override
 	public List<Way> getAllWays(double left, double bottom, double right,
 			double top) throws IOException {
+		openStreetMapBoxURL = configHandler.getConfig("OPENSTREETMAPBOXURL");
 
 		double base = 10.0;
 		double potenz = 9.0;

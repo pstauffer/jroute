@@ -14,7 +14,6 @@ public class ConfigHandler {
 		try {
 			properties.load(new FileInputStream(
 					"src/main/resources/jroute.properties"));
-			System.out.println(properties.getProperty("openStreetMapBoxURL"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
