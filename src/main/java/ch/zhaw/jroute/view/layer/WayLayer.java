@@ -37,7 +37,7 @@ public class WayLayer extends RenderableLayer implements Observer {
 	private WorldWindow worldWindow;
 	private LengthMeasurer lenghtMeasurer = new LengthMeasurer();
 	private List<Way> shortestPathList = new ArrayList<Way>();
-	private boolean showWays = false;
+	private boolean showWays = true;
 
 	public WayLayer(WorldWindow worldWindow, AnnotationLayer wayAnnotationLayer) {
 		super();
