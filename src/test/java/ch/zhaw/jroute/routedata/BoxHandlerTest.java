@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -382,6 +383,20 @@ public class BoxHandlerTest {
 		assertFalse(end.equals(way.getWaypointList().get(0)));
 		assertFalse(start.getWaypointID() == 555555);
 		assertFalse(end.getWaypointID() == 4444444);
+	}
+
+	@Test
+	public void testExceptionWrongCoordinate() throws IOException {
+
+		try {
+			testObject.getAllWays(-222, 0, 0, 0);
+			testObject.getAllWays(0, -222, 0, 0);
+			testObject.getAllWays(0, 0, -222, 0);
+			testObject.getAllWays(0, 0, 0, -222);
+			testObject.getAllWays(-222, -222, -222, -222);
+			Assert.fail();
+		} catch (IllegalArgumentException e) {
+		}
 	}
 
 }
