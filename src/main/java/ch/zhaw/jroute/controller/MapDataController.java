@@ -10,13 +10,14 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import ch.zhaw.jroute.model.IWayBuilder;
-import ch.zhaw.jroute.model.IWaypointBuilder;
-import ch.zhaw.jroute.model.Way;
-import ch.zhaw.jroute.model.Waypoint;
+import ch.zhaw.jroute.controller.interfaces.IMapDataController;
+import ch.zhaw.jroute.model.businessObjects.Way;
+import ch.zhaw.jroute.model.businessObjects.Waypoint;
+import ch.zhaw.jroute.model.interfaces.IWayBuilder;
+import ch.zhaw.jroute.model.interfaces.IWaypointBuilder;
 import ch.zhaw.jroute.routedata.IBoxHandler;
 
-public class MapDataController {
+public class MapDataController implements IMapDataController {
 	
 	private IBoxHandler boxHandler;
 	private IWaypointBuilder waypointBuilder;
@@ -30,14 +31,14 @@ public class MapDataController {
 		this.wayBuilder = wayBuilder;
 	}	
 	
-	public void getDataForMapSection(double lon1, double lat1, double lon2, double lat2) throws IOException{
+	public void getDataForMapSection(double lon1, double lat1, double lon2, double lat2,List<String> filterList) throws IOException{
 			
 			double left = lon1;
 			double bottom = lat1;
 			double right = lon2;
 			double top =  lat2;
 		
-		List<Way> wayData = this.boxHandler.getAllWays(left, bottom, right, top);
+		List<Way> wayData = this.boxHandler.getAllWays(left, bottom, right, top,filterList);
 		
 		for(Way way : wayData){
 			

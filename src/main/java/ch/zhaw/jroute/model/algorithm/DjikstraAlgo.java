@@ -9,9 +9,9 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import ch.zhaw.jroute.model.Way;
-import ch.zhaw.jroute.model.WayStatusEnum;
-import ch.zhaw.jroute.model.Waypoint;
+import ch.zhaw.jroute.model.businessObjects.Way;
+import ch.zhaw.jroute.model.businessObjects.Waypoint;
+import ch.zhaw.jroute.model.util.WayStatusEnum;
 
 /**
  * DjikstraAlgo Class for run the djikstra algorithm and calculate the shortest

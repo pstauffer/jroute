@@ -9,6 +9,10 @@ import java.util.Observer;
 import org.junit.Before;
 import org.junit.Test;
 
+import ch.zhaw.jroute.model.businessObjects.Waypoint;
+import ch.zhaw.jroute.model.interfaces.IWaypointBuilder;
+import ch.zhaw.jroute.model.util.WaypointStatusEnum;
+
 public class WaypointBuilderTest {
 
 	private IWaypointBuilder builder;

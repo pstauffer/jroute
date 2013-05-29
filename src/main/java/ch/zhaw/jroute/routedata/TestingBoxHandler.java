@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import ch.zhaw.jroute.model.Way;
-import ch.zhaw.jroute.model.Waypoint;
+import ch.zhaw.jroute.model.businessObjects.Way;
+import ch.zhaw.jroute.model.businessObjects.Waypoint;
 
 public class TestingBoxHandler {
 	private static Logger logger = Logger.getLogger("org.apache.log4j");
@@ -19,7 +19,7 @@ public class TestingBoxHandler {
 
 		try {
 			List<Way> ways = box.getAllWays(-85.43076, 34.90578, -85.00613,
-					34.91437);
+					34.91437,null);
 
 			for (Way way : ways) {
 				logger.debug("--------");

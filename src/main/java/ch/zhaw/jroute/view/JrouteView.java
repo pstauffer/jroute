@@ -15,11 +15,12 @@ import gov.nasa.worldwind.util.measure.MeasureToolController;
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import ch.zhaw.jroute.controller.IWaypointController;
-import ch.zhaw.jroute.model.Waypoint;
+import ch.zhaw.jroute.controller.interfaces.IWaypointController;
+import ch.zhaw.jroute.model.businessObjects.Waypoint;
 import ch.zhaw.jroute.view.layer.OSMMapnikLayer;
 import ch.zhaw.jroute.view.layer.WayLayer;
 import ch.zhaw.jroute.view.layer.WaypointLayer;
@@ -196,6 +197,10 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 
 	public MeasureTool getDataArea() {
 		return measureTool;
+	}
+	
+	public List<String> getFilterList(){
+		return this.navigationPanel.getControlPanel().getSelectedFilter();	
 	}
 	
 	public void showException(String message){

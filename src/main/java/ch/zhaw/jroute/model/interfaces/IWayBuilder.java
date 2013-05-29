@@ -1,10 +1,13 @@
-package ch.zhaw.jroute.model;
+package ch.zhaw.jroute.model.interfaces;
 
 import gov.nasa.worldwind.geom.Position;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Observer;
+
+import ch.zhaw.jroute.model.businessObjects.Way;
+import ch.zhaw.jroute.model.businessObjects.Waypoint;
 
 public interface IWayBuilder {
 	public void registerObserver(Observer obs);

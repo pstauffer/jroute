@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import ch.zhaw.jroute.model.Way;
-import ch.zhaw.jroute.model.WayStatusEnum;
-import ch.zhaw.jroute.model.Waypoint;
+import ch.zhaw.jroute.model.businessObjects.Way;
+import ch.zhaw.jroute.model.businessObjects.Waypoint;
+import ch.zhaw.jroute.model.util.WayStatusEnum;
 
 import gov.nasa.worldwind.WorldWind;
 import gov.nasa.worldwind.WorldWindow;

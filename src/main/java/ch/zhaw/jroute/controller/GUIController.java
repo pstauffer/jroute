@@ -10,8 +10,12 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.List;
 
-import ch.zhaw.jroute.model.IWayBuilder;
-import ch.zhaw.jroute.model.IWaypointBuilder;
+import ch.zhaw.jroute.controller.interfaces.IAlgorithmController;
+import ch.zhaw.jroute.controller.interfaces.IMapDataController;
+import ch.zhaw.jroute.controller.interfaces.IWayController;
+import ch.zhaw.jroute.controller.interfaces.IWaypointController;
+import ch.zhaw.jroute.model.interfaces.IWayBuilder;
+import ch.zhaw.jroute.model.interfaces.IWaypointBuilder;
 import ch.zhaw.jroute.routedata.IBoxHandler;
 import ch.zhaw.jroute.view.JrouteView;
 
@@ -19,10 +23,10 @@ public class GUIController {
 
 	private JrouteView view;
 	
-	private WaypointController waypointController;
-	private WayController wayController;
-	private AlgorithmController algoController;
-	private MapDataController mapDataController;
+	private IWaypointController waypointController;
+	private IWayController wayController;
+	private IAlgorithmController algoController;
+	private IMapDataController mapDataController;
 
 	boolean armedWay = false;
 	boolean armedWaypoint = false;
@@ -118,7 +122,7 @@ public class GUIController {
 			}
 			
 			try {
-				mapDataController.getDataForMapSection(pos1.getLongitude().degrees,pos1.getLatitude().degrees,pos2.getLongitude().degrees,pos2.getLatitude().degrees);
+				mapDataController.getDataForMapSection(pos1.getLongitude().degrees,pos1.getLatitude().degrees,pos2.getLongitude().degrees,pos2.getLatitude().degrees,view.getFilterList());
 			} catch (IOException ex) {
 				//TODO: custom message at the moment because API has no exception messages
 				view.showException("Data import failed, please retry");

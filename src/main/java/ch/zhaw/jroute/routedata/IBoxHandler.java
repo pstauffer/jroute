@@ -3,7 +3,7 @@ package ch.zhaw.jroute.routedata;
 import java.io.IOException;
 import java.util.List;
 
-import ch.zhaw.jroute.model.Way;
+import ch.zhaw.jroute.model.businessObjects.Way;
 
 /**
  * BoxHandler Interface for API Calls to openstreetmap.org needed for getting
@@ -28,6 +28,6 @@ public interface IBoxHandler {
 	 *         latitude
 	 * @throws IOException 
 	 */
-	List<Way> getAllWays(double left, double bottom, double right, double top)
+	List<Way> getAllWays(double left, double bottom, double right, double top,List<String> filterList)
 			throws IOException;
 }

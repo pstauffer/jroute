@@ -4,6 +4,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -11,8 +12,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import ch.zhaw.jroute.model.Way;
-import ch.zhaw.jroute.model.Waypoint;
+import ch.zhaw.jroute.model.businessObjects.Way;
+import ch.zhaw.jroute.model.businessObjects.Waypoint;
 
 public class BoxHandlerTest {
 	private static Logger logger = Logger.getLogger("org.apache.log4j");
@@ -30,7 +31,7 @@ public class BoxHandlerTest {
 		logger.setLevel(org.apache.log4j.Level.INFO);
 		IAPIConnector apiConnector = new APIConnectorMockSmall();
 		testObject = new BoxHandler(apiConnector);
-		allWaysFromXML = testObject.getAllWays(0, 0, 0, 0);
+		allWaysFromXML = testObject.getAllWays(0, 0, 0, 0,new ArrayList<String>());
 
 		for (Way way : allWaysFromXML) {
 			if (way.getWayID() == 27776903) {
@@ -389,11 +390,11 @@ public class BoxHandlerTest {
 	public void testExceptionWrongCoordinate() throws IOException {
 
 		try {
-			testObject.getAllWays(-222, 0, 0, 0);
-			testObject.getAllWays(0, -222, 0, 0);
-			testObject.getAllWays(0, 0, -222, 0);
-			testObject.getAllWays(0, 0, 0, -222);
-			testObject.getAllWays(-222, -222, -222, -222);
+			testObject.getAllWays(-222, 0, 0, 0,new ArrayList<String>());
+			testObject.getAllWays(0, -222, 0, 0,new ArrayList<String>());
+			testObject.getAllWays(0, 0, -222, 0,new ArrayList<String>());
+			testObject.getAllWays(0, 0, 0, -222,new ArrayList<String>());
+			testObject.getAllWays(-222, -222, -222, -222,new ArrayList<String>());
 			Assert.fail();
 		} catch (IllegalArgumentException e) {
 		}

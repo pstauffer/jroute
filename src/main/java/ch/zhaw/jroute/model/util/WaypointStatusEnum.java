@@ -1,4 +1,4 @@
-package ch.zhaw.jroute.model;
+package ch.zhaw.jroute.model.util;
 
 public enum WaypointStatusEnum {
 	start,

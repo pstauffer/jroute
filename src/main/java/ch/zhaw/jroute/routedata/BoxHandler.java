@@ -24,9 +24,9 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 
 import ch.zhaw.jroute.config.ConfigHandler;
-import ch.zhaw.jroute.model.Way;
-import ch.zhaw.jroute.model.WayStatusEnum;
-import ch.zhaw.jroute.model.Waypoint;
+import ch.zhaw.jroute.model.businessObjects.Way;
+import ch.zhaw.jroute.model.businessObjects.Waypoint;
+import ch.zhaw.jroute.model.util.WayStatusEnum;
 
 import com.ximpleware.AutoPilot;
 import com.ximpleware.EOFException;
@@ -67,7 +67,7 @@ public class BoxHandler implements IBoxHandler {
 	 */
 	@Override
 	public List<Way> getAllWays(double left, double bottom, double right,
-			double top) throws IOException {
+			double top,List<String> filterList) throws IOException {
 		openStreetMapBoxURL = configHandler.getConfig("OPENSTREETMAPBOXURL");
 
 		double base = 10.0;
@@ -85,6 +85,10 @@ public class BoxHandler implements IBoxHandler {
 		// check for correct coordinates
 		checkLatitudeCoordinates(bottom, top);
 		checkLongitudeCoordinates(left, right);
+		
+		for(String filter : filterList){
+			addNewStreetFilter(filter);
+		}
 
 		// set street filter (manually)
 		// addNewStreetFilter("motorway");

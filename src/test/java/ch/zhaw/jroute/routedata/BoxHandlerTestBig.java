@@ -2,13 +2,14 @@ package ch.zhaw.jroute.routedata;
 
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
-import ch.zhaw.jroute.model.Way;
+import ch.zhaw.jroute.model.businessObjects.Way;
 
 public class BoxHandlerTestBig {
 	private static Logger logger = Logger.getLogger("org.apache.log4j");
@@ -20,7 +21,7 @@ public class BoxHandlerTestBig {
 		logger.setLevel(org.apache.log4j.Level.INFO);
 		IAPIConnector apiConnector = new APIConnectorMockBig();
 		testObject = new BoxHandler(apiConnector);
-		allWaysFromXML = testObject.getAllWays(0, 0, 0, 0);
+		allWaysFromXML = testObject.getAllWays(0, 0, 0, 0,new ArrayList<String>());
 
 	}
 

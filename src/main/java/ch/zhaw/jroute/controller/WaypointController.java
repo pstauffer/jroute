@@ -8,10 +8,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import gov.nasa.worldwind.geom.Position;
-import ch.zhaw.jroute.model.IWaypointBuilder;
-import ch.zhaw.jroute.model.Waypoint;
+import ch.zhaw.jroute.controller.interfaces.IWayController;
+import ch.zhaw.jroute.controller.interfaces.IWaypointController;
 import ch.zhaw.jroute.model.WaypointBuilder;
-import ch.zhaw.jroute.model.WaypointStatusEnum;
+import ch.zhaw.jroute.model.businessObjects.Waypoint;
+import ch.zhaw.jroute.model.interfaces.IWaypointBuilder;
+import ch.zhaw.jroute.model.util.WaypointStatusEnum;
 import ch.zhaw.jroute.view.JrouteView;
 import ch.zhaw.jroute.view.layer.WaypointLayer;
 

@@ -6,6 +6,10 @@ import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
+import ch.zhaw.jroute.model.businessObjects.Waypoint;
+import ch.zhaw.jroute.model.interfaces.IWaypointBuilder;
+import ch.zhaw.jroute.model.util.WaypointStatusEnum;
+
 public class WaypointBuilder extends Observable implements IWaypointBuilder {
 
 	private HashMap<Long, Waypoint> waypointList = new HashMap<Long, Waypoint>();

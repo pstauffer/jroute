@@ -4,10 +4,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.zhaw.jroute.model.IWayBuilder;
-import ch.zhaw.jroute.model.IWaypointBuilder;
+import ch.zhaw.jroute.controller.interfaces.IAlgorithmController;
 import ch.zhaw.jroute.model.algorithm.DjikstraAlgo;
-import ch.zhaw.jroute.model.Way;
+import ch.zhaw.jroute.model.businessObjects.Way;
+import ch.zhaw.jroute.model.interfaces.IWayBuilder;
+import ch.zhaw.jroute.model.interfaces.IWaypointBuilder;
 import ch.zhaw.jroute.view.JrouteView;
 
 public class AlgorithmController implements IAlgorithmController {

@@ -11,9 +11,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import ch.zhaw.jroute.model.Way;
-import ch.zhaw.jroute.model.WayStatusEnum;
-import ch.zhaw.jroute.model.Waypoint;
+import ch.zhaw.jroute.model.businessObjects.Way;
+import ch.zhaw.jroute.model.businessObjects.Waypoint;
+import ch.zhaw.jroute.model.util.WayStatusEnum;
 
 public class DjikstraAlgoTest {
 	private static Logger logger = Logger.getLogger("org.apache.log4j");

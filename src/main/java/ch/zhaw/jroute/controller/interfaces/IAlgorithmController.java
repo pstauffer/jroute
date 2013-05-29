@@ -1,4 +1,4 @@
-package ch.zhaw.jroute.controller;
+package ch.zhaw.jroute.controller.interfaces;
 
 import java.io.IOException;
 

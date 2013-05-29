@@ -2,8 +2,8 @@ package ch.zhaw.jroute.model.algorithm;
 
 import java.util.List;
 
-import ch.zhaw.jroute.model.Way;
-import ch.zhaw.jroute.model.Waypoint;
+import ch.zhaw.jroute.model.businessObjects.Way;
+import ch.zhaw.jroute.model.businessObjects.Waypoint;
 
 /**
  * DjikstraAlgo Interface for run the djikstra algorithm and calculate the

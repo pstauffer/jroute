@@ -1,10 +1,12 @@
-package ch.zhaw.jroute.model;
+package ch.zhaw.jroute.model.businessObjects;
 
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.render.SurfaceCircle;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import ch.zhaw.jroute.model.util.WaypointStatusEnum;
 
 public class Waypoint extends SurfaceCircle {
 	private long waypointID;

@@ -10,6 +10,11 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
+import ch.zhaw.jroute.model.businessObjects.Way;
+import ch.zhaw.jroute.model.businessObjects.Waypoint;
+import ch.zhaw.jroute.model.interfaces.IWayBuilder;
+import ch.zhaw.jroute.model.util.WayStatusEnum;
+
 public class WayBuilder extends Observable implements IWayBuilder {
 	
 	Map<Integer, Way> allWays = new HashMap<Integer, Way>();

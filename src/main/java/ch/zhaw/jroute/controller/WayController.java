@@ -10,9 +10,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import ch.zhaw.jroute.model.IWayBuilder;
+import ch.zhaw.jroute.controller.interfaces.IWayController;
 import ch.zhaw.jroute.model.WayBuilder;
-import ch.zhaw.jroute.model.Waypoint;
+import ch.zhaw.jroute.model.businessObjects.Waypoint;
+import ch.zhaw.jroute.model.interfaces.IWayBuilder;
 import ch.zhaw.jroute.view.JrouteView;
 
 public class WayController implements IWayController{

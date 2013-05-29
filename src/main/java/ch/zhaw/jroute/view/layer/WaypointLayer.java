@@ -7,7 +7,7 @@ import java.awt.Point;
 import java.util.Observable;
 import java.util.Observer;
 
-import ch.zhaw.jroute.model.Waypoint;
+import ch.zhaw.jroute.model.businessObjects.Waypoint;
 
 import gov.nasa.worldwind.WorldWind;
 import gov.nasa.worldwind.avlist.AVKey;

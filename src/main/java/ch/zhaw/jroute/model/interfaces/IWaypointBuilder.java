@@ -1,9 +1,12 @@
-package ch.zhaw.jroute.model;
+package ch.zhaw.jroute.model.interfaces;
 
 import gov.nasa.worldwind.geom.Position;
 
 import java.util.HashMap;
 import java.util.Observer;
+
+import ch.zhaw.jroute.model.businessObjects.Waypoint;
+import ch.zhaw.jroute.model.util.WaypointStatusEnum;
 
 public interface IWaypointBuilder {
 

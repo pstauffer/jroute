@@ -21,8 +21,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import ch.zhaw.jroute.model.Way;
-import ch.zhaw.jroute.model.Waypoint;
+import ch.zhaw.jroute.model.businessObjects.Way;
+import ch.zhaw.jroute.model.businessObjects.Waypoint;
 import ch.zhaw.jroute.routedata.IBoxHandler;
 
 /**
