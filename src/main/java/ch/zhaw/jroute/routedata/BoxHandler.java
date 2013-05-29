@@ -47,7 +47,7 @@ import com.ximpleware.VTDNav;
  */
 public class BoxHandler implements IBoxHandler {
 	private static Logger logger = Logger.getLogger("org.apache.log4j");
-	private final String openStreetMapBoxURL = "http://www.overpass-api.de/api/xapi?way[bbox=";
+	private static final String openStreetMapBoxURL = "http://www.overpass-api.de/api/xapi?way[bbox=";
 	private IAPIConnector apiConnector;
 	private List<String> streetFilterList;
 	private List<Way> effectiveWayList;
@@ -67,7 +67,9 @@ public class BoxHandler implements IBoxHandler {
 	public List<Way> getAllWays(double left, double bottom, double right,
 			double top) throws IOException {
 
-		double powerSek = Math.pow(10.0, 9.0);
+		double base = 10.0;
+		double potenz = 9.0;
+		double powerSek = Math.pow(base, potenz);
 
 		// initialize the worker lists
 		streetFilterList = new ArrayList<String>();
@@ -188,7 +190,7 @@ public class BoxHandler implements IBoxHandler {
 		cleanUpForGui();
 		matchingWayList.clear();
 
-		// return wayList;
+		// give waylist back
 		return resultWayList;
 	}
 
