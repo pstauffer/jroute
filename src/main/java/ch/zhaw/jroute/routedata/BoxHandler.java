@@ -347,8 +347,7 @@ public class BoxHandler implements IBoxHandler {
 				}
 
 				newWay.setWayID(generatedKey);
-				newWay.setName(String.valueOf(way.getWayID()) + "Part" + start
-						+ "-" + end);
+				newWay.setName(way.getWayID() + "Part" + start + "-" + end);
 				Waypoint startPoint = newWaypoints.get(0);
 				Waypoint endPoint = waypoint;
 
@@ -367,8 +366,7 @@ public class BoxHandler implements IBoxHandler {
 						way.getWaypointList());
 				Way newWay = new Way();
 				newWay.setStatus(WayStatusEnum.undefined);
-				newWay.setName(String.valueOf(way.getWayID()) + "Part" + start
-						+ "-" + end);
+				newWay.setName(way.getWayID() + "Part" + start + "-" + end);
 
 				while (allWays.containsKey(generatedKey)) {
 					generatedKey++;
@@ -522,13 +520,17 @@ public class BoxHandler implements IBoxHandler {
 	 * @throws IllegalArgumentException
 	 */
 	private void checkLongitudeCoordinates(double left, double right) {
-		if (left > 90 || left < -90) {
+
+		double lon = Double.parseDouble(configHandler
+				.getConfig("LIMITLONGITUDE"));
+
+		if (left > lon || left < -lon) {
 			throw new IllegalArgumentException(
-					"left longitude must be between -90 and 90");
+					"left longitude must be between -" + lon + " and " + lon);
 		}
-		if (right > 90 || right < -90) {
+		if (right > lon || right < -lon) {
 			throw new IllegalArgumentException(
-					"right longitude must be between -90 and 90");
+					"right longitude must be between -" + lon + " and " + lon);
 		}
 		if (left > right) {
 			throw new IllegalArgumentException(
@@ -545,13 +547,17 @@ public class BoxHandler implements IBoxHandler {
 	 * @throws IllegalArgumentException
 	 */
 	private void checkLatitudeCoordinates(double bottom, double top) {
-		if (top > 180 || top < -180) {
-			throw new IllegalArgumentException(
-					"top latitude must be between -180 and 180");
+
+		double lat = Double.parseDouble(configHandler
+				.getConfig("LIMITLATITUDE"));
+
+		if (top > lat || top < -lat) {
+			throw new IllegalArgumentException("top latitude must be between -"
+					+ lat + " and " + lat);
 		}
-		if (bottom > 180 || bottom < -180) {
+		if (bottom > lat || bottom < -lat) {
 			throw new IllegalArgumentException(
-					"bottom latitude must be between -180 and 180");
+					"bottom latitude must be between -" + lat + " and " + lat);
 		}
 		if (bottom > top) {
 			throw new IllegalArgumentException(
