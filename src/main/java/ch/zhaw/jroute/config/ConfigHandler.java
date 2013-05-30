@@ -1,9 +1,7 @@
 package ch.zhaw.jroute.config;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class ConfigHandler {
@@ -11,14 +9,18 @@ public class ConfigHandler {
 
 	public ConfigHandler() {
 		properties = new Properties();
+		InputStream inputStream = this.getClass().getClassLoader()
+				.getResourceAsStream("jroute.properties");
+
+		if (inputStream == null) {
+			throw new RuntimeException("property file jroute.properties"
+					+ "' not found in the classpath");
+		}
 
 		try {
-			String configFile = new File("src/main/resources/jroute.properties")
-					.getAbsolutePath();
-			properties.load(new FileInputStream(configFile));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			properties.load(inputStream);
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
