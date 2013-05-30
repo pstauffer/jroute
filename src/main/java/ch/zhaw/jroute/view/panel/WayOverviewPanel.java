@@ -9,7 +9,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.TitledBorder;
 
 /**
- * Class which represent the panel where all connectors are shown
+ * this panel represent als gui elements to control the static ways
  * @author yk
  */
 public class WayOverviewPanel extends JPanel{
@@ -18,7 +18,7 @@ public class WayOverviewPanel extends JPanel{
 	private JButton stopCreatingWayButton;
 	
 	/**
-	 * 
+	 * Constructor to create the GridLayout
 	 */
 	public WayOverviewPanel(){
 		super(new GridLayout());
@@ -26,6 +26,9 @@ public class WayOverviewPanel extends JPanel{
 		createPanel();
 	}
 	
+	/**
+	 * creates the actual panel with the border
+	 */
 	public void createPanel(){
 		
 		//Create border around panel
@@ -33,6 +36,9 @@ public class WayOverviewPanel extends JPanel{
 		createButtons();
 	}
 	
+	/**
+	 * creates the buttons in the panel
+	 */
 	public void createButtons(){
 		createWayButton = new JButton("Create");
 		stopCreatingWayButton = new JButton("Stop");
@@ -41,10 +47,16 @@ public class WayOverviewPanel extends JPanel{
 		add(stopCreatingWayButton);
 	}
 	
-	public JButton getCreateConnectorButton() {
+	/**
+	 * @return the button to create a new Way
+	 */
+	public JButton getCreateWayButton() {
 		return createWayButton;
 	}
 
+	/**
+	 * @return the button to stop way creation
+	 */
 	public JButton getStopCreatingWayButton() {
 		return stopCreatingWayButton;
 	}
