@@ -1,12 +1,5 @@
 package ch.zhaw.jroute.view.layer;
 
-/*
-Copyright (C) 2001, 2009 United States Government
-as represented by the Administrator of the
-National Aeronautics and Space Administration.
-All Rights Reserved.
-*/
-
 import gov.nasa.worldwind.avlist.*;
 import gov.nasa.worldwind.geom.*;
 import gov.nasa.worldwind.layers.mercator.*;
@@ -14,6 +7,10 @@ import gov.nasa.worldwind.util.*;
 
 import java.net.*;
 
+/**
+ * Represent a layer which connects to openstreetmap and shows the maptiles
+ * @author yk
+ */
 public class OSMMapnikLayer extends BasicMercatorTiledImageLayer
 {
     public OSMMapnikLayer()
@@ -21,13 +18,20 @@ public class OSMMapnikLayer extends BasicMercatorTiledImageLayer
         super(makeLevels());
     }
 
+    /**
+     * Sets all config values to get the right data
+     * @return
+     */
     private static LevelSet makeLevels()
     {
         AVList params = new AVListImpl();
-
+        // width of map tile
         params.setValue(AVKey.TILE_WIDTH, 256);
+        // height of map tile
         params.setValue(AVKey.TILE_HEIGHT, 256);
+        // part of the mapserver name
         params.setValue(AVKey.DATA_CACHE_NAME, "Earth/OSM-Mercator/OpenStreetMap Mapnik");
+        // other part of the mapserver
         params.setValue(AVKey.SERVICE, "http://a.tile.openstreetmap.org/");
         params.setValue(AVKey.DATASET_NAME, "h");
         params.setValue(AVKey.FORMAT_SUFFIX, ".png");
@@ -41,6 +45,11 @@ public class OSMMapnikLayer extends BasicMercatorTiledImageLayer
         return new LevelSet(params);
     }
 
+    /**
+     * Constructs the url to get the right data from the mapserver
+     * @author yk
+     *
+     */
     private static class URLBuilder implements TileUrlBuilder
     {
         public URL getURL(Tile tile, String imageFormat)

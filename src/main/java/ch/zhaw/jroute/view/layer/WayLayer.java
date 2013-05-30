@@ -10,8 +10,9 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.apache.log4j.Logger;
+
 import ch.zhaw.jroute.model.businessObjects.Way;
-import ch.zhaw.jroute.model.businessObjects.Waypoint;
 import ch.zhaw.jroute.model.util.WayStatusEnum;
 
 import gov.nasa.worldwind.WorldWind;
@@ -29,8 +30,13 @@ import gov.nasa.worldwind.render.Renderable;
 import gov.nasa.worldwind.render.ShapeAttributes;
 import gov.nasa.worldwind.util.measure.LengthMeasurer;
 
+/**
+ * Represents the layer on the worldwind globus which displays all the ways
+ * @author yk
+ */
 public class WayLayer extends RenderableLayer implements Observer {
 
+	private static Logger logger = Logger.getLogger("org.apache.log4j");
 	private Way currentWay;
 	private AnnotationLayer wayAnnotationLayer;
 	private AnnotationAttributes annotationStyle;
@@ -39,22 +45,36 @@ public class WayLayer extends RenderableLayer implements Observer {
 	private List<Way> shortestPathList = new ArrayList<Way>();
 	private boolean showWays = true;
 
+	/**
+	 * Constructor
+	 * @param worldWindow parent main frame
+	 * @param wayAnnotationLayer to annotate the ways and display them
+	 */
 	public WayLayer(WorldWindow worldWindow, AnnotationLayer wayAnnotationLayer) {
 		super();
-		this.setAnnotationAttributes();
+		setAnnotationAttributes();
 
 		this.worldWindow = worldWindow;
 		this.wayAnnotationLayer = wayAnnotationLayer;
 		
 	}
 
+	/**
+	 * Creates the basic design for a way
+	 * @param color Color of the Way
+	 * @return Basic style of the way renderable
+	 */
 	private ShapeAttributes getShapeStyle(Color color) {
 		ShapeAttributes shapeStyle = new BasicShapeAttributes();
 		shapeStyle.setOutlineMaterial(new Material(color));
 		shapeStyle.setOutlineWidth(2d);
 		return shapeStyle;
 	}
-
+	
+	/**
+	 * Sets the style of the annotation which is added to each way
+	 * if it is configured
+	 */
 	private void setAnnotationAttributes() {
 		AnnotationAttributes defaultAttributes = new AnnotationAttributes();
 		defaultAttributes.setCornerRadius(10);
@@ -78,14 +98,35 @@ public class WayLayer extends RenderableLayer implements Observer {
 		// geoAttr.setEffect(AVKey.TEXT_EFFECT_OUTLINE); // Black outline
 		annotationStyle.setBackgroundColor(Color.BLACK);
 	}
-
+	
+	/**
+	 * Sets the basics attribute every way needs
+	 * @param way which needs the attributes
+	 * @return the updated way
+	 */
+	private Way addBasicAttributes(Way way){
+		way.setFollowTerrain(true);
+		way.setVisible(true);
+		way.setValue("SURFACE_PATH_DEPTH_OFFSET",0.50);
+		way.setAltitudeMode(WorldWind.CLAMP_TO_GROUND);
+		way.setPathType(AVKey.LINEAR);
+		return way;
+	}
+	
+	/**
+	 * this method is called a dataupdate was made from the model
+	 * its the main part to add and update ways in the layer
+	 */
 	public void update(Observable arg0, Object arg1) {
 		
 		//This handles if the layer is updated with the results of the dijkstra
 		if (arg1 instanceof List<?>) {
+			@SuppressWarnings("unchecked")
+			List<Way> resultList = (List<Way>) arg1;
+			Iterable<Renderable> allRenderables = this.getRenderables();
+			// it is possible to hide the ways between the waypoints for better perfomance
 			if(showWays){
-				List<Way> resultList = (List<Way>) arg1;
-				Iterable<Renderable> allRenderables = this.getRenderables();
+				// Check all ways for existing ones
 				for (Way resultWay : resultList) {
 					if (resultWay.getStatus() == WayStatusEnum.result) {
 						for (Renderable temp : allRenderables) {
@@ -95,11 +136,7 @@ public class WayLayer extends RenderableLayer implements Observer {
 								this.removeRenderable(existingWay);
 	
 								resultWay = handleExistingWay(resultWay);
-								resultWay.setFollowTerrain(true);
-								resultWay.setVisible(true);
-								resultWay.setValue("SURFACE_PATH_DEPTH_OFFSET",0.50);
-								resultWay.setAltitudeMode(WorldWind.CLAMP_TO_GROUND);
-								resultWay.setPathType(AVKey.LINEAR);
+								resultWay = addBasicAttributes(resultWay);
 								shortestPathList.add(resultWay);
 								this.addRenderable(resultWay);
 							}
@@ -107,15 +144,9 @@ public class WayLayer extends RenderableLayer implements Observer {
 					}
 				}
 			}else{
-				List<Way> resultList = (List<Way>) arg1;
-				Iterable<Renderable> allRenderables = this.getRenderables();
 				for (Way resultWay : resultList) {
-					resultWay.setAttributes(getShapeStyle(Color.GREEN));
-					resultWay.setFollowTerrain(true);
-					resultWay.setVisible(true);
-					resultWay.setValue("SURFACE_PATH_DEPTH_OFFSET",0.50);
-					resultWay.setAltitudeMode(WorldWind.CLAMP_TO_GROUND);
-					resultWay.setPathType(AVKey.LINEAR);
+					resultWay = handleExistingWay(resultWay);
+					resultWay = addBasicAttributes(resultWay);
 					shortestPathList.add(resultWay);
 					this.addRenderable(resultWay);
 				}
@@ -128,19 +159,14 @@ public class WayLayer extends RenderableLayer implements Observer {
 				currentWay = (Way) arg1;
 				
 				if(currentWay.getStart()==null || currentWay.getEnd()==null){
-					
+					logger.debug("found way with no start or endpoint");
 				}else{
 					currentWay.setDistance(calculateDistance(currentWay.getStart().getReferencePosition(),currentWay.getEnd().getReferencePosition()));
 				}
 				currentWay.setAttributes(getShapeStyle(Color.BLACK));
-				currentWay.setFollowTerrain(true);
-				currentWay.setVisible(true);
-				currentWay.setValue("SURFACE_PATH_DEPTH_OFFSET",0.50);
-				currentWay.setAltitudeMode(WorldWind.CLAMP_TO_GROUND);
-				currentWay.setPathType(AVKey.LINEAR);
+				currentWay = addBasicAttributes(currentWay);
 				this.addRenderable(currentWay);
 				//addAnnotation(currentWay);
-				// this.wwd.redraw();
 			}
 		//Updates the current way with a new position
 		} else if (arg1 instanceof Position) {
@@ -156,6 +182,11 @@ public class WayLayer extends RenderableLayer implements Observer {
 		this.worldWindow.redraw();
 	}
 
+	/**
+	 * adds a new color after his status to an existing way
+	 * @param way which already exists
+	 * @return new colored way
+	 */
 	private Way handleExistingWay(Way way) {
 		switch (way.getStatus()) {
 		case undefined:
@@ -174,6 +205,10 @@ public class WayLayer extends RenderableLayer implements Observer {
 		return way;
 	}
 	
+	/**
+	 * removes the highlighting from the layer
+	 * this means the shortest path is not visible anymore
+	 */
 	public void cleanUpAlgoPath(){
 		if(!shortestPathList.isEmpty()){
 			for(Way way: shortestPathList){
@@ -192,25 +227,36 @@ public class WayLayer extends RenderableLayer implements Observer {
 		}
 	}
 	
+	/**
+	 * removes all ways from the layer
+	 */
 	public void cleanLayer(){
 		this.removeAllRenderables();
 		shortestPathList.clear();
 		currentWay = null;
 	}
 
+	/**
+	 * adds a label the way which describes the length
+	 * @param newWay way to add an annotation
+	 */
 	private void addAnnotation(Way newWay) {
 		double meters = (double) Math
 				.round((newWay.getDistance() / 1000) * 100) / 100;
 		Position middle = calcMiddle(newWay.getStart().getReferencePosition(),
 				newWay.getEnd().getReferencePosition());
-		//GlobeAnnotation anno = new GlobeAnnotation(Double.toString(meters),
-		//		middle, this.annotationStyle);
-		GlobeAnnotation anno = new GlobeAnnotation(String.valueOf(newWay.getDistance()),
+		GlobeAnnotation anno = new GlobeAnnotation(String.valueOf(meters),
 				middle, this.annotationStyle);
 		anno.setAltitudeMode(WorldWind.CLAMP_TO_GROUND);
 		wayAnnotationLayer.addAnnotation(anno);
 	}
 
+	/**
+	 * calculates the middle between to positions
+	 * @param pos1
+	 * @param pos2
+	 * @return the position in the mittle
+	 */
 	private Position calcMiddle(Position pos1, Position pos2) {
 
 		Angle newLatitude = Angle
@@ -223,6 +269,12 @@ public class WayLayer extends RenderableLayer implements Observer {
 		return new Position(newLatitude, newLongitude, height);
 	}
 	
+	/**
+	 * Calculates the distance from a way with waypoints
+	 * @param start of the way
+	 * @param end of tway
+	 * @return the distance
+	 */
 	public double calculateDistance(Position start, Position end) {
 		ArrayList<Position> tempPos = new ArrayList<Position>();
 

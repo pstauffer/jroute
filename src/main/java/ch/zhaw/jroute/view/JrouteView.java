@@ -1,11 +1,9 @@
 package ch.zhaw.jroute.view;
 
-import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.layers.AnnotationLayer;
 import gov.nasa.worldwind.layers.Layer;
 import gov.nasa.worldwind.layers.LayerList;
-import gov.nasa.worldwind.layers.MarkerLayer;
 import gov.nasa.worldwind.pick.PickedObject;
 import gov.nasa.worldwind.pick.PickedObjectList;
 import gov.nasa.worldwind.util.measure.LengthMeasurer;
@@ -19,7 +17,6 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import ch.zhaw.jroute.controller.interfaces.IWaypointController;
 import ch.zhaw.jroute.model.businessObjects.Waypoint;
 import ch.zhaw.jroute.view.layer.OSMMapnikLayer;
 import ch.zhaw.jroute.view.layer.WayLayer;
@@ -27,6 +24,10 @@ import ch.zhaw.jroute.view.layer.WaypointLayer;
 import ch.zhaw.jroute.view.panel.SideNavigationPanel;
 import ch.zhaw.jroute.view.template.ApplicationTemplate;
 
+/**
+ * Main Window of jroute, contains the globe window and the control panels
+ * @author yk
+ */
 public class JrouteView extends ApplicationTemplate.AppFrame {
 
 	// Layers
@@ -36,14 +37,12 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 	private WaypointLayer waypointLayer;
 	private LengthMeasurer lenghtMeasurer = new LengthMeasurer();
 	private MeasureTool measureTool = new MeasureTool(this.getWwd());
-	private MeasureToolController measureController = new MeasureToolController();
-
-	// Controllers
-	private IWaypointController waypointController;
-
 	// Gui components
 	private SideNavigationPanel navigationPanel;
 
+	/**
+	 * Initializes the different layers, creates the control panel and adds it
+	 */
 	public JrouteView() {
 		super(true, false, false);
 		this.setSize(850, 800);
@@ -63,6 +62,9 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 
 	}
 
+	/**
+	 * this is used to create a measure tool from the worldwind sdk
+	 */
 	public void addMeasureTool() {
 		measureTool.setMeasureShapeType(MeasureTool.SHAPE_QUAD);
 		measureTool.setController(new MeasureToolController());
@@ -114,7 +116,7 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 	}
 
 	public void addWayActionListener(ActionListener listener) {
-		this.navigationPanel.getWayPanel().getCreateConnectorButton()
+		this.navigationPanel.getWayPanel().getCreateWayButton()
 				.addActionListener(listener);
 	}
 
@@ -163,6 +165,10 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 				.addActionListener(listener);
 	}
 
+	/**
+	 * returns all waypoints at a given position
+	 * @return found waypoints
+	 */
 	public Waypoint getWaypointAtPosition() {
 		PickedObjectList list = this.getWwd().getObjectsAtCurrentPosition();
 		Waypoint currentWaypoint = null;
@@ -176,7 +182,12 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 		return currentWaypoint;
 	}
 
-	// Maybe this is wrong position for this
+	/**
+	 * Calculates the distance between two points
+	 * @param start
+	 * @param end
+	 * @return the distance
+	 */
 	public double calculateDistance(Position start, Position end) {
 		ArrayList<Position> tempPos = new ArrayList<Position>();
 
@@ -187,22 +198,42 @@ public class JrouteView extends ApplicationTemplate.AppFrame {
 		return lenghtMeasurer.getLength(this.getWwd().getModel().getGlobe());
 	}
 	
+	/**
+	 * get the layer will all the waypoints in it
+	 * @return waypointLayer
+	 */
 	public WaypointLayer getWaypointLayer() {
 		return waypointLayer;
 	}
 
+	/**
+	 * get the layer will all the ways in it
+	 * @return wayLayer
+	 */
 	public WayLayer getWayLayer() {
 		return wayLayer;
 	}
 
+	/**
+	 * get the measure tool
+	 * @return measure tool
+	 */
 	public MeasureTool getDataArea() {
 		return measureTool;
 	}
 	
+	/**
+	 * get the filter list which is set in one of the control panels
+	 * @return
+	 */
 	public List<String> getFilterList(){
 		return this.navigationPanel.getControlPanel().getSelectedFilter();	
 	}
 	
+	/**
+	 * Show a specific exception in a dialog in front of the gui
+	 * @param message
+	 */
 	public void showException(String message){
 		JOptionPane.showMessageDialog(this,message,"Error", JOptionPane.ERROR_MESSAGE);
 	}

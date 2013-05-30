@@ -4,6 +4,4 @@ public enum WaypointStatusEnum {
 	start,
 	end,
 	undefined,
-	green,
-	red
 }

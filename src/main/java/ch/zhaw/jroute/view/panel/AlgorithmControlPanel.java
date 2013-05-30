@@ -8,17 +8,27 @@ import javax.swing.JPanel;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.TitledBorder;
 
+/**
+ * Panel whitch represent all gui items to controll the shortest path algorithm
+ * @author yk
+ */
 public class AlgorithmControlPanel extends JPanel {
 	
 	private JButton runAlgoButton;
 	private JButton cleanAlgoButton;
 	
+	/**
+	 * constructor call parent constructor with gridLayout
+	 */
 	public AlgorithmControlPanel(){
 		super(new GridLayout());
 		
 		this.createPanel();
 	}
 	
+	/**
+	 * creates the border in the panel and calls method creation method
+	 */
 	private void createPanel(){
 		
 		//Create border around panel
@@ -26,6 +36,9 @@ public class AlgorithmControlPanel extends JPanel {
 		this.createButtons();
 	}
 
+	/**
+	 * creates the actual buttons in the panel
+	 */
 	private void createButtons(){
 		runAlgoButton = new JButton("Get Path");
 		cleanAlgoButton = new JButton("Clean");
@@ -34,10 +47,18 @@ public class AlgorithmControlPanel extends JPanel {
 		this.add(cleanAlgoButton);
 	}
 
+	/**
+	 * returns the button to start the algorithm
+	 * @return button to start the algorithm
+	 */
 	public JButton getRunAlgoButton() {
 		return runAlgoButton;
 	}
-
+	
+	/**
+	 * returns the button to clean the result of the algorithm
+	 * @return button to clean the results
+	 */
 	public JButton getCleanAlgoButton() {
 		return cleanAlgoButton;
 	}

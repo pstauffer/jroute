@@ -1,17 +1,15 @@
 package ch.zhaw.jroute.view.panel;
 
-import java.awt.BorderLayout;
+import gov.nasa.worldwind.WorldWindow;
+
 import java.awt.Dimension;
 import java.awt.GridLayout;
-
-import gov.nasa.worldwind.WorldWindow;
 
 import javax.swing.JPanel;
 
 /**
- * 
+ * This panel represent a container for all sub panels
  * @author yk
- *
  */
 public class SideNavigationPanel extends JPanel{
 	
@@ -21,8 +19,12 @@ public class SideNavigationPanel extends JPanel{
 	private AlgorithmControlPanel algoControlPanel;
 	
 	/**
-	 * 
-	 * @param worldWindWindow
+	 * Constructor to initialize all sub panels 
+	 * - WaypointOverviewPanel: control the static waypoints
+	 * - WayOverviewPanel: control the static ways
+	 * - MapDataControlPanel: get data from the api and control it
+	 * - AlgorithmControlPanel: run the shortestpath algorithm
+	 * @param worldWindWindow the parent main window
 	 */
 	public SideNavigationPanel(WorldWindow worldWindWindow){
 		
@@ -41,18 +43,30 @@ public class SideNavigationPanel extends JPanel{
 		this.add(algoControlPanel);
 	}
 	
+	/**
+	 * @return the waypoint overview panel
+	 */
 	public WaypointOverviewPanel getWaypointPanel() {
 		return waypointPanel;
 	}
 
+	/**
+	 * @return the way overview panel
+	 */
 	public WayOverviewPanel getWayPanel() {
 		return wayPanel;
 	}
 	
+	/**
+	 * @return the map control panel
+	 */
 	public MapDataControlPanel getControlPanel(){
 		return controlPanel;
 	}
 
+	/**
+	 * @return the algorithm control panel
+	 */
 	public AlgorithmControlPanel getAlgoControlPanel() {
 		return algoControlPanel;
 	}

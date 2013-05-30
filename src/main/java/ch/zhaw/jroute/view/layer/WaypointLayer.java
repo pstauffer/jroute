@@ -1,14 +1,5 @@
 package ch.zhaw.jroute.view.layer;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Insets;
-import java.awt.Point;
-import java.util.Observable;
-import java.util.Observer;
-
-import ch.zhaw.jroute.model.businessObjects.Waypoint;
-
 import gov.nasa.worldwind.WorldWind;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.layers.AnnotationLayer;
@@ -18,51 +9,80 @@ import gov.nasa.worldwind.render.BasicShapeAttributes;
 import gov.nasa.worldwind.render.GlobeAnnotation;
 import gov.nasa.worldwind.render.Material;
 import gov.nasa.worldwind.render.Renderable;
-import gov.nasa.worldwind.render.ShapeAttributes;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Insets;
+import java.awt.Point;
+import java.util.Observable;
+import java.util.Observer;
+
+import ch.zhaw.jroute.model.businessObjects.Waypoint;
+import ch.zhaw.jroute.model.util.WaypointStatusEnum;
+
+/**
+ * Represents the layer which displays all waypoints on the worldwind globe
+ * @author yk
+ *
+ */
 public class WaypointLayer extends RenderableLayer implements Observer{
 
-	private ShapeAttributes shapeStyle;
 	private AnnotationAttributes annotationStyle;
 	private AnnotationLayer waypointAnnotationLayer;
-	int i = 0;
+	
 	public WaypointLayer(AnnotationLayer waypointAnnotationLayer){
 		super();
 		this.setAnnotationStyle();
 		this.waypointAnnotationLayer = waypointAnnotationLayer;
 	}
 	
+	/**
+	 * method which is called if the model is updated with new data
+	 * adds the actual waypoint to the layer
+	 */
 	public void update(Observable o, Object arg) {
 		Waypoint waypoint = (Waypoint)arg;
 		waypoint.setAttributes(getShapeStyle(Color.GRAY));
-		int i = 0;
 		
-		for(Renderable temp : this.getRenderables()){
-			Waypoint existingWp = (Waypoint)temp;
-			if(existingWp.getWaypointID() == waypoint.getWaypointID()){
-				this.removeRenderable(existingWp);
-				//Some crazy stuff happens
-				waypoint = handleExistingWaypoint(waypoint);
+		if(waypoint.getStatus()==WaypointStatusEnum.start||waypoint.getStatus()==WaypointStatusEnum.end){
+			//Check if the waypoint allready exists
+			for(Renderable temp : this.getRenderables()){
+				Waypoint existingWp = (Waypoint)temp;
+				if(existingWp.getWaypointID() == waypoint.getWaypointID()){
+					this.removeRenderable(existingWp);
+					waypoint = handleExistingWaypoint(waypoint);
+				}
 			}
 		}
 		
 		//addAnnotation(waypoint);
 		this.addRenderable(waypoint);
-		
-
 	}
 	
+	/**
+	 * removes all waypoints from the layer
+	 */
 	public void cleanLayer(){
 		this.removeAllRenderables();
 	}
 	
+	/**
+	 * Adds an annotation to the waypoint
+	 * unused at the moment because of missing config
+	 * @param waypoint the waypoint to add an annotation
+	 */
+	@SuppressWarnings("unused")
 	private void addAnnotation(Waypoint waypoint){
         GlobeAnnotation anno = new GlobeAnnotation(waypoint.getName(),waypoint.getReferencePosition(), this.annotationStyle);
         anno.setAltitudeMode(WorldWind.CLAMP_TO_GROUND);
         waypointAnnotationLayer.addAnnotation(anno);
 	}
 	
-	//TODO: UGLY REDOOOO!!!
+	/**
+	 * Defines the color of a waypoint with the status enum
+	 * @param waypoint to handle
+	 * @return colored waypoint
+	 */
 	private Waypoint handleExistingWaypoint(Waypoint waypoint){
 		switch(waypoint.getStatus()){
 		case undefined:
@@ -81,6 +101,11 @@ public class WaypointLayer extends RenderableLayer implements Observer{
 		return waypoint;
 	}
 	
+	/**
+	 * Creates the style attributes for a Waypoint
+	 * 
+	 * @return style attributes
+	 */
 	private BasicShapeAttributes getShapeStyle(Color color){
 		BasicShapeAttributes shapeStyle = new BasicShapeAttributes();
 		shapeStyle.setDrawOutline(true);
@@ -92,14 +117,10 @@ public class WaypointLayer extends RenderableLayer implements Observer{
 		shapeStyle.setDrawInterior(true);
 		return shapeStyle;
 	}
-
-	/**
-	 * Creates the style attributes for a Waypoint
-	 * 
-	 * @return style attributes
-	 */
-
 	
+	/**
+	 * Creates the style ot the annotation
+	 */
 	private void setAnnotationStyle(){
         annotationStyle = new AnnotationAttributes();
         annotationStyle.setAdjustWidthToText(AVKey.SIZE_FIT_TEXT);
