@@ -1,18 +1,12 @@
 package ch.zhaw.jroute.controller;
 
-import gov.nasa.worldwind.geom.Angle;
-import gov.nasa.worldwind.geom.LatLon;
-import gov.nasa.worldwind.geom.Position;
-
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 
 import ch.zhaw.jroute.controller.interfaces.IMapDataController;
 import ch.zhaw.jroute.model.businessObjects.Way;
-import ch.zhaw.jroute.model.businessObjects.Waypoint;
 import ch.zhaw.jroute.model.interfaces.IWayBuilder;
 import ch.zhaw.jroute.model.interfaces.IWaypointBuilder;
 import ch.zhaw.jroute.routedata.IBoxHandler;

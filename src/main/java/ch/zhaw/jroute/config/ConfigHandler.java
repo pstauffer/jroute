@@ -5,9 +5,11 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class ConfigHandler {
-	Properties properties;
+	
+	private Properties properties;
+	private static ConfigHandler _instance = null;
 
-	public ConfigHandler() {
+	private ConfigHandler() {
 		properties = new Properties();
 		InputStream inputStream = this.getClass().getClassLoader()
 				.getResourceAsStream("jroute.properties");
@@ -20,9 +22,16 @@ public class ConfigHandler {
 		try {
 			properties.load(inputStream);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
+	}
+	
+	public static ConfigHandler getInstance(){
+		if (_instance == null){
+			_instance = new ConfigHandler();
+		}
+		
+		return _instance;
 	}
 
 	public String getConfig(String key) {

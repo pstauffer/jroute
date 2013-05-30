@@ -8,6 +8,10 @@ import java.util.List;
 
 import ch.zhaw.jroute.model.util.WaypointStatusEnum;
 
+/**
+ * Represents a waypoint in jroute
+ * @author yk
+ */
 public class Waypoint extends SurfaceCircle {
 	private long waypointID;
 	private double lat;

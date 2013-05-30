@@ -11,21 +11,25 @@ import ch.zhaw.jroute.routedata.BoxHandler;
 import ch.zhaw.jroute.view.JrouteView;
 import ch.zhaw.jroute.view.template.ApplicationTemplate;
 
+/**
+ * Main class of jroute
+ * @author yk
+ *
+ */
 public class JrouteRunner {
 
 	/**
+	 * main method, sets the inital configuration of worldwind
+	 * and creates view, the model and the main controller
 	 * @param args
 	 */
 	public static void main(String[] args) {
 
-		// load config
-		ConfigHandler configHandler = new ConfigHandler();
-
-		float lat = Float.parseFloat(configHandler
+		float lat = Float.parseFloat(ConfigHandler.getInstance()
 				.getConfig("INITIAL_LATITUDE"));
-		float lon = Float.parseFloat(configHandler
+		float lon = Float.parseFloat(ConfigHandler.getInstance()
 				.getConfig("INITIAL_LONGITUDE"));
-		float alt = Float.parseFloat(configHandler
+		float alt = Float.parseFloat(ConfigHandler.getInstance()
 				.getConfig("INITIAL_ALTITUDE"));
 
 		// Set inital point on the map
@@ -42,7 +46,6 @@ public class JrouteRunner {
 		WayBuilder wayBuilder = new WayBuilder();
 		APIConnector apiConnector = new APIConnector();
 		BoxHandler boxHandler = new BoxHandler(apiConnector);
-		GUIController guiController = new GUIController(view, waypointBuilder,
-				wayBuilder, boxHandler);
+		new GUIController(view, waypointBuilder,wayBuilder, boxHandler);
 	}
 }

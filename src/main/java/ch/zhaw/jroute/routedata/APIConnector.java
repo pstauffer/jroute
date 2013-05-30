@@ -13,20 +13,14 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+/**
+ * Class to connect the OpenStreetMap API
+ * @author ps
+ */
 public class APIConnector implements IAPIConnector {
 
 	private static Logger logger = Logger.getLogger("org.apache.log4j");
 
-	/**
-	 * open connection to openstreetmap url, create new document and after that,
-	 * close the connection
-	 * 
-	 * @param url
-	 * @return document
-	 * @exception IOException
-	 * @exception ParserConfigurationException
-	 * @exception SAXException
-	 */
 	public Document getDocumentOverNewConnection(URL url) throws IOException {
 		Document document = null;
 		HttpURLConnection connection = null;

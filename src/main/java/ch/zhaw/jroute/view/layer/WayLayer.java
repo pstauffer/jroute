@@ -232,6 +232,7 @@ public class WayLayer extends RenderableLayer implements Observer {
 	 */
 	public void cleanLayer(){
 		this.removeAllRenderables();
+		wayAnnotationLayer.removeAllAnnotations();
 		shortestPathList.clear();
 		currentWay = null;
 	}

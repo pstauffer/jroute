@@ -24,6 +24,8 @@ public interface IBoxHandler {
 	 *            (is the longitude of the right side of the box)
 	 * @param top
 	 *            (is the latitude of the top side of the box)
+	 * @param filterList
+	 * 				A list of filters which are applied to the API call 
 	 * @return List<Way> all Way included the Waypoints with longitude and
 	 *         latitude
 	 * @throws IOException 

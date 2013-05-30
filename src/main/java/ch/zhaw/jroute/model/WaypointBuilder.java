@@ -6,28 +6,34 @@ import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
+import ch.zhaw.jroute.config.ConfigHandler;
 import ch.zhaw.jroute.model.businessObjects.Waypoint;
 import ch.zhaw.jroute.model.interfaces.IWaypointBuilder;
 import ch.zhaw.jroute.model.util.WaypointStatusEnum;
 
+/**
+ * This class handles all the waypoints produced in the GUI or the data
+ * import, updates the registered layers
+ * @author yk
+ */
 public class WaypointBuilder extends Observable implements IWaypointBuilder {
 
 	private HashMap<Long, Waypoint> waypointList = new HashMap<Long, Waypoint>();
-	private int currentLetter = 65; // A
 	private int id = 0;
 	private Waypoint startWaypoint;
 	private Waypoint endWaypoint;
 
+	@Override
 	public void createWaypointFromPosition(Position waypointPosition) {
+		
+		int radius = Integer.parseInt(ConfigHandler.getInstance().getConfig("WAYPOINTRADIUS"));
 
 		if (waypointPosition == null) {
 			return;
 		}
 
-		Waypoint newWaypoint = new Waypoint(waypointPosition, 10);
+		Waypoint newWaypoint = new Waypoint(waypointPosition, radius);
 
-		char c = (char) this.currentLetter;
-		String text = String.valueOf(c);
 		newWaypoint.setName(Integer.toString(id));
 
 		newWaypoint.setWaypointID(id);
@@ -36,7 +42,6 @@ public class WaypointBuilder extends Observable implements IWaypointBuilder {
 
 		waypointList.put((long) id, newWaypoint);
 
-		currentLetter++;
 		id++;
 
 		this.setChanged();
@@ -45,20 +50,15 @@ public class WaypointBuilder extends Observable implements IWaypointBuilder {
 	}
 	
 	@Override
-	public void createWaypointFromExistingWaypoint(Waypoint waypoint) {
+	public void createWaypointFromExistingWaypoint(Waypoint waypoint) 
+	{
+		int radius = Integer.parseInt(ConfigHandler.getInstance().getConfig("WAYPOINTRADIUS"));
+		waypoint.setRadius(radius);
+		waypoint.setName(String.valueOf(waypoint.getWaypointID()));
 
-		char c = (char) this.currentLetter;
-		String text = String.valueOf(c);
-		waypoint.setRadius(10);
-		waypoint.setName(Integer.toString(id));
-
-		//waypoint.setWaypointID(id);
 		waypoint.setStatus(WaypointStatusEnum.undefined);
 
-		waypointList.put((long) id, waypoint);
-
-		currentLetter++;
-		id++;
+		waypointList.put((long) waypoint.getWaypointID(), waypoint);
 
 		this.setChanged();
 		this.notifyObservers(waypoint);
@@ -91,6 +91,7 @@ public class WaypointBuilder extends Observable implements IWaypointBuilder {
 		this.notifyObservers(waypoint);
 	}
 
+	@Override
 	public void setEndWaypoint(WaypointStatusEnum status, Waypoint waypoint) {
 		if (status == WaypointStatusEnum.undefined) {
 			endWaypoint = null;
@@ -111,14 +112,17 @@ public class WaypointBuilder extends Observable implements IWaypointBuilder {
 		this.notifyObservers(waypoint);
 	}
 
+	@Override
 	public HashMap<Long, Waypoint> getWaypointList() {
 		return waypointList;
 	}
 
+	@Override
 	public Waypoint getStartWaypoint() {
 		return startWaypoint;
 	}
 
+	@Override
 	public Waypoint getEndWaypoint() {
 		return endWaypoint;
 	}
@@ -126,7 +130,6 @@ public class WaypointBuilder extends Observable implements IWaypointBuilder {
 	@Override
 	public void removeAllWaypoints() {
 		waypointList.clear();
-		currentLetter = 65; // A
 		id = 0;
 		startWaypoint = null;
 		endWaypoint = null;

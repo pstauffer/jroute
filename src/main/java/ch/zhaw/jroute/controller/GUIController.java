@@ -105,7 +105,6 @@ public class GUIController {
 			Position pos1 = positions.get(0);
 			Position pos2 = positions.get(0);
 			
-			
 			for(Position pos : positions){
 				//waypointController.createNewNode(pos);
 				

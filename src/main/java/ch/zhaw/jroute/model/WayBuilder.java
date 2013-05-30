@@ -3,7 +3,6 @@ package ch.zhaw.jroute.model;
 import gov.nasa.worldwind.geom.Position;
 
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +33,14 @@ public class WayBuilder extends Observable implements IWayBuilder {
 	public void createNewWay(Waypoint start) {
 		activeWay = new Way();
 		activeWay.setStart(start);
+		
+		List<Position> newPositions = new ArrayList<Position>();
+		
+		newPositions.add((Position) start.getCenter());
+		newPositions.add((Position) start.getCenter());
+		
+		activeWay.setPositions(newPositions);
+		
 		this.setChanged();
 		this.notifyObservers(activeWay);
 	}

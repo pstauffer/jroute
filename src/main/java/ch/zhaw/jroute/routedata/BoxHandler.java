@@ -52,7 +52,6 @@ public class BoxHandler implements IBoxHandler {
 	private List<Way> effectiveWayList;
 	private Map<Long, Waypoint> allWaypoints;
 	private Map<Long, Way> allWays;
-	private static ConfigHandler configHandler = new ConfigHandler();
 	private static String openStreetMapBoxURL;
 
 	public BoxHandler(IAPIConnector connector) {
@@ -67,7 +66,7 @@ public class BoxHandler implements IBoxHandler {
 	@Override
 	public List<Way> getAllWays(double left, double bottom, double right,
 			double top, List<String> filterList) throws IOException {
-		openStreetMapBoxURL = configHandler.getConfig("OPENSTREETMAPBOXURL");
+		openStreetMapBoxURL = ConfigHandler.getInstance().getConfig("OPENSTREETMAPBOXURL");
 
 		double base = 10.0;
 		double potenz = 9.0;
@@ -519,7 +518,7 @@ public class BoxHandler implements IBoxHandler {
 	 */
 	private void checkLongitudeCoordinates(double left, double right) {
 
-		double lon = Double.parseDouble(configHandler
+		double lon = Double.parseDouble(ConfigHandler.getInstance()
 				.getConfig("LIMITLONGITUDE"));
 		String message = "longitude must be between -" + lon + " and " + lon;
 
@@ -545,7 +544,7 @@ public class BoxHandler implements IBoxHandler {
 	 */
 	private void checkLatitudeCoordinates(double bottom, double top) {
 
-		double lat = Double.parseDouble(configHandler
+		double lat = Double.parseDouble(ConfigHandler.getInstance()
 				.getConfig("LIMITLATITUDE"));
 		String message = "latitude must be between -" + lat + " and " + lat;
 

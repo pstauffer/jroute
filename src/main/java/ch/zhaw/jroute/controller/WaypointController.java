@@ -1,22 +1,20 @@
 package ch.zhaw.jroute.controller;
 
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import gov.nasa.worldwind.geom.Position;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import gov.nasa.worldwind.geom.Position;
-import ch.zhaw.jroute.controller.interfaces.IWayController;
 import ch.zhaw.jroute.controller.interfaces.IWaypointController;
-import ch.zhaw.jroute.model.WaypointBuilder;
 import ch.zhaw.jroute.model.businessObjects.Waypoint;
 import ch.zhaw.jroute.model.interfaces.IWaypointBuilder;
 import ch.zhaw.jroute.model.util.WaypointStatusEnum;
 import ch.zhaw.jroute.view.JrouteView;
-import ch.zhaw.jroute.view.layer.WaypointLayer;
 
+/**
+ * Controller which connects the view with the waybuilder model
+ * @author yk
+ */
 public class WaypointController implements IWaypointController {
 	
 	private IWaypointBuilder waypointBuilder;
@@ -24,7 +22,6 @@ public class WaypointController implements IWaypointController {
 	private WaypointMouseAdapter mouseAdapter;
 	private StartWaypointMouseAdapter startMouseAdapter;
 	private EndWaypointMouseAdapter endMouseAdapter;
-	private IWayController wayController;
 	
 	public WaypointController(JrouteView view, IWaypointBuilder builder){
 		
@@ -35,8 +32,6 @@ public class WaypointController implements IWaypointController {
 		this.mouseAdapter = new WaypointMouseAdapter();
 		this.startMouseAdapter = new StartWaypointMouseAdapter();
 		this.endMouseAdapter = new EndWaypointMouseAdapter();
-		
-		this.wayController = wayController;
 	}
 	
 	public void createNewNode(Position position){

@@ -3,19 +3,18 @@ package ch.zhaw.jroute.controller;
 import gov.nasa.worldwind.event.PositionEvent;
 import gov.nasa.worldwind.event.PositionListener;
 
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import ch.zhaw.jroute.controller.interfaces.IWayController;
-import ch.zhaw.jroute.model.WayBuilder;
 import ch.zhaw.jroute.model.businessObjects.Waypoint;
 import ch.zhaw.jroute.model.interfaces.IWayBuilder;
 import ch.zhaw.jroute.view.JrouteView;
 
+/**
+ * Controller which connects the view with the way model
+ * @author yk
+ */
 public class WayController implements IWayController{
 	
 	private JrouteView view;

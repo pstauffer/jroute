@@ -1,14 +1,16 @@
 package ch.zhaw.jroute.model.businessObjects;
 
-import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.render.Path;
-import gov.nasa.worldwind.render.SurfacePolyline;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ch.zhaw.jroute.model.util.WayStatusEnum;
 
+/**
+ * Represents a way in jroute
+ * @author yk
+ */
 public class Way extends Path {
 	private Waypoint start;
 	private Waypoint end;
