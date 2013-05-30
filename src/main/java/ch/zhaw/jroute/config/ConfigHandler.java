@@ -1,5 +1,6 @@
 package ch.zhaw.jroute.config;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -12,8 +13,9 @@ public class ConfigHandler {
 		properties = new Properties();
 
 		try {
-			properties.load(new FileInputStream(
-					"src/main/resources/jroute.properties"));
+			String configFile = new File("src/main/resources/jroute.properties")
+					.getAbsolutePath();
+			properties.load(new FileInputStream(configFile));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
