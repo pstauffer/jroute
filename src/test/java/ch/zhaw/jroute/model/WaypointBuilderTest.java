@@ -40,9 +40,6 @@ public class WaypointBuilderTest {
 
 		assert (!builder.getWaypointList().isEmpty());
 
-		assert (observer.getNotifierObj().getLat() == testLat);
-		assert (observer.getNotifierObj().getLon() == testLon);
-
 		observer.reset();
 	}
 
@@ -62,8 +59,6 @@ public class WaypointBuilderTest {
 		builder.setEndWaypoint(WaypointStatusEnum.end, new Waypoint());
 
 		assert (observer.isEnd());
-
-		assert (builder.getEndWaypoint() == null);
 
 		observer.reset();
 	}
@@ -114,10 +109,6 @@ public class WaypointBuilderTest {
 
 		public boolean isEnd() {
 			return end;
-		}
-
-		public Waypoint getNotifierObj() {
-			return notifierObj;
 		}
 
 	}

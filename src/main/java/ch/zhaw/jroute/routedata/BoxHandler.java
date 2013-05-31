@@ -296,13 +296,14 @@ public class BoxHandler implements IBoxHandler {
 	 * @param wayList
 	 */
 	private void handleCrossRoads(List<Way> wayList) {
-
+		int z = 0;
 		List<Way> splittedWay = new ArrayList<Way>();
 
 		for (Waypoint waypoint : allWaypoints.values()) {
 			if (waypoint.getAddedWays().size() > 1) {
 				for (Way way : waypoint.getAddedWays()) {
 					if (way.getStart() == waypoint || way.getEnd() == waypoint) {
+						z++;
 					} else {
 						way.addSplitPoint(waypoint);
 						if (!splittedWay.contains(way)) {
